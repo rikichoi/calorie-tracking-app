@@ -1,7 +1,63 @@
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
+import Avocado from "../../images/avocado-image.png";
+import Chicken from "../../images/chicken-image.png";
+import Bowl from "../../images/bowl-image.png";
+import Smoothie from "../../images/smoothie-image.png";
+import Yogurt from "../../images/yogurt-image.png";
+import Running from "../../images/running-image.png";
+import Jumping from "../../images/jumping-image.png";
+import Swimming from "../../images/swimming-image.png";
+import {numberFormatter} from '@/lib/utils'
+import LogMealItem from "@/components/LogMealItem";
+
 
 export default function Dashboard() {
+  <LogMealItem mealImage={Avocado} mealName="Avocado Toast" mealCal="275" mealProtein="25" mealWeight="300"/>
+
+  const DUMMY_DATA = [
+    {
+      id: 1,
+      mealImage: Avocado,
+      mealName: "Avocado Toast",
+      mealCal: 275,
+      mealProtein: 25,
+      mealWeight: 300,
+    },
+    {
+      id: 2,
+      mealImage: Chicken,
+      mealName: "Grilled Chicken Salad",
+      mealCal: 447,
+      mealProtein: 10,
+      mealWeight: 125,
+    },
+    {
+      id: 3,
+      mealImage: Yogurt,
+      mealName: "Greek Yogurt",
+      mealCal: 750,
+      mealProtein: 50,
+      mealWeight: 100,
+    },
+    {
+      id: 4,
+      mealImage: Bowl,
+      mealName: "Quinoa Bowl",
+      mealCal: 430,
+      mealProtein: 37,
+      mealWeight: 258,
+    },
+    {
+      id: 5,
+      mealImage: Smoothie,
+      mealName: "Peanut Butter Smoothie",
+      mealCal: 200,
+      mealProtein: 20,
+      mealWeight: 175,
+    },
+  ]
   return (
     <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8">
       <div className="w-5/6">
@@ -13,11 +69,11 @@ export default function Dashboard() {
         </p>
       </div>
       <div className="w-5/6 grid grid-cols-2 gap-4">
-        <div className="bg-gray-200 items-center rounded-xl pl-3 pr-3 grid grid-cols-3 shadow-xl">
+        <div className="bg-gray-200 items-center rounded-xl pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
           <ul className="pl-12 col-span-2">
             <li className="text-sm">You have consumed</li>
             <li className="text-lg pt-3 font-bold">
-              <span className="text-green-500">1,500</span>/2,000
+              <span className="text-green-500">{numberFormatter(1500)}</span>/{numberFormatter(2000)}
             </li>
             <li className="font-bold">Calories</li>
           </ul>
@@ -59,7 +115,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="bg-gray-200 rounded-xl px-5 flex items-center shadow-xl">
+        <div className="bg-gray-200 rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
           <ul className="space-y-1 w-full">
             <li className="text-sm">Protein</li>
             <div
@@ -138,55 +194,86 @@ export default function Dashboard() {
             </Link>
           </div>
           <div className="col-span-4 justify-end flex">
-            <Link href={""} className="bg-orange-300 rounded-full w-12 h-12 flex justify-center">
-            <p className="text-3xl pt-1">+</p>
+            <Link
+              href={""}
+              className="bg-orange-300 rounded-full w-12 h-12 flex justify-center"
+            >
+              <p className="text-3xl pt-1">+</p>
             </Link>
-            </div>
-        </div>
-      </div>
-
-      <div className="w-5/6">
-        <h1 className="text-2xl font-bold">Recent Meals</h1>
-        <div className="grid grid-rows-7">
-          <div className="grid grid-cols-6">
-            <div>IMAGE PLACEHOLDER</div>
-            <div>Food</div>
-            <div>300g</div>
-          </div>
-          <div className="grid grid-cols-6">
-            <div>IMAGE PLACEHOLDER</div>
-
-            <div>Drinks</div>
-            <div>300g</div>
-          </div>
-          <div className="grid grid-cols-6">
-            <div>IMAGE PLACEHOLDER</div>
-
-            <div>Exercise</div>
-            <div>300g</div>
           </div>
         </div>
       </div>
 
       <div className="w-5/6">
-        <h1 className="text-2xl font-bold">Recent Exercise</h1>
-        <div className="grid grid-rows-7">
-          <div className="grid grid-cols-6">
-            <div>IMAGE PLACEHOLDER</div>
+        <h1 className="text-2xl font-bold mb-5">Recent Meals</h1>
+        <div className="grid gap-6 mb-5">
+          {/* <Link href={""} className="grid grid-cols-6 h-3/5">
+            <Image
+              alt="Avocado Toast"
+              src={Avocado}
+              className="rounded-xl max-h-20 object-cover"
+            ></Image>
+            <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
+              <li className="flex items-end">Avocado Toast</li>
+              <li className="text-gray-500 font-light font-light">
+                300 Calories &#8226; 10g Protein
+              </li>
+            </ul>
+            <div className="col-span-3 justify-end flex items-center">300g</div>
+          </Link> */}
+          {DUMMY_DATA.map((meal) => {
+            return (
+              <LogMealItem key={meal.id} mealImage={meal.mealImage} mealName={meal.mealName} mealCal={meal.mealCal} mealProtein={meal.mealProtein} mealWeight={meal.mealWeight}/>
+            )
+          })}
+        </div>
+      </div>
 
-            <div>Exercise</div>
-            <div>300g</div>
-          </div>
-          <div className="grid grid-cols-6">
-            <div>IMAGE PLACEHOLDER</div>
-            <div>Exercise</div>
-            <div>300g</div>{" "}
-          </div>
-          <div className="grid grid-cols-6">
-            <div>IMAGE PLACEHOLDER</div>
-            <div>Exercise</div>
-            <div>300g</div>{" "}
-          </div>
+      <div className="w-5/6">
+        <h1 className="text-2xl font-bold mb-5">Recent Exercise</h1>
+        <div className="grid grid-rows-3 gap-6 mb-5">
+          <Link href={""} className="grid grid-cols-8 h-3/5">
+            <Image
+              alt="Person running"
+              src={Running}
+              className="rounded-xl max-h-20 px-7"
+            ></Image>
+            <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
+              <li className="flex items-end">Running</li>
+              <li className="text-gray-500 font-light font-light">
+                45 Minutes &#8226; 250 Calories
+              </li>
+            </ul>
+            <div className="col-span-5 justify-end flex items-center">15m</div>
+          </Link>
+          <Link href={""} className="grid grid-cols-8 h-3/5">
+            <Image
+              alt="Person using jump rope"
+              src={Jumping}
+              className="rounded-xl max-h-20 px-7"
+            ></Image>
+            <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
+              <li className="flex items-end">Jump Rope</li>
+              <li className="text-gray-500 font-light">
+                15 Minutes &#8226; 100 Calories
+              </li>
+            </ul>
+            <div className="col-span-5 justify-end flex items-center">40m</div>
+          </Link>
+          <Link href={""} className="grid grid-cols-8 h-3/5">
+            <Image
+              alt="Person swimming"
+              src={Swimming}
+              className="rounded-xl  max-h-20 px-7"
+            ></Image>
+            <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
+              <li className="flex items-end">Swimming</li>
+              <li className="text-gray-500 font-light">
+                35 Minutes &#8226; 275 Calories
+              </li>
+            </ul>
+            <div className="col-span-5 justify-end flex items-center">30m</div>
+          </Link>
         </div>
       </div>
     </main>

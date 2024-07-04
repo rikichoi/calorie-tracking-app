@@ -101,7 +101,7 @@ export default function Home() {
         <div>
         <a href="#">
           <h5 className="text-gray-500 text-sm text-center">
-            Privary Policy
+            Privacy Policy
           </h5>
           </a>
         </div>
