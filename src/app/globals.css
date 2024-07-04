@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 } */
+
+button {
+  @apply hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110
+}
