@@ -6,9 +6,9 @@ import Link from "next/link";
 export default function Navbar() {
   return (
     <div className="pt-2 grid grid-cols-12 border-b-2">
-      <div className=" col-span-2 h-16 justify-start">
+      <div className="pl-28 col-span-2 h-16 justify-start">
         <Link href="/">
-        <Image src={Logo} alt="Calorie Tracker Logo" className="ml-5 w-36 h-16" />
+        <Image src={Logo} alt="Calorie Tracker Logo" className="p-1 min-w-32 min-h-16 max-h-16 max-w-36" />
         </Link>
       </div>
       <div className="pl-64 text-sm col-span-10 justify-end items-center grid grid-cols-4">

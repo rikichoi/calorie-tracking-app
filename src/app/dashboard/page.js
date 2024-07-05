@@ -1,15 +1,11 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
 import Avocado from "../../images/avocado-image.png";
 import Chicken from "../../images/chicken-image.png";
 import Bowl from "../../images/bowl-image.png";
 import Smoothie from "../../images/smoothie-image.png";
 import Yogurt from "../../images/yogurt-image.png";
-import Running from "../../images/running-image.png";
-import Jumping from "../../images/jumping-image.png";
-import Swimming from "../../images/swimming-image.png";
 import { numberFormatter } from "@/lib/utils";
 import LogMealItem from "@/components/LogMealItem";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -17,7 +13,13 @@ import { Doughnut } from "react-chartjs-2";
 import { useState, useRef, useEffect } from "react";
 import Modal from "@/components/Modal";
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { storage } from "@/lib/utils";
 import LogExerciseItem from "@/components/LogExerciseItem";
 
@@ -26,8 +28,10 @@ ChartJS.register(ArcElement, Tooltip);
 export default function Dashboard() {
   const [mealLog, setMealLog] = useState([]);
   const [exerciseLog, setExerciseLog] = useState([]);
-  const [modeModal, setModeModal] = useState();
-  const [openMealModal, setOpenMealModal] = useState(false);
+  const [modeModal, setModeModal] = useState(false);
+  const [openMealModal, setOpenMealModal] = useState(true);
+  const [manualLog, setManualLog] = useState(true);
+  const imageRef = useRef();
   const proteinRef = useRef();
   const carbRef = useRef();
   const fatRef = useRef();
@@ -36,6 +40,30 @@ export default function Dashboard() {
   const weightRef = useRef();
   const exerciseNameRef = useRef();
   const exerciseDurationRef = useRef();
+
+  const deleteMealHandler = async (mealLogId) => {
+    const docRef = doc(db, "mealLog", mealLogId);
+    try {
+      await deleteDoc(docRef);
+      setMealLog((prevState) => {
+        return prevState.filter((i) => i.id !== mealLogId);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const deleteExerciseHandler = async (exerciseLogId) => {
+    const docRef = doc(db, "exerciseLog", exerciseLogId);
+    try {
+      await deleteDoc(docRef);
+      setExerciseLog((prevState) => {
+        return prevState.filter((i) => i.id !== exerciseLogId);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const addMealHandler = async (e) => {
     e.preventDefault();
@@ -51,6 +79,23 @@ export default function Dashboard() {
     const collectionRef = collection(db, "mealLog");
     try {
       const docSnap = await addDoc(collectionRef, newMeal);
+
+      setMealLog((prevState) => {
+        return [
+          ...prevState,
+          {
+            id: docSnap.id,
+            ...newMeal,
+          },
+        ];
+      });
+
+      calorieRef.current.value = "";
+      proteinRef.current.value = "";
+      fatRef.current.value = "";
+      carbRef.current.value = "";
+      mealNameRef.current.value = "";
+      weightRef.current.value = "";
     } catch (error) {
       console.log(error.message);
     }
@@ -65,19 +110,12 @@ export default function Dashboard() {
         return {
           id: doc.id,
           ...doc.data(),
+          mealImg: doc.data().mealImage,
           mealCal: doc.data().calorie,
           mealProtein: doc.data().protein,
           mealWeight: doc.data().weight,
           mealName: doc.data().mealName,
         };
-        // <LogMealItem
-        // key={meal.id}
-        // mealImage={meal.mealImage}
-        // mealName={meal.mealName}
-        // mealCal={meal.mealCal}
-        // mealProtein={meal.mealProtein}
-        // mealWeight={meal.mealWeight}
-        // />
       });
       setMealLog(data);
     };
@@ -111,68 +149,31 @@ export default function Dashboard() {
           exerciseName: doc.data().exerciseName,
           exerciseDuration: doc.data().exerciseDuration,
         };
-        // <LogMealItem
-        // key={meal.id}
-        // mealImage={meal.mealImage}
-        // mealName={meal.mealName}
-        // mealCal={meal.mealCal}
-        // mealProtein={meal.mealProtein}
-        // mealWeight={meal.mealWeight}
-        // />
       });
       setExerciseLog(data);
     };
     getExerciseLogData();
   }, []);
 
+  function clearModal() {
+    if (modeModal == false) {
+      calorieRef.current.value = "";
+      proteinRef.current.value = "";
+      fatRef.current.value = "";
+      carbRef.current.value = "";
+      mealNameRef.current.value = "";
+      weightRef.current.value = "";
+    } else if (modeModal == true) {
+      exerciseNameRef.current.value = "";
+      exerciseDurationRef.current.value = "";
+    }
+  }
+
   const DUMMY_USER = [
     {
       maintenanceCal: 2000,
       consumedCal: 1572,
       reminingCal: 428,
-    },
-  ];
-
-  const DUMMY_DATA = [
-    {
-      id: 1,
-      mealImage: Avocado,
-      mealName: "Avocado Toast",
-      mealCal: 275,
-      mealProtein: 25,
-      mealWeight: 300,
-    },
-    {
-      id: 2,
-      mealImage: Chicken,
-      mealName: "Grilled Chicken Salad",
-      mealCal: 447,
-      mealProtein: 10,
-      mealWeight: 125,
-    },
-    {
-      id: 3,
-      mealImage: Yogurt,
-      mealName: "Greek Yogurt",
-      mealCal: 750,
-      mealProtein: 50,
-      mealWeight: 100,
-    },
-    {
-      id: 4,
-      mealImage: Bowl,
-      mealName: "Quinoa Bowl",
-      mealCal: 430,
-      mealProtein: 37,
-      mealWeight: 258,
-    },
-    {
-      id: 5,
-      mealImage: Smoothie,
-      mealName: "Peanut Butter Smoothie",
-      mealCal: 200,
-      mealProtein: 20,
-      mealWeight: 175,
     },
   ];
 
@@ -185,19 +186,24 @@ export default function Dashboard() {
       }`}
     >
       {/* Add Meal Modal Section */}
-      <Modal show={openMealModal} onClose={setOpenMealModal}>
+      <Modal
+        show={openMealModal}
+        onClose={setOpenMealModal}
+        clearModalFunction={clearModal}
+      >
         {modeModal ? (
           <form onSubmit={addExerciseHandler} className="px-3">
             <div className="flex flex-col">
               <label>Name</label>
               <input
+                required
                 ref={exerciseNameRef}
                 type="string"
                 min={0.0}
                 placeholder="Enter Exercise"
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col ">
               <label>Duration (mins)</label>
               <input
                 ref={exerciseDurationRef}
@@ -211,68 +217,81 @@ export default function Dashboard() {
             </button>
           </form>
         ) : (
-          <form onSubmit={addMealHandler} className="px-3">
-            <div className="flex flex-col">
-              <label>Calories</label>
-              <input
-                ref={calorieRef}
-                type="number"
-                min={0.0}
-                placeholder="Enter Calories"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Protein</label>
-              <input
-                ref={proteinRef}
-                type="number"
-                min={0.0}
-                placeholder="Enter Protein"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Carbohydrates</label>
-              <input
-                ref={carbRef}
-                type="number"
-                min={0.0}
-                placeholder="Enter Carbohydrates"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Fat</label>
-              <input
-                ref={fatRef}
-                type="number"
-                min={0.0}
-                placeholder="Enter Fat"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Name</label>
-              <input
-                ref={mealNameRef}
-                type="string"
-                min={0.0}
-                placeholder="Enter Name"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Weight</label>
-              <input
-                ref={weightRef}
-                type="string"
-                min={0.0}
-                placeholder="Enter Weight"
-              />
-            </div>
+          <div>
             <button
-              type="submit"
-              className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+              onClick={() => setManualLog(!manualLog)}
+              className="w-full border-2 h-12 bg-gray-600 text-white"
             >
-              Log
+              Log Manually
             </button>
-          </form>
+            {manualLog ? (
+              <form onSubmit={addMealHandler} className="px-3">
+                <div className="flex flex-col">
+                  <label>Name</label>
+                  <input
+                    ref={mealNameRef}
+                    type="string"
+                    min={0.0}
+                    placeholder="Enter Name"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label>Calories</label>
+                  <input
+                    ref={calorieRef}
+                    type="number"
+                    min={0.0}
+                    placeholder="Enter Calories"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label>Protein</label>
+                  <input
+                    ref={proteinRef}
+                    type="number"
+                    min={0.0}
+                    placeholder="Enter Protein"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label>Carbohydrates</label>
+                  <input
+                    ref={carbRef}
+                    type="number"
+                    min={0.0}
+                    placeholder="Enter Carbohydrates"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label>Fat</label>
+                  <input
+                    ref={fatRef}
+                    type="number"
+                    min={0.0}
+                    placeholder="Enter Fat"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label>Weight</label>
+                  <input
+                    ref={weightRef}
+                    type="string"
+                    min={0.0}
+                    placeholder="Enter Weight"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+                >
+                  Log
+                </button>
+              </form>
+            ) : (
+              ""
+            )}
+          </div>
         )}
       </Modal>
       <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
@@ -418,23 +437,11 @@ export default function Dashboard() {
         <div className="w-5/6">
           <h1 className="text-2xl font-bold mb-5">Recent Meals</h1>
           <div className="grid gap-6 mb-5">
-            {/* <Link href={""} className="grid grid-cols-6 h-3/5">
-            <Image
-              alt="Avocado Toast"
-              src={Avocado}
-              className="rounded-xl max-h-20 object-cover"
-            ></Image>
-            <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
-              <li className="flex items-end">Avocado Toast</li>
-              <li className="text-gray-500 font-light font-light">
-                300 Calories &#8226; 10g Protein
-              </li>
-            </ul>
-            <div className="col-span-3 justify-end flex items-center">300g</div>
-          </Link> */}
             {mealLog.map((meal) => {
               return (
                 <LogMealItem
+                  deleteMeal={deleteMealHandler}
+                  mealId={meal.id}
                   key={meal.id}
                   mealImage={meal.mealImage}
                   mealName={meal.mealName}
@@ -448,8 +455,8 @@ export default function Dashboard() {
         </div>
         {/* Exercise Logging Section */}
         <div className="w-5/6">
-          <div className="w-full flex flex-row">
-            <h1 className="text-2xl font-bold mb-5 w-full">Recent Exercise</h1>
+          <div className="w-full mt-8 mb-5 flex flex-row">
+            <h1 className="text-2xl font-bold w-full">Recent Exercise</h1>
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => (
@@ -465,6 +472,8 @@ export default function Dashboard() {
           {exerciseLog.map((exercise) => {
             return (
               <LogExerciseItem
+                deleteExercise={deleteExerciseHandler}
+                exerciseId={exercise.id}
                 key={exercise.id}
                 exerciseName={exercise.exerciseName}
                 exerciseDuration={exercise.exerciseDuration}
