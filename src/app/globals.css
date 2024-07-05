@@ -35,3 +35,6 @@ body {
 button {
   @apply hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110
 }
+input {
+  @apply rounded-md p-1 border-2 border-black bg-[#C8CFA0] placeholder-opacity-100
+}

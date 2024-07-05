@@ -1,11 +1,6 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import Avocado from "../../images/avocado-image.png";
-import Chicken from "../../images/chicken-image.png";
-import Bowl from "../../images/bowl-image.png";
-import Smoothie from "../../images/smoothie-image.png";
-import Yogurt from "../../images/yogurt-image.png";
 import { numberFormatter } from "@/lib/utils";
 import LogMealItem from "@/components/LogMealItem";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -22,6 +17,8 @@ import {
 } from "firebase/firestore";
 import { storage } from "@/lib/utils";
 import LogExerciseItem from "@/components/LogExerciseItem";
+import AddMealModal from "@/components/modals/AddMealModal";
+import AddExerciseModal from "@/components/modals/AddExerciseModal";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -29,17 +26,8 @@ export default function Dashboard() {
   const [mealLog, setMealLog] = useState([]);
   const [exerciseLog, setExerciseLog] = useState([]);
   const [modeModal, setModeModal] = useState(false);
-  const [openMealModal, setOpenMealModal] = useState(true);
-  const [manualLog, setManualLog] = useState(true);
-  const imageRef = useRef();
-  const proteinRef = useRef();
-  const carbRef = useRef();
-  const fatRef = useRef();
-  const calorieRef = useRef();
-  const mealNameRef = useRef();
-  const weightRef = useRef();
-  const exerciseNameRef = useRef();
-  const exerciseDurationRef = useRef();
+  const [openModal, setOpenModal] = useState(true);
+
 
   const deleteMealHandler = async (mealLogId) => {
     const docRef = doc(db, "mealLog", mealLogId);
@@ -65,42 +53,6 @@ export default function Dashboard() {
     }
   };
 
-  const addMealHandler = async (e) => {
-    e.preventDefault();
-
-    const newMeal = {
-      calorie: calorieRef.current.value,
-      protein: proteinRef.current.value,
-      fat: fatRef.current.value,
-      carbohydrate: carbRef.current.value,
-      mealName: mealNameRef.current.value,
-      weight: weightRef.current.value,
-    };
-    const collectionRef = collection(db, "mealLog");
-    try {
-      const docSnap = await addDoc(collectionRef, newMeal);
-
-      setMealLog((prevState) => {
-        return [
-          ...prevState,
-          {
-            id: docSnap.id,
-            ...newMeal,
-          },
-        ];
-      });
-
-      calorieRef.current.value = "";
-      proteinRef.current.value = "";
-      fatRef.current.value = "";
-      carbRef.current.value = "";
-      mealNameRef.current.value = "";
-      weightRef.current.value = "";
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
   useEffect(() => {
     const getMealLogData = async () => {
       const collectionRef = collection(db, "mealLog");
@@ -120,22 +72,7 @@ export default function Dashboard() {
       setMealLog(data);
     };
     getMealLogData();
-  }, []);
-
-  const addExerciseHandler = async (e) => {
-    e.preventDefault();
-
-    const newExercise = {
-      exerciseName: exerciseNameRef.current.value,
-      exerciseDuration: exerciseDurationRef.current.value,
-    };
-    const collectionRef = collection(db, "exerciseLog");
-    try {
-      const docSnap = await addDoc(collectionRef, newExercise);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  }, [openModal]);
 
   useEffect(() => {
     const getExerciseLogData = async () => {
@@ -153,21 +90,9 @@ export default function Dashboard() {
       setExerciseLog(data);
     };
     getExerciseLogData();
-  }, []);
+  }, [openModal]);
 
-  function clearModal() {
-    if (modeModal == false) {
-      calorieRef.current.value = "";
-      proteinRef.current.value = "";
-      fatRef.current.value = "";
-      carbRef.current.value = "";
-      mealNameRef.current.value = "";
-      weightRef.current.value = "";
-    } else if (modeModal == true) {
-      exerciseNameRef.current.value = "";
-      exerciseDurationRef.current.value = "";
-    }
-  }
+
 
   const DUMMY_USER = [
     {
@@ -180,118 +105,20 @@ export default function Dashboard() {
   return (
     <main
       className={`${
-        openMealModal
-          ? "fixed overflow-hidden pt-[4.6rem] top-0 left-0 right-0 mx-auto"
+        openModal
+          ? "fixed overflow-hidden pt-[4.6rem] top-0 left-0 right-0 "
           : ""
       }`}
     >
       {/* Add Meal Modal Section */}
       <Modal
-        show={openMealModal}
-        onClose={setOpenMealModal}
-        clearModalFunction={clearModal}
+        show={openModal}
+        onClose={setOpenModal}
       >
         {modeModal ? (
-          <form onSubmit={addExerciseHandler} className="px-3">
-            <div className="flex flex-col">
-              <label>Name</label>
-              <input
-                required
-                ref={exerciseNameRef}
-                type="string"
-                min={0.0}
-                placeholder="Enter Exercise"
-              />
-            </div>
-            <div className="flex flex-col ">
-              <label>Duration (mins)</label>
-              <input
-                ref={exerciseDurationRef}
-                type="number"
-                min={0.0}
-                placeholder="Enter Duration"
-              />
-            </div>
-            <button className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110">
-              Log
-            </button>
-          </form>
+          <AddExerciseModal show={openModal} onClose={setOpenModal} />
         ) : (
-          <div>
-            <button
-              onClick={() => setManualLog(!manualLog)}
-              className="w-full border-2 h-12 bg-gray-600 text-white"
-            >
-              Log Manually
-            </button>
-            {manualLog ? (
-              <form onSubmit={addMealHandler} className="px-3">
-                <div className="flex flex-col">
-                  <label>Name</label>
-                  <input
-                    ref={mealNameRef}
-                    type="string"
-                    min={0.0}
-                    placeholder="Enter Name"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label>Calories</label>
-                  <input
-                    ref={calorieRef}
-                    type="number"
-                    min={0.0}
-                    placeholder="Enter Calories"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label>Protein</label>
-                  <input
-                    ref={proteinRef}
-                    type="number"
-                    min={0.0}
-                    placeholder="Enter Protein"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label>Carbohydrates</label>
-                  <input
-                    ref={carbRef}
-                    type="number"
-                    min={0.0}
-                    placeholder="Enter Carbohydrates"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label>Fat</label>
-                  <input
-                    ref={fatRef}
-                    type="number"
-                    min={0.0}
-                    placeholder="Enter Fat"
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label>Weight</label>
-                  <input
-                    ref={weightRef}
-                    type="string"
-                    min={0.0}
-                    placeholder="Enter Weight"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
-                >
-                  Log
-                </button>
-              </form>
-            ) : (
-              ""
-            )}
-          </div>
+          <AddMealModal show={openModal} onClose={setOpenModal} />
         )}
       </Modal>
       <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
@@ -424,9 +251,9 @@ export default function Dashboard() {
             <div className="col-span-4 justify-end flex">
               <button
                 onClick={() => (
-                  setOpenMealModal(!openMealModal), setModeModal(false)
+                  setOpenModal(!openModal), setModeModal(false)
                 )}
-                className="bg-orange-300 rounded-full w-12 h-12 flex justify-center text-3xl pt-1"
+                className="bg-orange-300 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
               >
                 +
               </button>
@@ -460,9 +287,9 @@ export default function Dashboard() {
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => (
-                  setOpenMealModal(!openMealModal), setModeModal(true)
+                  setOpenModal(!openModal), setModeModal(true)
                 )}
-                className="bg-orange-300 rounded-full w-12 h-12 flex justify-center text-3xl pt-1"
+                className="bg-orange-300 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
               >
                 +
               </button>
