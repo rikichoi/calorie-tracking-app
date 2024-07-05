@@ -14,13 +14,72 @@ import { numberFormatter } from "@/lib/utils";
 import LogMealItem from "@/components/LogMealItem";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Modal from "@/components/Modal";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { storage } from "@/lib/utils";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
-const [openMealModal, setOpenMealModal] = useState(false)
+  const [mealLog, setMealLog] = useState([]);
+  console.log(mealLog);
+  const [openMealModal, setOpenMealModal] = useState(false);
+  const proteinRef = useRef();
+  const carbRef = useRef();
+  const fatRef = useRef();
+  const calorieRef = useRef();
+  const nameRef = useRef();
+  const weightRef = useRef();
+  const [modeModal, setModeModal] = useState();
+
+  const addMealHandler = async (e) => {
+    e.preventDefault();
+
+    const newMeal = {
+      calorie: calorieRef.current.value,
+      protein: proteinRef.current.value,
+      fat: fatRef.current.value,
+      carbohydrate: carbRef.current.value,
+      name: nameRef.current.value,
+      weight: nameRef.current.value,
+    };
+    const collectionRef = collection(db, "mealLog");
+    try {
+      const docSnap = await addDoc(collectionRef, newMeal);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    const getMealLogData = async () => {
+      const collectionRef = collection(db, "mealLog");
+      const docsSnap = await getDocs(collectionRef);
+
+      const data = docsSnap.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+          mealCal: doc.data().calorie,
+          mealProtein: doc.data().protein,
+          mealWeight: doc.data().weight,
+          mealName: doc.data().name,
+        };
+        // <LogMealItem
+        // key={meal.id}
+        // mealImage={meal.mealImage}
+        // mealName={meal.mealName}
+        // mealCal={meal.mealCal}
+        // mealProtein={meal.mealProtein}
+        // mealWeight={meal.mealWeight}
+        // />
+      });
+      setMealLog(data);
+    };
+    getMealLogData();
+  }, []);
 
   const DUMMY_USER = [
     {
@@ -72,13 +131,120 @@ const [openMealModal, setOpenMealModal] = useState(false)
       mealWeight: 175,
     },
   ];
+
   return (
-    <>
-      {/* Modal Section */}
-<Modal show={openMealModal} onClose={setOpenMealModal}>
-  Reusable Modal
-</Modal>
-      <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8">
+    <main
+      className={`${
+        openMealModal ? "fixed overflow-hidden pt-[4.6rem] top-0" : ""
+      }`}
+    >
+      {/* Add Meal Modal Section */}
+      <Modal show={openMealModal} onClose={setOpenMealModal}>
+        {modeModal ? (
+          <form onSubmit={addMealHandler} className="px-3">
+            <div className="flex flex-col">
+              <label>Exercise</label>
+              <input
+                ref={calorieRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Calories"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Duration (mins)</label>
+              <input
+                ref={proteinRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Protein"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Carbohydrates</label>
+              <input
+                ref={carbRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Carbohydrates"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Fat</label>
+              <input
+                ref={fatRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Fat"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Name</label>
+              <input
+                ref={nameRef}
+                type="string"
+                min={0.0}
+                placeholder="Enter Name"
+              />
+            </div>
+            <button className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110">
+              Log Meal
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={addMealHandler} className="px-3">
+            <div className="flex flex-col">
+              <label>Calories</label>
+              <input
+                ref={calorieRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Calories"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Protein</label>
+              <input
+                ref={proteinRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Protein"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Carbohydrates</label>
+              <input
+                ref={carbRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Carbohydrates"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Fat</label>
+              <input
+                ref={fatRef}
+                type="number"
+                min={0.0}
+                placeholder="Enter Fat"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Name</label>
+              <input
+                ref={nameRef}
+                type="string"
+                min={0.0}
+                placeholder="Enter Name"
+              />
+            </div>
+            <button className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110">
+              Log Meal
+            </button>
+          </form>
+        )}
+      </Modal>
+      <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
         <div className="w-5/6">
           <h1 className="text-2xl font-bold font-Epilogue">
             Good morning, Julia
@@ -89,7 +255,7 @@ const [openMealModal, setOpenMealModal] = useState(false)
         </div>
         {/* Left Overview Section */}
         <div className="w-5/6 grid grid-cols-2 gap-4">
-          <div className="bg-gray-200 items-center rounded-xl pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
+          <div className="bg-gray-200 items-center min-h-[200px] rounded-xl pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
             <ul className="pl-12 col-span-2">
               <li className="text-sm">You have consumed</li>
               <li className="text-lg pt-3 font-bold">
@@ -99,9 +265,9 @@ const [openMealModal, setOpenMealModal] = useState(false)
               <li className="font-bold">Calories</li>
             </ul>
 
-            <div className="items-center justify-center flex ">
+            <div className="items-center justify-center flex min-h-full">
               <Doughnut
-                className="p-2"
+                className="p-2 "
                 data={{
                   labels: [`Consumed Calories`, `Remaining Calories`],
                   datasets: [
@@ -125,7 +291,7 @@ const [openMealModal, setOpenMealModal] = useState(false)
             </div>
           </div>
           {/* Right Overview Section */}
-          <div className="bg-gray-200 rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
+          <div className="bg-gray-200 min-h-full rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
             <ul className="space-y-1 w-full">
               <li className="text-sm">Protein</li>
               <div
@@ -206,7 +372,14 @@ const [openMealModal, setOpenMealModal] = useState(false)
               </Link>
             </div>
             <div className="col-span-4 justify-end flex">
-                <button onClick={() => setOpenMealModal(!openMealModal)} className="bg-orange-300 rounded-full w-12 h-12 flex justify-center text-3xl pt-1">+</button>
+              <button
+                onClick={() => (
+                  setOpenMealModal(!openMealModal), setModeModal(false)
+                )}
+                className="bg-orange-300 rounded-full w-12 h-12 flex justify-center text-3xl pt-1"
+              >
+                +
+              </button>
             </div>
           </div>
         </div>
@@ -228,7 +401,7 @@ const [openMealModal, setOpenMealModal] = useState(false)
             </ul>
             <div className="col-span-3 justify-end flex items-center">300g</div>
           </Link> */}
-            {DUMMY_DATA.map((meal) => {
+            {mealLog.map((meal) => {
               return (
                 <LogMealItem
                   key={meal.id}
@@ -244,7 +417,19 @@ const [openMealModal, setOpenMealModal] = useState(false)
         </div>
         {/* Exercise Logging Section */}
         <div className="w-5/6">
-          <h1 className="text-2xl font-bold mb-5">Recent Exercise</h1>
+          <div className="w-full flex flex-row">
+            <h1 className="text-2xl font-bold mb-5 w-full">Recent Exercise</h1>
+            <div className="flex w-full justify-end justify-items-end">
+              <button
+                onClick={() => (
+                  setOpenMealModal(!openMealModal), setModeModal(true)
+                )}
+                className="bg-orange-300 rounded-full w-12 h-12 flex justify-center text-3xl pt-1"
+              >
+                +
+              </button>
+            </div>
+          </div>
           <div className="grid grid-rows-3 gap-6 mb-5">
             <Link href={""} className="grid grid-cols-8 h-3/5">
               <Image
@@ -254,13 +439,10 @@ const [openMealModal, setOpenMealModal] = useState(false)
               ></Image>
               <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
                 <li className="flex items-end">Running</li>
-                <li className="text-gray-500 font-light font-light">
+                <li className="text-gray-500 font-light">
                   45 Minutes &#8226; 250 Calories
                 </li>
               </ul>
-              <div className="col-span-5 justify-end flex items-center">
-                15m
-              </div>
             </Link>
             <Link href={""} className="grid grid-cols-8 h-3/5">
               <Image
@@ -274,9 +456,6 @@ const [openMealModal, setOpenMealModal] = useState(false)
                   15 Minutes &#8226; 100 Calories
                 </li>
               </ul>
-              <div className="col-span-5 justify-end flex items-center">
-                40m
-              </div>
             </Link>
             <Link href={""} className="grid grid-cols-8 h-3/5">
               <Image
@@ -290,13 +469,10 @@ const [openMealModal, setOpenMealModal] = useState(false)
                   35 Minutes &#8226; 275 Calories
                 </li>
               </ul>
-              <div className="col-span-5 justify-end flex items-center">
-                30m
-              </div>
             </Link>
           </div>
         </div>
       </main>
-    </>
+    </main>
   );
 }
