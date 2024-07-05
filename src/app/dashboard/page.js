@@ -19,20 +19,23 @@ import Modal from "@/components/Modal";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { storage } from "@/lib/utils";
+import LogExerciseItem from "@/components/LogExerciseItem";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
   const [mealLog, setMealLog] = useState([]);
-  console.log(mealLog);
+  const [exerciseLog, setExerciseLog] = useState([]);
+  const [modeModal, setModeModal] = useState();
   const [openMealModal, setOpenMealModal] = useState(false);
   const proteinRef = useRef();
   const carbRef = useRef();
   const fatRef = useRef();
   const calorieRef = useRef();
-  const nameRef = useRef();
+  const mealNameRef = useRef();
   const weightRef = useRef();
-  const [modeModal, setModeModal] = useState();
+  const exerciseNameRef = useRef();
+  const exerciseDurationRef = useRef();
 
   const addMealHandler = async (e) => {
     e.preventDefault();
@@ -42,8 +45,8 @@ export default function Dashboard() {
       protein: proteinRef.current.value,
       fat: fatRef.current.value,
       carbohydrate: carbRef.current.value,
-      name: nameRef.current.value,
-      weight: nameRef.current.value,
+      mealName: mealNameRef.current.value,
+      weight: weightRef.current.value,
     };
     const collectionRef = collection(db, "mealLog");
     try {
@@ -65,7 +68,7 @@ export default function Dashboard() {
           mealCal: doc.data().calorie,
           mealProtein: doc.data().protein,
           mealWeight: doc.data().weight,
-          mealName: doc.data().name,
+          mealName: doc.data().mealName,
         };
         // <LogMealItem
         // key={meal.id}
@@ -79,6 +82,47 @@ export default function Dashboard() {
       setMealLog(data);
     };
     getMealLogData();
+  }, []);
+
+  const addExerciseHandler = async (e) => {
+    e.preventDefault();
+
+    const newExercise = {
+      exerciseName: exerciseNameRef.current.value,
+      exerciseDuration: exerciseDurationRef.current.value,
+    };
+    const collectionRef = collection(db, "exerciseLog");
+    try {
+      const docSnap = await addDoc(collectionRef, newExercise);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    const getExerciseLogData = async () => {
+      const collectionRef = collection(db, "exerciseLog");
+      const docsSnap = await getDocs(collectionRef);
+
+      const data = docsSnap.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+          exerciseName: doc.data().exerciseName,
+          exerciseDuration: doc.data().exerciseDuration,
+        };
+        // <LogMealItem
+        // key={meal.id}
+        // mealImage={meal.mealImage}
+        // mealName={meal.mealName}
+        // mealCal={meal.mealCal}
+        // mealProtein={meal.mealProtein}
+        // mealWeight={meal.mealWeight}
+        // />
+      });
+      setExerciseLog(data);
+    };
+    getExerciseLogData();
   }, []);
 
   const DUMMY_USER = [
@@ -135,60 +179,35 @@ export default function Dashboard() {
   return (
     <main
       className={`${
-        openMealModal ? "fixed overflow-hidden pt-[4.6rem] top-0" : ""
+        openMealModal
+          ? "fixed overflow-hidden pt-[4.6rem] top-0 left-0 right-0 mx-auto"
+          : ""
       }`}
     >
       {/* Add Meal Modal Section */}
       <Modal show={openMealModal} onClose={setOpenMealModal}>
         {modeModal ? (
-          <form onSubmit={addMealHandler} className="px-3">
+          <form onSubmit={addExerciseHandler} className="px-3">
             <div className="flex flex-col">
-              <label>Exercise</label>
+              <label>Name</label>
               <input
-                ref={calorieRef}
-                type="number"
+                ref={exerciseNameRef}
+                type="string"
                 min={0.0}
-                placeholder="Enter Calories"
+                placeholder="Enter Exercise"
               />
             </div>
             <div className="flex flex-col">
               <label>Duration (mins)</label>
               <input
-                ref={proteinRef}
+                ref={exerciseDurationRef}
                 type="number"
                 min={0.0}
-                placeholder="Enter Protein"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Carbohydrates</label>
-              <input
-                ref={carbRef}
-                type="number"
-                min={0.0}
-                placeholder="Enter Carbohydrates"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Fat</label>
-              <input
-                ref={fatRef}
-                type="number"
-                min={0.0}
-                placeholder="Enter Fat"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label>Name</label>
-              <input
-                ref={nameRef}
-                type="string"
-                min={0.0}
-                placeholder="Enter Name"
+                placeholder="Enter Duration"
               />
             </div>
             <button className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110">
-              Log Meal
+              Log
             </button>
           </form>
         ) : (
@@ -232,14 +251,26 @@ export default function Dashboard() {
             <div className="flex flex-col">
               <label>Name</label>
               <input
-                ref={nameRef}
+                ref={mealNameRef}
                 type="string"
                 min={0.0}
                 placeholder="Enter Name"
               />
             </div>
-            <button className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110">
-              Log Meal
+            <div className="flex flex-col">
+              <label>Weight</label>
+              <input
+                ref={weightRef}
+                type="string"
+                min={0.0}
+                placeholder="Enter Weight"
+              />
+            </div>
+            <button
+              type="submit"
+              className="rounded-xl w-24 h-11 m-3 text-white font-semibold border-2  bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+            >
+              Log
             </button>
           </form>
         )}
@@ -272,7 +303,7 @@ export default function Dashboard() {
                   labels: [`Consumed Calories`, `Remaining Calories`],
                   datasets: [
                     {
-                      label: "Remaining Calories",
+                      label: "Calories",
                       data: [
                         DUMMY_USER.map((user) => user.consumedCal),
                         DUMMY_USER.map((user) => user.reminingCal),
@@ -430,47 +461,16 @@ export default function Dashboard() {
               </button>
             </div>
           </div>
-          <div className="grid grid-rows-3 gap-6 mb-5">
-            <Link href={""} className="grid grid-cols-8 h-3/5">
-              <Image
-                alt="Person running"
-                src={Running}
-                className="rounded-xl max-h-20 px-7"
-              ></Image>
-              <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
-                <li className="flex items-end">Running</li>
-                <li className="text-gray-500 font-light">
-                  45 Minutes &#8226; 250 Calories
-                </li>
-              </ul>
-            </Link>
-            <Link href={""} className="grid grid-cols-8 h-3/5">
-              <Image
-                alt="Person using jump rope"
-                src={Jumping}
-                className="rounded-xl max-h-20 px-7"
-              ></Image>
-              <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
-                <li className="flex items-end">Jump Rope</li>
-                <li className="text-gray-500 font-light">
-                  15 Minutes &#8226; 100 Calories
-                </li>
-              </ul>
-            </Link>
-            <Link href={""} className="grid grid-cols-8 h-3/5">
-              <Image
-                alt="Person swimming"
-                src={Swimming}
-                className="rounded-xl  max-h-20 px-7"
-              ></Image>
-              <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
-                <li className="flex items-end">Swimming</li>
-                <li className="text-gray-500 font-light">
-                  35 Minutes &#8226; 275 Calories
-                </li>
-              </ul>
-            </Link>
-          </div>
+
+          {exerciseLog.map((exercise) => {
+            return (
+              <LogExerciseItem
+                key={exercise.id}
+                exerciseName={exercise.exerciseName}
+                exerciseDuration={exercise.exerciseDuration}
+              />
+            );
+          })}
         </div>
       </main>
     </main>
