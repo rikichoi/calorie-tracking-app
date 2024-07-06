@@ -47,7 +47,7 @@ export default function AddMealModal({ show, onClose }) {
               ...newMeal,
             },
           ];
-        });
+        }); 
         mealImageRef.current.value = "";
         calorieRef.current.value = "";
         proteinRef.current.value = "";
