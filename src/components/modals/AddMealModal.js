@@ -21,6 +21,7 @@ export default function AddMealModal({ show, onClose }) {
   const [foodList, setFoodList] = useState([]);
   const [manualLog, setManualLog] = useState(false);
   const [logText, setLogText] = useState("Log Manually");
+  const [search, setSearch] = useState('');
 
 
   const addMealHandler = async (e) => {
@@ -127,7 +128,7 @@ export default function AddMealModal({ show, onClose }) {
         </button>
       </div>
       {manualLog ? (
-        <form onSubmit={addMealHandler} className="px-3">
+        <form onSubmit={addMealHandler} className="px-3 flex flex-col gap-4">
           <div className="flex flex-col">
             <label>Name</label>
             <input
@@ -192,7 +193,10 @@ export default function AddMealModal({ show, onClose }) {
         </form>
       ) : (
         <div className="grid gap-6 mb-5">
-          {foodList.map((food) => {
+            {/* console.log(foodList.filter(food => food.foodName.toLowerCase().includes(search))); */}
+
+          <input className="mx-4" onChange={(e) => setSearch(e.target.value)} placeholder="Search all foods..."></input>
+          {foodList.filter((food)=>food.foodName.toLowerCase().includes(search)).map((food) => {
             return (
               <FoodListModal
                 foodId={food.id}

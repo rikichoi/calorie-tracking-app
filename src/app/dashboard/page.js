@@ -24,10 +24,15 @@ import EditExerciseModal from "@/components/modals/EditExerciseModal";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
+import { useContext } from "react";
+import { authContext } from "@/lib/store/auth-context";
+import Home from "../page";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
+  const {user, loading, logout} = useContext(authContext);
+
   const [mealLog, setMealLog] = useState([]);
   const [exerciseLog, setExerciseLog] = useState([]);
   const [modeModal, setModeModal] = useState(false);
@@ -190,7 +195,7 @@ export default function Dashboard() {
         <div className="w-5/6 grid grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold font-Epilogue">
-              Good morning, Julia
+              Good morning, {user.displayName}
             </h1>
             <p className="text-gray-500 text-sm pt-2 pb-4 font-light font-Inter">
               Here&apos;s your daily summary
@@ -199,13 +204,13 @@ export default function Dashboard() {
           <div className="flex justify-end gap-2">
             <button
               onClick={() => deleteAllMealHandler(mealLog)}
-              className="bg-red-700 items-center border-black text-white border-2 rounded-full text-sm w-24 h-14 flex justify-center pt-0.5"
+              className="bg-red-700 items-center border-black text-white border-2 rounded-full  w-36 h-14 flex justify-center pt-0.5"
             >
               Reset Meals
             </button>
             <button
               onClick={() => deleteAllExerciseHandler(exerciseLog)}
-              className="bg-red-500 items-center border-black text-white border-2 rounded-full w-24 h-14 text-sm flex justify-center pt-0.5"
+              className="bg-red-500 items-center border-black text-white border-2 rounded-full w-36 h-14  flex justify-center pt-0.5"
             >
               Reset Exercises
             </button>
@@ -259,14 +264,14 @@ export default function Dashboard() {
               <LinearProgress
                 variant="determinate"
                 color="warning"
-                value={carbProgress}
+                value={fatProgress}
                 className="w-full h-3 rounded-xl transition-all"
               />
               <li className="text-sm">Carbohydrates ({parseInt(carbProgress)}%) {carbCalories}g</li>{" "}
               <LinearProgress
                 variant="determinate"
                 color="secondary"
-                value={fatProgress}
+                value={carbProgress}
                 className="w-full h-3 rounded-xl transition-all"
               />
             </ul>
@@ -288,50 +293,20 @@ export default function Dashboard() {
           <p>{consumedCalories}/2362</p>
         </div>
         {/* Meal Logging Section */}
-        <div className="w-5/6 mt-10">
-          <h1 className="text-2xl font-bold mb-3">Quick Add</h1>
-          <div className="grid grid-cols-7 gap-6 mb-3">
-            <div className="col-span-1">
-              <Link
-                href={"/dashboard"}
-                className="bg-gray-300 justify-center py-1 flex rounded-full"
-              >
-                Food
-              </Link>
-            </div>
-            <div className="col-span-1">
-              {" "}
-              <Link
-                href={"/dashboard"}
-                className="bg-gray-300 justify-center py-1 flex rounded-full"
-              >
-                Drinks
-              </Link>
-            </div>
-            <div className="col-span-1">
-              {" "}
-              <Link
-                href={"/dashboard"}
-                className="bg-gray-300 justify-center py-1 flex rounded-full"
-              >
-                Exercise
-              </Link>
-            </div>
-            <div className="col-span-4 justify-end flex">
+        <div className="w-5/6">
+          <div className="w-full mt-8 mb-5 flex flex-row">
+            <h1 className="text-2xl font-bold w-full">Recent Meals</h1>
+            <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => (
                   setModeModal("addMeal"), setOpenModal(!openModal)
                 )}
-                className="bg-orange-300 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
+                className="bg-green-600 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
               >
                 +
               </button>
             </div>
           </div>
-        </div>
-
-        <div className="w-5/6">
-          <h1 className="text-2xl font-bold  mb-5">Recent Meals</h1>
           <div className="grid gap-6 mb-5 ">
             {mealLog.map((meal) => {
               return (
@@ -372,7 +347,7 @@ export default function Dashboard() {
                 onClick={() => (
                   setModeModal("addExercise"), setOpenModal(!openModal)
                 )}
-                className="bg-orange-300 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
+                className="bg-green-600 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
               >
                 +
               </button>

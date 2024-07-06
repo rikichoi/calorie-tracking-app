@@ -1,21 +1,31 @@
+'use client'
 import Image from "next/image";
 import MainImage from "../images/main-image.png";
 import NutritionImage from "../images/nutrition-image.png";
 import FitnessImage from "../images/fitness-image.png";
 import TargetImage from "../images/target-image.png";
 import BMIImage from "../images/bmi-image.png";
+import { useContext } from "react";
+import { authContext } from "@/lib/store/auth-context";
+import { FcGoogle } from "react-icons/fc";
+import Dashboard from "./dashboard/page";
+
 
 export default function Home() {
+  const {user, loading, logout} = useContext(authContext);
+  const { googleLoginHandler } = useContext(authContext);
+  if(!user){
+
   return (
     <main className="flex min-h-screen h-[1000px] flex-col items-center gap-28 pr-24 pl-24 pt-8">
-      <div className="grid justify-items-center">
+      <div className="grid justify-items-center ">
         <Image
           src={MainImage}
           alt="Fruits"
-          className="rounded-xl brightness-[75%] max-h-[500px] object-cover absolute"
+          className="rounded-xl brightness-[50%] max-h-[500px] object-cover absolute"
         />
         <div className="relative mt-64 items-center ml-24">
-          <h1 className="text-white text-5xl font-semibold mb-2">
+          <h1 className="text-white text-5xl brightness-150 font-semibold mb-2">
             Welcome to Calorie Tracker
           </h1>
           <p className="text-white w-5/6 mb-5">
@@ -23,12 +33,12 @@ export default function Home() {
             calculate your BMI. Get started by signing in or signing up for free
             today.
           </p>
-          <button className="rounded-xl w-28 h-14 mr-4 text-white font-semibold bg-orange-600">
-            Sign Up
-          </button>
-          <button className="rounded-xl w-28 h-14 font-semibold bg-white">
-            Log In
-          </button>
+          <button
+              onClick={googleLoginHandler}
+              className="flex justify-center items-center rounded-xl w-48 h-16 mr-2 text-white font-semibold bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+            >
+              <FcGoogle className="text-2xl mr-3"> </FcGoogle> Sign In
+            </button>
         </div>
       </div>
       <div className=" flex -mb-20 w-5/6">
@@ -116,3 +126,6 @@ export default function Home() {
     </main>
   );
 }
+return <Dashboard/>;
+}
+

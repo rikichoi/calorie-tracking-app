@@ -1,22 +1,20 @@
+'use client';
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+import AuthContextProvider from "@/lib/store/auth-context";
 
-export const metadata = {
-  title: "Calorie Tracking App",
-  description: "Calorie Tracking",
-};
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div>
+      <body>
+        <AuthContextProvider>
           <Navbar />
-        </div>
-        <div>{children}</div>
+          {children}
+        </AuthContextProvider>
       </body>
     </html>
   );

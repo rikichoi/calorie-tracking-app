@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -13,7 +14,7 @@ const firebaseConfig = {
   projectId: "calorie-tracker-61345",
   storageBucket: "calorie-tracker-61345.appspot.com",
   messagingSenderId: "342118702479",
-  appId: "1:342118702479:web:f0968c2f6b08ffd321bffa"
+  appId: "1:342118702479:web:f0968c2f6b08ffd321bffa",
 };
 
 // Initialize Firebase
@@ -24,4 +25,7 @@ const db = getFirestore(app);
 
 const storage = getStorage(app);
 
-export {app, db}
+const auth = getAuth(app);
+
+
+export { app, db, auth };

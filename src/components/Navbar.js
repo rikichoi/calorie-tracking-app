@@ -2,41 +2,67 @@ import React from "react";
 import Image from "next/image";
 import Logo from "../images/logo.png";
 import Link from "next/link";
+import { useContext } from "react";
+import { authContext } from "@/lib/store/auth-context";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Navbar() {
+  const { user, loading, logout } = useContext(authContext);
+  const { googleLoginHandler } = useContext(authContext);
+
   return (
     <div className="pt-2 grid grid-cols-12 border-b-2">
       <div className="pl-28 col-span-2 h-16 justify-start">
-        <Link href="/">
-        <Image src={Logo} alt="Calorie Tracker Logo" className="p-1 min-w-32 min-h-16 max-h-16 max-w-36" />
-        </Link>
+        <Image
+          src={Logo}
+          alt="HealthDiary Logo"
+          className="p-1 min-w-24 min-h-14 max-h-16 max-w-28"
+        />
       </div>
-      <div className="pl-64 text-sm col-span-10 justify-end items-center grid grid-cols-4">
-        <div className=" col-span-3 pr-12 w-4/6 flex flex-row justify-between justify-self-end">
-          <a href="#" className="text-center font-semibold">
-            <p>Products</p>
-          </a>
-          <a href="#" className="text-center font-semibold">
-            <p>Support</p>
-          </a>
-          <a href="#" className="text-center font-semibold">
-            <p>Blog</p>
-          </a>
-          <a href="#" className="text-center font-semibold">
-            <p>About</p>
-          </a>
+      {user && !loading && (
+        <div className="pl-64 w-full text-sm col-span-10 text-right justify-end items-center grid grid-cols-8">
+          <div className=" flex col-span-10 w-full justify-end ">
+            <img
+              src={user.photoURL}
+              alt={user.displayName}
+              referrerPolicy="no-referrer"
+              className="w-11 h-11 rounded-full mr-3"
+            />
+            <button
+              onClick={logout}
+              className="flex justify-center items-center rounded-xl w-36 h-11 mr-2 text-white font-semibold bg-red-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
-        <div className="flex justify-end mr-7">
-          <Link href={"/dashboard"}>
-          <button className="rounded-xl w-24 h-11 mr-2 text-white font-semibold bg-orange-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110">
-            Sign Up
-          </button>
-          </Link>
-          <button className="rounded-xl w-24 h-11 font-semibold bg-gray-300 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 ">
-            Log In
-          </button>
+      )}
+      {!user && (
+        <div className="pl-64 w-full text-sm col-span-10 text-right justify-end items-center grid grid-cols-8">
+          <div className=" col-span-5 flex flex-row gap-14 justify-end w-full">
+            <a href="#" className=" font-semibold">
+              <p>Products</p>
+            </a>
+            <a href="#" className="text-center font-semibold">
+              <p>Support</p>
+            </a>
+            <a href="#" className="text-center font-semibold">
+              <p>Blog</p>
+            </a>
+            <a href="#" className="text-center font-semibold">
+              <p>About</p>
+            </a>
+          </div>
+          <div className=" flex col-span-3 w-full justify-center ">
+            <button
+              onClick={googleLoginHandler}
+              className="flex justify-center items-center rounded-xl w-36 h-11 mr-2 text-white font-semibold bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+            >
+              <FcGoogle className="text-2xl mr-3"> </FcGoogle> Sign In
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

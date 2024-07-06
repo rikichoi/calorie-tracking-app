@@ -48,7 +48,7 @@ export default function AddExerciseModal({ show, onClose }) {
         </button>
       </div>
       <div className="flex flex-col">
-        <label>Name</label>
+        <label>Exercise Type</label>
         <select
           required
           ref={exerciseNameRef}
