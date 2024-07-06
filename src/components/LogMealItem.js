@@ -4,6 +4,11 @@ import Image from "next/image";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function LogMealItem({
+  selectedMeal,
+  selectMeal,
+  editMealMode,
+  show,
+  onClose,
   deleteMeal,
   mealId,
   mealLogId,
@@ -17,7 +22,7 @@ export default function LogMealItem({
 }) {
   return (
     <div className="grid grid-cols-12">
-      <button className="grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]">
+      <button onClick={()=>(selectMeal(selectedMeal), onClose(!show), editMealMode("editMeal"))} className="grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]">
         <div className="grid col-span-8  grid-cols-9 h-3/5">
           <Image
             alt={""}

@@ -20,6 +20,8 @@ export default function AddMealModal({ show, onClose }) {
   const mealImageRef = useRef();
   const [foodList, setFoodList] = useState([]);
   const [manualLog, setManualLog] = useState(false);
+  const [logText, setLogText] = useState("Log Manually");
+
 
   const addMealHandler = async (e) => {
     e.preventDefault();
@@ -87,12 +89,22 @@ export default function AddMealModal({ show, onClose }) {
   function closeModal() {
     if (manualLog == true) {
       setManualLog(false);
+      setLogText("Manual Entry");
       calorieRef.current.value = "";
       proteinRef.current.value = "";
       fatRef.current.value = "";
       carbRef.current.value = "";
       mealNameRef.current.value = "";
       weightRef.current.value = "";
+    }
+  }
+
+  function switchLogText(){
+    if (logText == "Manual Entry"){
+      setLogText("View Food List")
+    }
+    else{
+      setLogText("Manual Entry")
     }
   }
 
@@ -108,10 +120,10 @@ export default function AddMealModal({ show, onClose }) {
       </div>
       <div className=" flex flex-col items-center">
         <button
-          onClick={() => setManualLog(!manualLog)}
+          onClick={() => (setManualLog(!manualLog), switchLogText())}
           className="w-full bg-[#ff791f] max-h-36 max-w-xl font-bold py-3 border-2 rounded-full border-black mb-3 before:content-"
         >
-          Log Manually / View Food List
+          {logText}
         </button>
       </div>
       {manualLog ? (

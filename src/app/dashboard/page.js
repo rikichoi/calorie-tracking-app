@@ -19,6 +19,7 @@ import { storage } from "@/lib/utils";
 import LogExerciseItem from "@/components/LogExerciseItem";
 import AddMealModal from "@/components/modals/AddMealModal";
 import AddExerciseModal from "@/components/modals/AddExerciseModal";
+import EditMealModal from "@/components/modals/EditMealModal";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -26,8 +27,9 @@ export default function Dashboard() {
   const [mealLog, setMealLog] = useState([]);
   const [exerciseLog, setExerciseLog] = useState([]);
   const [modeModal, setModeModal] = useState(false);
-  const [openModal, setOpenModal] = useState(true);
-
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedMealEdit, setSelectedMealEdit] = useState([]);
+  const [selectedMeal, setSelectedMeal] = useState([]);
 
   const deleteMealHandler = async (mealLogId) => {
     const docRef = doc(db, "mealLog", mealLogId);
@@ -40,6 +42,7 @@ export default function Dashboard() {
       console.log(error.message);
     }
   };
+
 
   const deleteExerciseHandler = async (exerciseLogId) => {
     const docRef = doc(db, "exerciseLog", exerciseLogId);
@@ -67,6 +70,8 @@ export default function Dashboard() {
           mealProtein: doc.data().protein,
           mealWeight: doc.data().weight,
           mealName: doc.data().mealName,
+          mealFat: doc.data().fat,
+          mealCarbs: doc.data().carbohydrate,
         };
       });
       setMealLog(data);
@@ -92,8 +97,6 @@ export default function Dashboard() {
     getExerciseLogData();
   }, [openModal]);
 
-
-
   const DUMMY_USER = [
     {
       maintenanceCal: 2000,
@@ -111,14 +114,19 @@ export default function Dashboard() {
       }`}
     >
       {/* Add Meal Modal Section */}
-      <Modal
-        show={openModal}
-        onClose={setOpenModal}
-      >
-        {modeModal ? (
+      <Modal show={openModal} onClose={setOpenModal}>
+        {modeModal == "addExercise" && (
           <AddExerciseModal show={openModal} onClose={setOpenModal} />
-        ) : (
+        )}
+        {modeModal == "addMeal" && (
           <AddMealModal show={openModal} onClose={setOpenModal} />
+        )}
+        {modeModal == "editMeal" && (
+          <EditMealModal
+            sMeal={selectedMeal}
+            show={openModal}
+            onClose={setOpenModal}
+          />
         )}
       </Modal>
       <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
@@ -251,7 +259,7 @@ export default function Dashboard() {
             <div className="col-span-4 justify-end flex">
               <button
                 onClick={() => (
-                  setOpenModal(!openModal), setModeModal(false)
+                  setModeModal("addMeal"), setOpenModal(!openModal)
                 )}
                 className="bg-orange-300 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
               >
@@ -267,7 +275,21 @@ export default function Dashboard() {
             {mealLog.map((meal) => {
               return (
                 <LogMealItem
+                  editMealMode={setModeModal}
+                  show={openModal}
+                  onClose={setOpenModal}
                   deleteMeal={deleteMealHandler}
+                  selectedMeal={[
+                    meal.id,
+                    meal.mealImage,
+                    meal.mealCal,
+                    meal.mealProtein,
+                    meal.mealWeight,
+                    meal.mealName,
+                    meal.mealFat,
+                    meal.mealCarbs,
+                  ]}
+                  selectMeal={setSelectedMeal}
                   mealId={meal.id}
                   key={meal.id}
                   mealImage={meal.mealImage}
@@ -287,7 +309,7 @@ export default function Dashboard() {
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => (
-                  setOpenModal(!openModal), setModeModal(true)
+                  setModeModal("addExercise"), setOpenModal(!openModal)
                 )}
                 className="bg-orange-300 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
               >
