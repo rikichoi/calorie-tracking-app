@@ -35,7 +35,7 @@ export default function Dashboard() {
   const [selectedMeal, setSelectedMeal] = useState([]);
   const [selectedExercise, setselectedExercise] = useState([]);
   const [consumedCalories, setConsumedCalories] = useState(0);
-  const [remainingCalories, setremainingCalories] = useState(0);
+  const [remainingCalories, setremainingCalories] = useState(2362);
   const [proteinCalories, setProteinCalories] = useState(0);
   const [carbCalories, setCarbCalories] = useState(0);
   const [fatCalories, setFatCalories] = useState(0);
