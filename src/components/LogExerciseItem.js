@@ -7,6 +7,11 @@ import Swimming from "@/images/swimming-image.png";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function LogExerciseItem({
+  selectedExercise,
+  selectExercise,
+  editExerciseMode,
+  show,
+  onClose,
   exerciseId,
   deleteExercise,
   exerciseName,
@@ -28,20 +33,30 @@ export default function LogExerciseItem({
   }
 
   return (
-    <div className="grid gap-6 grid-cols-9 mb-5">
-      <Link href={""} className="grid col-span-8 grid-cols-8 h-3/5">
-        <Image
-          alt=""
-          src={exerciseImg}
-          className="rounded-xl max-h-20 px-7 max-w-36"
-        ></Image>
-        <ul className="col-span-2 ml-3 grid grid-rows-2 h-full">
-          <li className="flex items-end">{exerciseName}</li>
-          <li className="text-gray-500 font-light">
-            {exerciseDuration} Minutes &#8226; {exerciseCalorie} Calories
-          </li>
-        </ul>
-      </Link>
+    <div className="grid grid-cols-12">
+      <button
+        onClick={() => (
+          selectExercise(selectedExercise),
+          onClose(!show),
+          editExerciseMode("editExercise")
+        )}
+        className="grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]"
+      >
+        <div className="grid col-span-8 grid-cols-9 ">
+          <Image
+            alt=""
+            src={exerciseImg}
+            className="rounded-xl ml-2 max-w-20 flex text-center max-h-24 col-span-1"
+            unoptimized
+          ></Image>
+          <ul className="col-span-8 ml-10 grid grid-rows-2 h-full">
+            <li className="flex items-end">{exerciseName}</li>
+            <li className="flex items-start text-gray-500 font-light">
+              {exerciseDuration} Minutes &#8226; {exerciseCalorie} Calories
+            </li>
+          </ul>
+        </div>
+      </button>
       <div className="justify-end flex items-center">
         <button
           onClick={() => {

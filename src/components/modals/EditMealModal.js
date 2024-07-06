@@ -144,7 +144,7 @@ export default function EditMealModal({ sMeal, show, onClose }) {
           onClick={() => editMealHandler(sMeal[0])}
           className="rounded-xl w-24 h-11 m-7 text-white font-semibold border-2 border-black bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
         >
-          Log
+          Update
         </button>
     </div>
   );

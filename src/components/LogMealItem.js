@@ -23,7 +23,7 @@ export default function LogMealItem({
   return (
     <div className="grid grid-cols-12">
       <button onClick={()=>(selectMeal(selectedMeal), onClose(!show), editMealMode("editMeal"))} className="grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]">
-        <div className="grid col-span-8  grid-cols-9 h-3/5">
+        <div className="grid col-span-8  grid-cols-9">
           <Image
             alt={""}
             src={mealImage}

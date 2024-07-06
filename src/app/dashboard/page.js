@@ -20,6 +20,7 @@ import LogExerciseItem from "@/components/LogExerciseItem";
 import AddMealModal from "@/components/modals/AddMealModal";
 import AddExerciseModal from "@/components/modals/AddExerciseModal";
 import EditMealModal from "@/components/modals/EditMealModal";
+import EditExerciseModal from "@/components/modals/EditExerciseModal";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -30,6 +31,7 @@ export default function Dashboard() {
   const [openModal, setOpenModal] = useState(false);
   const [selectedMealEdit, setSelectedMealEdit] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState([]);
+  const [selectedExercise, setselectedExercise] = useState([]);
 
   const deleteMealHandler = async (mealLogId) => {
     const docRef = doc(db, "mealLog", mealLogId);
@@ -42,7 +44,6 @@ export default function Dashboard() {
       console.log(error.message);
     }
   };
-
 
   const deleteExerciseHandler = async (exerciseLogId) => {
     const docRef = doc(db, "exerciseLog", exerciseLogId);
@@ -124,6 +125,13 @@ export default function Dashboard() {
         {modeModal == "editMeal" && (
           <EditMealModal
             sMeal={selectedMeal}
+            show={openModal}
+            onClose={setOpenModal}
+          />
+        )}
+        {modeModal == "editExercise" && (
+          <EditExerciseModal
+            sExercise={selectedExercise}
             show={openModal}
             onClose={setOpenModal}
           />
@@ -317,18 +325,28 @@ export default function Dashboard() {
               </button>
             </div>
           </div>
-
-          {exerciseLog.map((exercise) => {
-            return (
-              <LogExerciseItem
-                deleteExercise={deleteExerciseHandler}
-                exerciseId={exercise.id}
-                key={exercise.id}
-                exerciseName={exercise.exerciseName}
-                exerciseDuration={exercise.exerciseDuration}
-              />
-            );
-          })}
+          <div className="grid gap-6 mb-5 ">
+            {exerciseLog.map((exercise) => {
+              return (
+                <LogExerciseItem
+                  editExerciseMode={setModeModal}
+                  show={openModal}
+                  onClose={setOpenModal}
+                  selectedExercise={[
+                    exercise.id,
+                    exercise.exerciseName,
+                    exercise.exerciseDuration,
+                  ]}
+                  selectExercise={setselectedExercise}
+                  deleteExercise={deleteExerciseHandler}
+                  exerciseId={exercise.id}
+                  key={exercise.id}
+                  exerciseName={exercise.exerciseName}
+                  exerciseDuration={exercise.exerciseDuration}
+                />
+              );
+            })}
+          </div>
         </div>
       </main>
     </main>
