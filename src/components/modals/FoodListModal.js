@@ -1,6 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRef, useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 export default function FoodListModal({
   foodId,
@@ -12,9 +21,29 @@ export default function FoodListModal({
   foodCal,
   foodWeight,
 }) {
+
+  const addFoodHandler = async (e) => {
+
+    const newFood = {
+      mealImage: foodImage,
+      calorie: foodCal,
+      protein: foodProtein,
+      fat: foodFat,
+      carbohydrate: foodCarb,
+      mealName: foodName,
+      weight: foodWeight,
+    };
+    const collectionRef = collection(db, "mealLog");
+      try {
+        await addDoc(collectionRef, newFood);
+      } catch (error) {
+        console.log(error.message);
+      }
+  };
+
   return (
     <div className="flex flex-col items-center">
-      <button className="grid grid-cols-8 hover:bg-[#C8CFA0] hover:border-2 hover:border-[#C8CFA0] rounded-xl max-w-xl justify-center py-3 px-4">
+      <button onClick={() => addFoodHandler()} className="grid grid-cols-8 hover:bg-[#C8CFA0]  hover:border-[#C8CFA0] rounded-xl max-w-xl justify-center py-3 px-4">
         <Image
           src={foodImage}
           alt={`${foodName} Image`}

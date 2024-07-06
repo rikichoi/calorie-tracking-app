@@ -262,8 +262,8 @@ export default function Dashboard() {
         </div>
 
         <div className="w-5/6">
-          <h1 className="text-2xl font-bold mb-5">Recent Meals</h1>
-          <div className="grid gap-6 mb-5">
+          <h1 className="text-2xl font-bold  mb-5">Recent Meals</h1>
+          <div className="grid gap-6 mb-5 ">
             {mealLog.map((meal) => {
               return (
                 <LogMealItem

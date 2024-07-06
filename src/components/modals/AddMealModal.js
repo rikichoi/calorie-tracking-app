@@ -17,16 +17,9 @@ export default function AddMealModal({ show, onClose }) {
   const calorieRef = useRef();
   const mealNameRef = useRef();
   const weightRef = useRef();
-  const foodImageRef = useRef();
-  const foodNameRef = useRef();
-  const foodProteinRef = useRef();
-  const foodCarbRef = useRef();
-  const foodFatRef = useRef();
-  const foodCalRef = useRef();
-  const foodWeightRef = useRef();
+  const mealImageRef = useRef();
   const [foodList, setFoodList] = useState([]);
   const [manualLog, setManualLog] = useState(false);
-  console.log(foodList);
 
   const addMealHandler = async (e) => {
     e.preventDefault();
@@ -53,7 +46,7 @@ export default function AddMealModal({ show, onClose }) {
             },
           ];
         });
-
+        mealImageRef.current.value = "";
         calorieRef.current.value = "";
         proteinRef.current.value = "";
         fatRef.current.value = "";
@@ -104,7 +97,7 @@ export default function AddMealModal({ show, onClose }) {
   }
 
   return (
-    <>
+    <div>
       <div className="w-full flex flex-row justify-end p-4">
         <button
           onClick={() => (onClose(!show), closeModal())}
@@ -114,12 +107,12 @@ export default function AddMealModal({ show, onClose }) {
         </button>
       </div>
       <div className=" flex flex-col items-center">
-      <button
-        onClick={() => setManualLog(!manualLog)}
-        className="w-full bg-[#ff791f] max-h-36 max-w-xl font-bold py-3 border-2 rounded-full border-black mb-3"
-      >
-        Log Manually / View Food List
-      </button>
+        <button
+          onClick={() => setManualLog(!manualLog)}
+          className="w-full bg-[#ff791f] max-h-36 max-w-xl font-bold py-3 border-2 rounded-full border-black mb-3 before:content-"
+        >
+          Log Manually / View Food List
+        </button>
       </div>
       {manualLog ? (
         <form onSubmit={addMealHandler} className="px-3">
@@ -204,6 +197,6 @@ export default function AddMealModal({ show, onClose }) {
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }
