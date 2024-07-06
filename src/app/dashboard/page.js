@@ -21,6 +21,9 @@ import AddMealModal from "@/components/modals/AddMealModal";
 import AddExerciseModal from "@/components/modals/AddExerciseModal";
 import EditMealModal from "@/components/modals/EditMealModal";
 import EditExerciseModal from "@/components/modals/EditExerciseModal";
+import LinearProgress, {
+  linearProgressClasses,
+} from "@mui/material/LinearProgress";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -36,6 +39,9 @@ export default function Dashboard() {
   const [proteinCalories, setProteinCalories] = useState(0);
   const [carbCalories, setCarbCalories] = useState(0);
   const [fatCalories, setFatCalories] = useState(0);
+  const [proteinProgress, setProteinProgress] = useState(0);
+  const [carbProgress, setCarbProgress] = useState(0);
+  const [fatProgress, setFatProgress] = useState(0);
 
   function getConsumedAndRemainingCalories(mealLog) {
     let sum = 0;
@@ -53,19 +59,21 @@ export default function Dashboard() {
     }
   }
 
-  
   function getNutritionValues(mealLog) {
     let protein = 0;
     let carb = 0;
     let fat = 0;
     for (var i = 0, len = mealLog.length; i < len; i++) {
       protein += Number(mealLog[i].protein);
-      carb += Number(mealLog[i].carb);
+      carb += Number(mealLog[i].carbohydrate);
       fat += Number(mealLog[i].fat);
     }
-      setProteinCalories(protein);
-      setCarbCalories(carb);
-      setFatCalories(fat);
+    setProteinCalories(protein);
+    setCarbCalories(carb);
+    setFatCalories(fat);
+    setProteinProgress((protein / 136) * 100);
+    setCarbProgress((carb / 361) * 100);
+    setFatProgress((fat / 73) * 100);
   }
 
   const deleteMealHandler = async (mealLogId) => {
@@ -127,7 +135,7 @@ export default function Dashboard() {
     getMealLogData();
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
-  }, [openModal, getConsumedAndRemainingCalories,getNutritionValues, mealLog]);
+  }, [openModal, getConsumedAndRemainingCalories, getNutritionValues, mealLog]);
 
   useEffect(() => {
     const getExerciseLogData = async () => {
@@ -189,12 +197,6 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex justify-end gap-2">
-          <button
-              onClick={() => console.log(proteinCalories)}
-              className="bg-red-700 items-center border-black text-white border-2 rounded-full text-sm w-24 h-14 flex justify-center pt-0.5"
-            >
-              Reset Meals
-            </button>
             <button
               onClick={() => deleteAllMealHandler(mealLog)}
               className="bg-red-700 items-center border-black text-white border-2 rounded-full text-sm w-24 h-14 flex justify-center pt-0.5"
@@ -244,37 +246,29 @@ export default function Dashboard() {
           </div>
           {/* Right Overview Section */}
           <div className="bg-gray-200 min-h-full rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
-            <ul className="space-y-1 w-full">
-              <li className="text-sm">Protein</li>
-              <div
-                className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
-                role="progressbar"
-                aria-valuenow="50"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                <div className={`flex flex-col justify-center rounded-full overflow-hidden bg-yellow-500 text-xs text-white text-center whitespace-nowrap duration-500 transition-all w-5`}></div>
-              </div>
-              <li className="text-sm">Net Carbs</li>
-              <div
-                className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
-                role="progressbar"
-                aria-valuenow="25"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                <div className="flex flex-col justify-center overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500 w-3/4"></div>
-              </div>
-              <li className="text-sm">Fat</li>
-              <div
-                className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
-                role="progressbar"
-                aria-valuenow="50"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                <div className="flex flex-col justify-center rounded-full overflow-hidden bg-red-500 text-xs text-white text-center whitespace-nowrap transition duration-500 w-1/2"></div>
-              </div>
+            <ul className="space-y-3 w-full">
+            <span className="font-bold">Nutrition Intake Breakdown</span>
+              <li className="text-sm">Protein ({parseInt(proteinProgress)}%) {proteinCalories}g</li>
+              <LinearProgress
+                variant="determinate"
+                color="success"
+                value={proteinProgress}
+                className="w-full h-3 rounded-xl transition-all"
+              />
+              <li className="text-sm">Fats ({parseInt(fatProgress)}%) {fatCalories}g</li>{" "}
+              <LinearProgress
+                variant="determinate"
+                color="warning"
+                value={carbProgress}
+                className="w-full h-3 rounded-xl transition-all"
+              />
+              <li className="text-sm">Carbohydrates ({parseInt(carbProgress)}%) {carbCalories}g</li>{" "}
+              <LinearProgress
+                variant="determinate"
+                color="secondary"
+                value={fatProgress}
+                className="w-full h-3 rounded-xl transition-all"
+              />
             </ul>
           </div>
         </div>
