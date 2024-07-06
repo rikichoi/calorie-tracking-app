@@ -9,7 +9,7 @@ import {
   getDocs,
   deleteDoc,
   doc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { Smokum } from "next/font/google";
 
@@ -25,17 +25,15 @@ export default function EditMealModal({ sMeal, show, onClose }) {
   const editMealHandler = async (mealLogId) => {
     const docRef = doc(db, "mealLog", mealLogId);
     const newMeal = {
-        calorie: calorieRef.current.value,
-        protein: proteinRef.current.value,
-        fat: fatRef.current.value,
-        carbohydrate: carbRef.current.value,
-        mealName: mealNameRef.current.value,
-        weight: weightRef.current.value,
-      };
+      calorie: calorieRef.current.value,
+      protein: proteinRef.current.value,
+      fat: fatRef.current.value,
+      carbohydrate: carbRef.current.value,
+      mealName: mealNameRef.current.value,
+      weight: weightRef.current.value,
+    };
     try {
-      await updateDoc(docRef, newMeal), {
-        
-      };
+      await updateDoc(docRef, newMeal), {};
     } catch (error) {
       console.log(error.message);
     }
@@ -48,11 +46,7 @@ export default function EditMealModal({ sMeal, show, onClose }) {
     weightRef.current.value = sMeal[4];
     calorieRef.current.value = sMeal[2];
     proteinRef.current.value = sMeal[3];
-    console.log(sMeal)
   }, [sMeal]);
-
-
-
 
   return (
     <div className=" flex flex-col items-center">
@@ -77,7 +71,7 @@ export default function EditMealModal({ sMeal, show, onClose }) {
         unoptimized
         className="rounded-full  w-3 col-span-2 max-h-20 object-cover"
       />
-      <div  className="px-3">
+      <div className="px-3">
         <div className="flex flex-col">
           <label>Name</label>
           <input
@@ -103,7 +97,7 @@ export default function EditMealModal({ sMeal, show, onClose }) {
             ref={proteinRef}
             type="number"
             min={0.0}
-            defaultValue={proteinRef}
+            defaultValue={Number(proteinRef)}
             placeholder="Enter Protein"
           />
         </div>
@@ -132,20 +126,19 @@ export default function EditMealModal({ sMeal, show, onClose }) {
           <label>Weight</label>
           <input
             ref={weightRef}
-            type="string"
+            type="number"
             min={0.0}
             defaultValue={weightRef}
             placeholder="Enter Weight"
           />
         </div>
-
       </div>
       <button
-          onClick={() => editMealHandler(sMeal[0])}
-          className="rounded-xl w-24 h-11 m-7 text-white font-semibold border-2 border-black bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
-        >
-          Update
-        </button>
+        onClick={() => editMealHandler(sMeal[0])}
+        className="rounded-xl w-24 h-11 m-7 text-white font-semibold border-2 border-black bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+      >
+        Update
+      </button>
     </div>
   );
 }

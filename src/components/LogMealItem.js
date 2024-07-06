@@ -35,11 +35,11 @@ export default function LogMealItem({
           <ul className="col-span-4 ml-10 grid grid-rows-2 h-full">
             <li className="flex items-end">{mealName}</li>
             <li className="flex items-start text-gray-500 font-light">
-              {mealCal} Calories &#8226; {mealProtein}g Protein
+              {Number(mealCal)} Calories &#8226; {Number(mealProtein)}g Protein
             </li>
           </ul>
           <div className="col-span-3 justify-end flex items-center">
-            {mealWeight}g{" "}
+            {Number(mealWeight)}g{" "}
           </div>
         </div>
       </button>

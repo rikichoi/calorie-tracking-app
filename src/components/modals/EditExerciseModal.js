@@ -65,7 +65,7 @@ export default function EditExerciseModal({ sExercise, show, onClose }) {
         <div className="flex flex-col">
           <label>Duration</label>
           <input
-            ref={exerciseDurationRef}
+            ref={Number(exerciseDurationRef)}
             type="number"
             min={0.0}
             defaultValue={exerciseDurationRef}
@@ -74,6 +74,7 @@ export default function EditExerciseModal({ sExercise, show, onClose }) {
         </div>
       </div>
       <button
+        type="submit"
         onClick={() => editExerciseHandler(sExercise[0])}
         className="rounded-xl w-24 h-11 m-7 text-white font-semibold border-2 border-black bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
       >

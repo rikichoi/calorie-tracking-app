@@ -29,9 +29,28 @@ export default function Dashboard() {
   const [exerciseLog, setExerciseLog] = useState([]);
   const [modeModal, setModeModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [selectedMealEdit, setSelectedMealEdit] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState([]);
   const [selectedExercise, setselectedExercise] = useState([]);
+  const [maintenanceCalories, setMaintenanceCalories] = useState([]);
+  const [consumedCalories, setConsumedCalories] = useState(0);
+  const [remainingCalories, setremainingCalories] = useState(0);
+  const [mealIdList, setMealIdList] = useState([]);
+
+  function getConsumedCalories(mealLog) {
+    let sum = 0;
+    let remaining = 2362;
+    for (var i = 0, len = mealLog.length; i < len; i++) {
+      sum += Number(mealLog[i].calorie);
+      remaining-=Number(mealLog[i].calorie);
+    }
+    if (sum == consumedCalories) {
+      return;
+    } {
+      setremainingCalories(remaining);
+      setConsumedCalories(sum);
+    }
+  };
+
 
   const deleteMealHandler = async (mealLogId) => {
     const docRef = doc(db, "mealLog", mealLogId);
@@ -57,6 +76,18 @@ export default function Dashboard() {
     }
   };
 
+  function deleteAllMealHandler(mealLog) {
+    for (var i = 0, len = mealLog.length; i < len; i++) {
+      deleteMealHandler(mealLog[i].id);
+    }
+  }
+
+  function deleteAllExerciseHandler(exerciseLog) {
+    for (var i = 0, len = exerciseLog.length; i < len; i++) {
+      deleteExerciseHandler(exerciseLog[i].id);
+    }
+  }
+
   useEffect(() => {
     const getMealLogData = async () => {
       const collectionRef = collection(db, "mealLog");
@@ -78,7 +109,8 @@ export default function Dashboard() {
       setMealLog(data);
     };
     getMealLogData();
-  }, [openModal]);
+    getConsumedCalories(mealLog);
+  }, [openModal, getConsumedCalories, mealLog]);
 
   useEffect(() => {
     const getExerciseLogData = async () => {
@@ -97,6 +129,12 @@ export default function Dashboard() {
     };
     getExerciseLogData();
   }, [openModal]);
+
+  //   function findConsumedCal(data){
+  // data.map((cal)=>{
+  //   console.log(cal[0])
+  // })
+  //   }
 
   const DUMMY_USER = [
     {
@@ -138,13 +176,29 @@ export default function Dashboard() {
         )}
       </Modal>
       <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
-        <div className="w-5/6">
-          <h1 className="text-2xl font-bold font-Epilogue">
-            Good morning, Julia
-          </h1>
-          <p className="text-gray-500 text-sm pt-2 pb-4 font-light font-Inter">
-            Here&apos;s your daily summary
-          </p>
+        <div className="w-5/6 grid grid-cols-2">
+          <div>
+            <h1 className="text-2xl font-bold font-Epilogue">
+              Good morning, Julia
+            </h1>
+            <p className="text-gray-500 text-sm pt-2 pb-4 font-light font-Inter">
+              Here&apos;s your daily summary
+            </p>
+          </div>
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => deleteAllMealHandler(mealLog)}
+              className="bg-red-700 items-center border-black text-white border-2 rounded-full text-sm w-24 h-14 flex justify-center pt-0.5"
+            >
+              Reset Meals
+            </button>
+            <button
+              onClick={() => deleteAllExerciseHandler(exerciseLog)}
+              className="bg-red-500 items-center border-black text-white border-2 rounded-full w-24 h-14 text-sm flex justify-center pt-0.5"
+            >
+              Reset Exercises
+            </button>
+          </div>
         </div>
         {/* Left Overview Section */}
         <div className="w-5/6 grid grid-cols-2 gap-4">
@@ -152,8 +206,7 @@ export default function Dashboard() {
             <ul className="pl-12 col-span-2">
               <li className="text-sm">You have consumed</li>
               <li className="text-lg pt-3 font-bold">
-                <span className="text-green-500">{numberFormatter(1500)}</span>/
-                {numberFormatter(2000)}
+                <span className="">{consumedCalories}</span> / 2362
               </li>
               <li className="font-bold">Calories</li>
             </ul>
@@ -167,8 +220,8 @@ export default function Dashboard() {
                     {
                       label: "Calories",
                       data: [
-                        DUMMY_USER.map((user) => user.consumedCal),
-                        DUMMY_USER.map((user) => user.reminingCal),
+                        consumedCalories,
+                        remainingCalories,
                       ],
                       backgroundColor: ["#FFA500", "#000000"],
                       borderWidth: 5,
@@ -178,7 +231,7 @@ export default function Dashboard() {
               />
               <div className="absolute">
                 <span className="text-center flex text-sm font-bold text-gray-800 ">
-                  {DUMMY_USER.map((user) => user.reminingCal)}
+                 {remainingCalories}/2362
                 </span>
               </div>
             </div>

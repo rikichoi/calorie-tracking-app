@@ -52,7 +52,7 @@ export default function LogExerciseItem({
           <ul className="col-span-8 ml-10 grid grid-rows-2 h-full">
             <li className="flex items-end">{exerciseName}</li>
             <li className="flex items-start text-gray-500 font-light">
-              {exerciseDuration} Minutes &#8226; {exerciseCalorie} Calories
+              {Number(exerciseDuration)} Minutes &#8226; {exerciseCalorie} Calories
             </li>
           </ul>
         </div>
