@@ -31,26 +31,42 @@ export default function Dashboard() {
   const [openModal, setOpenModal] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState([]);
   const [selectedExercise, setselectedExercise] = useState([]);
-  const [maintenanceCalories, setMaintenanceCalories] = useState([]);
   const [consumedCalories, setConsumedCalories] = useState(0);
   const [remainingCalories, setremainingCalories] = useState(0);
-  const [mealIdList, setMealIdList] = useState([]);
+  const [proteinCalories, setProteinCalories] = useState(0);
+  const [carbCalories, setCarbCalories] = useState(0);
+  const [fatCalories, setFatCalories] = useState(0);
 
-  function getConsumedCalories(mealLog) {
+  function getConsumedAndRemainingCalories(mealLog) {
     let sum = 0;
     let remaining = 2362;
     for (var i = 0, len = mealLog.length; i < len; i++) {
       sum += Number(mealLog[i].calorie);
-      remaining-=Number(mealLog[i].calorie);
+      remaining -= Number(mealLog[i].calorie);
     }
     if (sum == consumedCalories) {
       return;
-    } {
+    }
+    {
       setremainingCalories(remaining);
       setConsumedCalories(sum);
     }
-  };
+  }
 
+  
+  function getNutritionValues(mealLog) {
+    let protein = 0;
+    let carb = 0;
+    let fat = 0;
+    for (var i = 0, len = mealLog.length; i < len; i++) {
+      protein += Number(mealLog[i].protein);
+      carb += Number(mealLog[i].carb);
+      fat += Number(mealLog[i].fat);
+    }
+      setProteinCalories(protein);
+      setCarbCalories(carb);
+      setFatCalories(fat);
+  }
 
   const deleteMealHandler = async (mealLogId) => {
     const docRef = doc(db, "mealLog", mealLogId);
@@ -109,8 +125,9 @@ export default function Dashboard() {
       setMealLog(data);
     };
     getMealLogData();
-    getConsumedCalories(mealLog);
-  }, [openModal, getConsumedCalories, mealLog]);
+    getConsumedAndRemainingCalories(mealLog);
+    getNutritionValues(mealLog);
+  }, [openModal, getConsumedAndRemainingCalories,getNutritionValues, mealLog]);
 
   useEffect(() => {
     const getExerciseLogData = async () => {
@@ -129,20 +146,6 @@ export default function Dashboard() {
     };
     getExerciseLogData();
   }, [openModal]);
-
-  //   function findConsumedCal(data){
-  // data.map((cal)=>{
-  //   console.log(cal[0])
-  // })
-  //   }
-
-  const DUMMY_USER = [
-    {
-      maintenanceCal: 2000,
-      consumedCal: 1572,
-      reminingCal: 428,
-    },
-  ];
 
   return (
     <main
@@ -186,6 +189,12 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex justify-end gap-2">
+          <button
+              onClick={() => console.log(proteinCalories)}
+              className="bg-red-700 items-center border-black text-white border-2 rounded-full text-sm w-24 h-14 flex justify-center pt-0.5"
+            >
+              Reset Meals
+            </button>
             <button
               onClick={() => deleteAllMealHandler(mealLog)}
               className="bg-red-700 items-center border-black text-white border-2 rounded-full text-sm w-24 h-14 flex justify-center pt-0.5"
@@ -219,10 +228,7 @@ export default function Dashboard() {
                   datasets: [
                     {
                       label: "Calories",
-                      data: [
-                        consumedCalories,
-                        remainingCalories,
-                      ],
+                      data: [consumedCalories, remainingCalories],
                       backgroundColor: ["#FFA500", "#000000"],
                       borderWidth: 5,
                     },
@@ -231,7 +237,7 @@ export default function Dashboard() {
               />
               <div className="absolute">
                 <span className="text-center flex text-sm font-bold text-gray-800 ">
-                 {remainingCalories}/2362
+                  {remainingCalories}/2362
                 </span>
               </div>
             </div>
@@ -247,8 +253,8 @@ export default function Dashboard() {
                 aria-valuemin="0"
                 aria-valuemax="100"
               >
-                <div className="flex flex-col justify-center rounded-full overflow-hidden bg-yellow-500 text-xs text-white text-center whitespace-nowrap transition duration-500 w-5/6"></div>
-              </div>{" "}
+                <div className={`flex flex-col justify-center rounded-full overflow-hidden bg-yellow-500 text-xs text-white text-center whitespace-nowrap duration-500 transition-all w-5`}></div>
+              </div>
               <li className="text-sm">Net Carbs</li>
               <div
                 className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
@@ -275,7 +281,7 @@ export default function Dashboard() {
         {/* Calorie Goal Progress Bar */}
         <div className="w-5/6 mt-10">
           {/* this might have to turn into a list so we can allow for mapping data */}
-          <p>Daily Calorie Goal</p>
+          <p>Maintenance Calorie Goal</p>
           <div
             className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
             role="progressbar"
@@ -285,7 +291,7 @@ export default function Dashboard() {
           >
             <div className="flex flex-col justify-center rounded-full overflow-hidden bg-teal-500 text-xs text-white text-center whitespace-nowrap transition duration-500 w-4/5"></div>
           </div>
-          <p>1,500 of 2,000 calories</p>
+          <p>{consumedCalories}/2362</p>
         </div>
         {/* Meal Logging Section */}
         <div className="w-5/6 mt-10">
