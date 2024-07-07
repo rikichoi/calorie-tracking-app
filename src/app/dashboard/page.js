@@ -313,7 +313,7 @@ export default function Dashboard() {
           <p>{consumedCalories}/2362</p>
         </div>
         {/* Meal Logging Section */}
-        <div className="w-5/6">
+        <div className="border- w-5/6">
           <div className="w-full mt-8 mb-5 flex flex-row">
             <h1 className="text-2xl font-bold w-full">Recent Meals</h1>
             <div className="flex w-full justify-end justify-items-end">
@@ -321,15 +321,15 @@ export default function Dashboard() {
                 onClick={() => deleteAllMealHandler(mealLog)}
                 className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
               >
-                Reset Meals
+                Reset Meal
               </button>
               <button
                 onClick={() => (
                   setModeModal("addMeal"), setOpenModal(!openModal)
                 )}
-                className="bg-green-600 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
+                className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
               >
-                +
+                + Add Meal
               </button>
             </div>
           </div>
@@ -373,15 +373,15 @@ export default function Dashboard() {
                 onClick={() => deleteAllExerciseHandler(exerciseLog)}
                 className="bg-red-700 items-center border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
               >
-                Reset Exercises
+                Reset Exercise
               </button>
               <button
                 onClick={() => (
                   setModeModal("addExercise"), setOpenModal(!openModal)
                 )}
-                className="bg-green-600 border-black border-2 rounded-full w-12 h-12 flex justify-center text-3xl pt-0.5"
+                className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
               >
-                +
+                + Add Exercise
               </button>
             </div>
           </div>
