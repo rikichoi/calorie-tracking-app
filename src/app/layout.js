@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <title>HealthDiary</title>
+      </head>
       <body>
         <AuthContextProvider>
           <Navbar />
