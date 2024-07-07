@@ -7,9 +7,16 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  where,
+  query
 } from "firebase/firestore";
+import { useContext } from "react";
+import { authContext } from "@/lib/store/auth-context";
 
 export default function AddExerciseModal({ show, onClose }) {
+  const { user, loading, logout } = useContext(authContext);
+
+
   const exerciseNameRef = useRef();
   const exerciseDurationRef = useRef();
 
@@ -17,6 +24,7 @@ export default function AddExerciseModal({ show, onClose }) {
       e.preventDefault();
 
       const newExercise = {
+        uid: user.uid,
         exerciseName: exerciseNameRef.current.value,
         exerciseDuration: exerciseDurationRef.current.value,
       };
@@ -24,6 +32,8 @@ export default function AddExerciseModal({ show, onClose }) {
       if (exerciseDurationRef.current.value > 0) {
       try {
         const docSnap = await addDoc(collectionRef, newExercise);
+        exerciseDurationRef.current.value = "";
+
       } catch (error) {
         console.log(error.message);
       }

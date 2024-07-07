@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
@@ -7,10 +8,17 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  where,
+  query
 } from "firebase/firestore";
 import FoodListModal from "./FoodListModal";
+import { useContext } from "react";
+import { authContext } from "@/lib/store/auth-context";
+
 
 export default function AddMealModal({ show, onClose }) {
+  const { user, loading, logout } = useContext(authContext);
+
   const proteinRef = useRef();
   const carbRef = useRef();
   const fatRef = useRef();
@@ -20,7 +28,7 @@ export default function AddMealModal({ show, onClose }) {
   const mealImageRef = useRef();
   const [foodList, setFoodList] = useState([]);
   const [manualLog, setManualLog] = useState(false);
-  const [logText, setLogText] = useState("Log Manually");
+  const [logText, setLogText] = useState("Manual Entry");
   const [search, setSearch] = useState('');
 
 
@@ -28,6 +36,7 @@ export default function AddMealModal({ show, onClose }) {
     e.preventDefault();
 
     const newMeal = {
+      uid: user.uid,
       calorie: calorieRef.current.value,
       protein: proteinRef.current.value,
       fat: fatRef.current.value,
@@ -40,16 +49,6 @@ export default function AddMealModal({ show, onClose }) {
       try {
         const docSnap = await addDoc(collectionRef, newMeal);
 
-        setMealLog((prevState) => {
-          return [
-            ...prevState,
-            {
-              id: docSnap.id,
-              ...newMeal,
-            },
-          ];
-        }); 
-        mealImageRef.current.value = "";
         calorieRef.current.value = "";
         proteinRef.current.value = "";
         fatRef.current.value = "";

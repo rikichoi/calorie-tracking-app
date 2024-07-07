@@ -37,7 +37,7 @@ export default function Home() {
               onClick={googleLoginHandler}
               className="flex justify-center items-center rounded-xl w-48 h-16 mr-2 text-white font-semibold bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
             >
-              <FcGoogle className="text-2xl mr-3"> </FcGoogle> Sign In
+              <FcGoogle className="text-2xl mr-3"> </FcGoogle> Get Started!
             </button>
         </div>
       </div>
@@ -96,28 +96,28 @@ export default function Home() {
       <div className="  w-5/6 h-20 grid grid-cols-4 gap-5">
         <div>
         <a href="#">
-          <h5 className="text-gray-500 text-sm text-center">
+          <h5 className="text-gray-500 text-center">
             About Us
           </h5>
           </a>
         </div>
         <div>
         <a href="#">
-          <h5 className="text-gray-500 text-sm text-center">
+          <h5 className="text-gray-500  text-center">
             Contact Us
           </h5>
           </a>
         </div>
         <div>
         <a href="#">
-          <h5 className="text-gray-500 text-sm text-center">
+          <h5 className="text-gray-500  text-center">
             Privacy Policy
           </h5>
           </a>
         </div>
         <div>
           <a href="#">
-          <h5 className="text-gray-500 text-sm text-center">
+          <h5 className="text-gray-500  text-center">
             Terms of Service
           </h5>
           </a>

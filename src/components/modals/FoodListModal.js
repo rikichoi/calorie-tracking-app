@@ -9,7 +9,11 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  where,
+  query
 } from "firebase/firestore";
+import { useContext } from "react";
+import { authContext } from "@/lib/store/auth-context";
 
 export default function FoodListModal({
   foodId,
@@ -22,9 +26,12 @@ export default function FoodListModal({
   foodWeight,
 }) {
 
+  const { user, loading, logout } = useContext(authContext);
+
   const addFoodHandler = async (e) => {
 
     const newFood = {
+      uid: user.uid,
       mealImage: foodImage,
       calorie: foodCal,
       protein: foodProtein,

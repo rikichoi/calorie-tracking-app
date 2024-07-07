@@ -14,6 +14,8 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  where,
+  query
 } from "firebase/firestore";
 import { storage } from "@/lib/utils";
 import LogExerciseItem from "@/components/LogExerciseItem";
@@ -31,7 +33,7 @@ import Home from "../page";
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
-  const {user, loading, logout} = useContext(authContext);
+  const { user, loading, logout } = useContext(authContext);
 
   const [mealLog, setMealLog] = useState([]);
   const [exerciseLog, setExerciseLog] = useState([]);
@@ -39,6 +41,7 @@ export default function Dashboard() {
   const [openModal, setOpenModal] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState([]);
   const [selectedExercise, setselectedExercise] = useState([]);
+  const [maintenanceCalories, setMaintenanceCalories] = useState(0);
   const [consumedCalories, setConsumedCalories] = useState(0);
   const [remainingCalories, setremainingCalories] = useState(2362);
   const [proteinCalories, setProteinCalories] = useState(0);
@@ -59,6 +62,7 @@ export default function Dashboard() {
       return;
     }
     {
+      setMaintenanceCalories((sum / 2362) * 100)
       setremainingCalories(remaining);
       setConsumedCalories(sum);
     }
@@ -105,6 +109,15 @@ export default function Dashboard() {
     }
   };
 
+  function deleteAllMealExerciseHandler(mealLog, exerciseLog) {
+    for (var i = 0, len = mealLog.length; i < len; i++) {
+      deleteMealHandler(mealLog[i].id);
+    }
+    for (var i = 0, len = exerciseLog.length; i < len; i++) {
+      deleteExerciseHandler(exerciseLog[i].id);
+    }
+  }
+
   function deleteAllMealHandler(mealLog) {
     for (var i = 0, len = mealLog.length; i < len; i++) {
       deleteMealHandler(mealLog[i].id);
@@ -118,9 +131,12 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
+    if(!user) return;
     const getMealLogData = async () => {
       const collectionRef = collection(db, "mealLog");
-      const docsSnap = await getDocs(collectionRef);
+      const q = query(collectionRef, where("uid", '==', user.uid))
+
+      const docsSnap = await getDocs(q);
 
       const data = docsSnap.docs.map((doc) => {
         return {
@@ -140,12 +156,16 @@ export default function Dashboard() {
     getMealLogData();
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
-  }, [openModal, getConsumedAndRemainingCalories, getNutritionValues, mealLog]);
+  }, [user, openModal, getConsumedAndRemainingCalories, getNutritionValues, mealLog]);
 
   useEffect(() => {
+    if(!user) return;
     const getExerciseLogData = async () => {
       const collectionRef = collection(db, "exerciseLog");
-      const docsSnap = await getDocs(collectionRef);
+      const q = query(collectionRef, where("uid", '==', user.uid))
+
+
+      const docsSnap = await getDocs(q);
 
       const data = docsSnap.docs.map((doc) => {
         return {
@@ -158,7 +178,7 @@ export default function Dashboard() {
       setExerciseLog(data);
     };
     getExerciseLogData();
-  }, [openModal]);
+  }, [user, openModal]);
 
   return (
     <main
@@ -203,22 +223,16 @@ export default function Dashboard() {
           </div>
           <div className="flex justify-end gap-2">
             <button
-              onClick={() => deleteAllMealHandler(mealLog)}
-              className="bg-red-700 items-center border-black text-white border-2 rounded-full  w-36 h-14 flex justify-center pt-0.5"
+              onClick={() => deleteAllMealExerciseHandler(mealLog, exerciseLog)}
+              className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
             >
-              Reset Meals
-            </button>
-            <button
-              onClick={() => deleteAllExerciseHandler(exerciseLog)}
-              className="bg-red-500 items-center border-black text-white border-2 rounded-full w-36 h-14  flex justify-center pt-0.5"
-            >
-              Reset Exercises
+              Reset All
             </button>
           </div>
         </div>
         {/* Left Overview Section */}
         <div className="w-5/6 grid grid-cols-2 gap-4">
-          <div className="bg-gray-200 items-center min-h-[200px] rounded-xl pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
+          <div className="bg-gray-200 items-center min-h-[250px] rounded-xl pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
             <ul className="pl-12 col-span-2">
               <li className="text-sm">You have consumed</li>
               <li className="text-lg pt-3 font-bold">
@@ -244,7 +258,7 @@ export default function Dashboard() {
               />
               <div className="absolute">
                 <span className="text-center flex text-sm font-bold text-gray-800 ">
-                  {remainingCalories}/2362
+                  {remainingCalories} remaining
                 </span>
               </div>
             </div>
@@ -252,27 +266,35 @@ export default function Dashboard() {
           {/* Right Overview Section */}
           <div className="bg-gray-200 min-h-full rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
             <ul className="space-y-3 w-full">
-            <span className="font-bold">Nutrition Intake Breakdown</span>
-              <li className="text-sm">Protein ({parseInt(proteinProgress)}%) {proteinCalories}g</li>
+              <span className="font-bold">Nutrition Intake Breakdown</span>
+              <li className="text-sm">
+                Protein ({parseInt(proteinProgress)}%) | {proteinCalories}g /
+                136g
+              </li>
               <LinearProgress
                 variant="determinate"
                 color="success"
                 value={proteinProgress}
-                className="w-full h-3 rounded-xl transition-all"
+                className="w-full min-h-3 rounded-xl transition-all"
               />
-              <li className="text-sm">Fats ({parseInt(fatProgress)}%) {fatCalories}g</li>{" "}
+              <li className="text-sm">
+                Fats ({parseInt(fatProgress)}%) | {fatCalories}g / 73g
+              </li>{" "}
               <LinearProgress
                 variant="determinate"
                 color="warning"
                 value={fatProgress}
-                className="w-full h-3 rounded-xl transition-all"
+                className="w-full min-h-3 rounded-xl transition-all"
               />
-              <li className="text-sm">Carbohydrates ({parseInt(carbProgress)}%) {carbCalories}g</li>{" "}
+              <li className="text-sm">
+                Carbohydrates ({parseInt(carbProgress)}%) | {carbCalories}g /
+                361g
+              </li>{" "}
               <LinearProgress
                 variant="determinate"
                 color="secondary"
                 value={carbProgress}
-                className="w-full h-3 rounded-xl transition-all"
+                className="w-full min-h-3 rounded-xl transition-all"
               />
             </ul>
           </div>
@@ -281,15 +303,13 @@ export default function Dashboard() {
         <div className="w-5/6 mt-10">
           {/* this might have to turn into a list so we can allow for mapping data */}
           <p>Maintenance Calorie Goal</p>
-          <div
-            className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
-            role="progressbar"
-            aria-valuenow="50"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            <div className="flex flex-col justify-center rounded-full overflow-hidden bg-teal-500 text-xs text-white text-center whitespace-nowrap transition duration-500 w-4/5"></div>
-          </div>
+          <LinearProgress
+                variant="determinate"
+                color="primary"
+                value={parseInt(maintenanceCalories)}
+                className="w-full min-h-3 rounded-xl transition-all"
+                maxValue={100}
+              />
           <p>{consumedCalories}/2362</p>
         </div>
         {/* Meal Logging Section */}
@@ -297,6 +317,12 @@ export default function Dashboard() {
           <div className="w-full mt-8 mb-5 flex flex-row">
             <h1 className="text-2xl font-bold w-full">Recent Meals</h1>
             <div className="flex w-full justify-end justify-items-end">
+              <button
+                onClick={() => deleteAllMealHandler(mealLog)}
+                className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+              >
+                Reset Meals
+              </button>
               <button
                 onClick={() => (
                   setModeModal("addMeal"), setOpenModal(!openModal)
@@ -343,6 +369,12 @@ export default function Dashboard() {
           <div className="w-full mt-8 mb-5 flex flex-row">
             <h1 className="text-2xl font-bold w-full">Recent Exercise</h1>
             <div className="flex w-full justify-end justify-items-end">
+              <button
+                onClick={() => deleteAllExerciseHandler(exerciseLog)}
+                className="bg-red-700 items-center border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
+              >
+                Reset Exercises
+              </button>
               <button
                 onClick={() => (
                   setModeModal("addExercise"), setOpenModal(!openModal)
