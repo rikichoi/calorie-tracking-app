@@ -40,7 +40,7 @@ export default function EditExerciseModal({ sExercise, show, onClose }) {
       <div className="w-full flex flex-row justify-end p-4">
         <button
           onClick={() => onClose(!show)}
-          className="w-10 h-10 rounded-full bg-red-700 border-black border-2 text-white font-bold"
+          className="hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 w-10 h-10 rounded-full bg-red-700 border-black border-2 text-white font-bold"
         >
           X
         </button>

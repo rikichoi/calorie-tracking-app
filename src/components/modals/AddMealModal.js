@@ -113,7 +113,7 @@ export default function AddMealModal({ show, onClose }) {
       <div className="w-full flex flex-row justify-end p-4">
         <button
           onClick={() => (onClose(!show), closeModal())}
-          className="w-10 h-10 rounded-full bg-red-700 border-black border-2 text-white font-bold"
+          className="hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 w-10 h-10 rounded-full bg-red-700 border-black border-2 text-white font-bold"
         >
           X
         </button>
@@ -121,7 +121,7 @@ export default function AddMealModal({ show, onClose }) {
       <div className=" flex flex-col items-center">
         <button
           onClick={() => (setManualLog(!manualLog), switchLogText())}
-          className="w-full bg-[#ff791f] max-h-36 max-w-xl font-bold py-3 border-2 rounded-full border-black mb-3 before:content-"
+          className="hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 w-full bg-[#ff791f] max-h-36 max-w-xl font-bold py-3 border-2 rounded-full border-black mb-3 before:content-"
         >
           {logText}
         </button>

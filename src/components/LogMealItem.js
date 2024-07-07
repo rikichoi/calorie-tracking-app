@@ -22,7 +22,7 @@ export default function LogMealItem({
 }) {
   return (
     <div className="grid grid-cols-12">
-      <button onClick={()=>(selectMeal(selectedMeal), onClose(!show), editMealMode("editMeal"))} className="grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]">
+      <button onClick={()=>(selectMeal(selectedMeal), onClose(!show), editMealMode("editMeal"))} className="hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]">
         <div className="grid col-span-8  grid-cols-9">
           <Image
             alt={""}
@@ -48,7 +48,7 @@ export default function LogMealItem({
           onClick={() => {
             deleteMeal(mealId);
           }}
-          className="mr-1 hover:scale-110 active:scale-125 hover:shadow-none"
+          className="hover:shadow-gray-900 transition-all duration-100 mr-1 hover:scale-110 active:scale-125 hover:shadow-none"
         >
           <FaRegTrashAlt className="w-10 h-10 hover:cursor-pointer" />
         </button>

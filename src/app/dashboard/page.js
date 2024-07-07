@@ -224,7 +224,7 @@ export default function Dashboard() {
           <div className="flex justify-end gap-2">
             <button
               onClick={() => deleteAllMealExerciseHandler(mealLog, exerciseLog)}
-              className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+              className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
             >
               Reset All
             </button>
@@ -319,7 +319,7 @@ export default function Dashboard() {
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => deleteAllMealHandler(mealLog)}
-                className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
               >
                 Reset Meal
               </button>
@@ -371,7 +371,7 @@ export default function Dashboard() {
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => deleteAllExerciseHandler(exerciseLog)}
-                className="bg-red-700 items-center border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
+                className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
               >
                 Reset Exercise
               </button>

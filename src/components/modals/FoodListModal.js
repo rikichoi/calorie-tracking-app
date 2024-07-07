@@ -50,7 +50,7 @@ export default function FoodListModal({
 
   return (
     <div className="flex flex-col items-center">
-      <button onClick={() => addFoodHandler()} className="grid grid-cols-8 hover:bg-[#C8CFA0]  hover:border-[#C8CFA0] rounded-xl max-w-xl justify-center py-3 px-4">
+      <button onClick={() => addFoodHandler()} className="hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 grid grid-cols-8 hover:bg-[#C8CFA0]  hover:border-[#C8CFA0] rounded-xl max-w-xl justify-center py-3 px-4">
         <Image
           src={foodImage}
           alt={`${foodName} Image`}

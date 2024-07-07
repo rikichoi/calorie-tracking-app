@@ -52,7 +52,7 @@ export default function AddExerciseModal({ show, onClose }) {
         <button
           type="reset"
           onClick={() => (onClose(!show), clearModal())}
-          className="w-10 h-10 rounded-full bg-red-700 border-black border-2 text-white font-bold"
+          className="hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 w-10 h-10 rounded-full bg-red-700 border-black border-2 text-white font-bold"
         >
           X
         </button>
