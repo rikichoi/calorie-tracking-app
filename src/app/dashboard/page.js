@@ -55,11 +55,17 @@ export default function Dashboard() {
   const [fatProgress, setFatProgress] = useState(0);
 
   function getConsumedAndRemainingCalories(mealLog) {
+    let filteredList = mealLog.filter((meal) =>
+      new Date(meal.createdAt.toDate())
+        .toISOString()
+        .split("T")[0]
+        .includes(new Date(startDate).toISOString().split("T")[0])
+    );
     let sum = 0;
     let remaining = 2362;
-    for (var i = 0, len = mealLog.length; i < len; i++) {
-      sum += Number(mealLog[i].calorie);
-      remaining -= Number(mealLog[i].calorie);
+    for (var i = 0, len = filteredList.length; i < len; i++) {
+      sum += Number(filteredList[i].calorie);
+      remaining -= Number(filteredList[i].calorie);
     }
     if (sum == consumedCalories) {
       return;
@@ -72,13 +78,19 @@ export default function Dashboard() {
   }
 
   function getNutritionValues(mealLog) {
+    let filteredList = mealLog.filter((meal) =>
+      new Date(meal.createdAt.toDate())
+        .toISOString()
+        .split("T")[0]
+        .includes(new Date(startDate).toISOString().split("T")[0])
+    );
     let protein = 0;
     let carb = 0;
     let fat = 0;
-    for (var i = 0, len = mealLog.length; i < len; i++) {
-      protein += Number(mealLog[i].protein);
-      carb += Number(mealLog[i].carbohydrate);
-      fat += Number(mealLog[i].fat);
+    for (var i = 0, len = filteredList.length; i < len; i++) {
+      protein += Number(filteredList[i].protein);
+      carb += Number(filteredList[i].carbohydrate);
+      fat += Number(filteredList[i].fat);
     }
     setProteinCalories(protein);
     setCarbCalories(carb);
@@ -199,10 +211,18 @@ export default function Dashboard() {
       {/* Add Meal Modal Section */}
       <Modal show={openModal} onClose={setOpenModal}>
         {modeModal == "addExercise" && (
-          <AddExerciseModal show={openModal} onClose={setOpenModal} selectedDate={startDate}/>
+          <AddExerciseModal
+            show={openModal}
+            onClose={setOpenModal}
+            selectedDate={startDate}
+          />
         )}
         {modeModal == "addMeal" && (
-          <AddMealModal show={openModal} onClose={setOpenModal} selectedDate={startDate}/>
+          <AddMealModal
+            show={openModal}
+            onClose={setOpenModal}
+            selectedDate={startDate}
+          />
         )}
         {modeModal == "editMeal" && (
           <EditMealModal
@@ -237,9 +257,7 @@ export default function Dashboard() {
               Reset All
             </button>
             <button
-              onClick={() =>
-                console.log(exerciseLog)
-              }
+              onClick={() => console.log(exerciseLog)}
               className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
             >
               LOG
@@ -413,7 +431,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="grid gap-6 mb-5 ">
-          {exerciseLog
+            {exerciseLog
               .filter((exercise) =>
                 new Date(exercise.createdAt.toDate())
                   .toISOString()
@@ -421,25 +439,25 @@ export default function Dashboard() {
                   .includes(new Date(startDate).toISOString().split("T")[0])
               )
               .map((exercise) => {
-              return (
-                <LogExerciseItem
-                  editExerciseMode={setModeModal}
-                  show={openModal}
-                  onClose={setOpenModal}
-                  selectedExercise={[
-                    exercise.id,
-                    exercise.exerciseName,
-                    exercise.exerciseDuration,
-                  ]}
-                  selectExercise={setselectedExercise}
-                  deleteExercise={deleteExerciseHandler}
-                  exerciseId={exercise.id}
-                  key={exercise.id}
-                  exerciseName={exercise.exerciseName}
-                  exerciseDuration={exercise.exerciseDuration}
-                />
-              );
-            })}
+                return (
+                  <LogExerciseItem
+                    editExerciseMode={setModeModal}
+                    show={openModal}
+                    onClose={setOpenModal}
+                    selectedExercise={[
+                      exercise.id,
+                      exercise.exerciseName,
+                      exercise.exerciseDuration,
+                    ]}
+                    selectExercise={setselectedExercise}
+                    deleteExercise={deleteExerciseHandler}
+                    exerciseId={exercise.id}
+                    key={exercise.id}
+                    exerciseName={exercise.exerciseName}
+                    exerciseDuration={exercise.exerciseDuration}
+                  />
+                );
+              })}
           </div>
         </div>
       </main>
