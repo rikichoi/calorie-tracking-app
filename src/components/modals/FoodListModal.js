@@ -24,6 +24,7 @@ export default function FoodListModal({
   foodFat,
   foodCal,
   foodWeight,
+  selectedDate,
 }) {
 
   const { user, loading, logout } = useContext(authContext);
@@ -39,6 +40,7 @@ export default function FoodListModal({
       carbohydrate: foodCarb,
       mealName: foodName,
       weight: foodWeight,
+      createdAt: selectedDate,
     };
     const collectionRef = collection(db, "mealLog");
       try {

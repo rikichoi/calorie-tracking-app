@@ -15,7 +15,7 @@ import {
   deleteDoc,
   doc,
   where,
-  query
+  query,
 } from "firebase/firestore";
 import { storage } from "@/lib/utils";
 import LogExerciseItem from "@/components/LogExerciseItem";
@@ -29,12 +29,15 @@ import LinearProgress, {
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
 import Home from "../page";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
   const { user, loading, logout } = useContext(authContext);
 
+  const [startDate, setStartDate] = useState(new Date());
   const [mealLog, setMealLog] = useState([]);
   const [exerciseLog, setExerciseLog] = useState([]);
   const [modeModal, setModeModal] = useState(false);
@@ -62,7 +65,7 @@ export default function Dashboard() {
       return;
     }
     {
-      setMaintenanceCalories((sum / 2362) * 100)
+      setMaintenanceCalories((sum / 2362) * 100);
       setremainingCalories(remaining);
       setConsumedCalories(sum);
     }
@@ -131,10 +134,10 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    if(!user) return;
+    if (!user) return;
     const getMealLogData = async () => {
       const collectionRef = collection(db, "mealLog");
-      const q = query(collectionRef, where("uid", '==', user.uid))
+      const q = query(collectionRef, where("uid", "==", user.uid));
 
       const docsSnap = await getDocs(q);
 
@@ -156,14 +159,19 @@ export default function Dashboard() {
     getMealLogData();
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
-  }, [user, openModal, getConsumedAndRemainingCalories, getNutritionValues, mealLog]);
+  }, [
+    user,
+    openModal,
+    getConsumedAndRemainingCalories,
+    getNutritionValues,
+    mealLog,
+  ]);
 
   useEffect(() => {
-    if(!user) return;
+    if (!user) return;
     const getExerciseLogData = async () => {
       const collectionRef = collection(db, "exerciseLog");
-      const q = query(collectionRef, where("uid", '==', user.uid))
-
+      const q = query(collectionRef, where("uid", "==", user.uid));
 
       const docsSnap = await getDocs(q);
 
@@ -191,10 +199,10 @@ export default function Dashboard() {
       {/* Add Meal Modal Section */}
       <Modal show={openModal} onClose={setOpenModal}>
         {modeModal == "addExercise" && (
-          <AddExerciseModal show={openModal} onClose={setOpenModal} />
+          <AddExerciseModal show={openModal} onClose={setOpenModal} selectedDate={startDate}/>
         )}
         {modeModal == "addMeal" && (
-          <AddMealModal show={openModal} onClose={setOpenModal} />
+          <AddMealModal show={openModal} onClose={setOpenModal} selectedDate={startDate}/>
         )}
         {modeModal == "editMeal" && (
           <EditMealModal
@@ -228,6 +236,18 @@ export default function Dashboard() {
             >
               Reset All
             </button>
+            <button
+              onClick={() =>
+                console.log(exerciseLog)
+              }
+              className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
+            >
+              LOG
+            </button>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+            />
           </div>
         </div>
         {/* Left Overview Section */}
@@ -239,6 +259,9 @@ export default function Dashboard() {
                 <span className="">{consumedCalories}</span> / 2362
               </li>
               <li className="font-bold">Calories</li>
+              <li className="mt-5 text-center flex font-bold text-gray-800 ">
+                {remainingCalories} remaining
+              </li>
             </ul>
 
             <div className="items-center justify-center flex min-h-full">
@@ -256,11 +279,6 @@ export default function Dashboard() {
                   ],
                 }}
               />
-              <div className="absolute">
-                <span className="text-center flex text-sm font-bold text-gray-800 ">
-                  {remainingCalories} remaining
-                </span>
-              </div>
             </div>
           </div>
           {/* Right Overview Section */}
@@ -274,6 +292,7 @@ export default function Dashboard() {
               <LinearProgress
                 variant="determinate"
                 color="success"
+                InputProps={{ inputProps: { min: 0, max: 100 } }}
                 value={proteinProgress}
                 className="w-full min-h-3 rounded-xl transition-all"
               />
@@ -283,6 +302,7 @@ export default function Dashboard() {
               <LinearProgress
                 variant="determinate"
                 color="warning"
+                InputProps={{ inputProps: { min: 0, max: 100 } }}
                 value={fatProgress}
                 className="w-full min-h-3 rounded-xl transition-all"
               />
@@ -304,12 +324,12 @@ export default function Dashboard() {
           {/* this might have to turn into a list so we can allow for mapping data */}
           <p>Maintenance Calorie Goal</p>
           <LinearProgress
-                variant="determinate"
-                color="primary"
-                value={parseInt(maintenanceCalories)}
-                className="w-full min-h-3 rounded-xl transition-all"
-                maxValue={100}
-              />
+            variant="determinate"
+            color="primary"
+            value={parseInt(maintenanceCalories)}
+            className="w-full min-h-3 rounded-xl transition-all"
+            maxValue={100}
+          />
           <p>{consumedCalories}/2362</p>
         </div>
         {/* Meal Logging Section */}
@@ -334,34 +354,41 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="grid gap-6 mb-5 ">
-            {mealLog.map((meal) => {
-              return (
-                <LogMealItem
-                  editMealMode={setModeModal}
-                  show={openModal}
-                  onClose={setOpenModal}
-                  deleteMeal={deleteMealHandler}
-                  selectedMeal={[
-                    meal.id,
-                    meal.mealImage,
-                    meal.mealCal,
-                    meal.mealProtein,
-                    meal.mealWeight,
-                    meal.mealName,
-                    meal.mealFat,
-                    meal.mealCarbs,
-                  ]}
-                  selectMeal={setSelectedMeal}
-                  mealId={meal.id}
-                  key={meal.id}
-                  mealImage={meal.mealImage}
-                  mealName={meal.mealName}
-                  mealCal={meal.mealCal}
-                  mealProtein={meal.mealProtein}
-                  mealWeight={meal.mealWeight}
-                />
-              );
-            })}
+            {mealLog
+              .filter((meal) =>
+                new Date(meal.createdAt.toDate())
+                  .toISOString()
+                  .split("T")[0]
+                  .includes(new Date(startDate).toISOString().split("T")[0])
+              )
+              .map((meal) => {
+                return (
+                  <LogMealItem
+                    editMealMode={setModeModal}
+                    show={openModal}
+                    onClose={setOpenModal}
+                    deleteMeal={deleteMealHandler}
+                    selectedMeal={[
+                      meal.id,
+                      meal.mealImage,
+                      meal.mealCal,
+                      meal.mealProtein,
+                      meal.mealWeight,
+                      meal.mealName,
+                      meal.mealFat,
+                      meal.mealCarbs,
+                    ]}
+                    selectMeal={setSelectedMeal}
+                    mealId={meal.id}
+                    key={meal.id}
+                    mealImage={meal.mealImage}
+                    mealName={meal.mealName}
+                    mealCal={meal.mealCal}
+                    mealProtein={meal.mealProtein}
+                    mealWeight={meal.mealWeight}
+                  />
+                );
+              })}
           </div>
         </div>
         {/* Exercise Logging Section */}
@@ -386,7 +413,14 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="grid gap-6 mb-5 ">
-            {exerciseLog.map((exercise) => {
+          {exerciseLog
+              .filter((exercise) =>
+                new Date(exercise.createdAt.toDate())
+                  .toISOString()
+                  .split("T")[0]
+                  .includes(new Date(startDate).toISOString().split("T")[0])
+              )
+              .map((exercise) => {
               return (
                 <LogExerciseItem
                   editExerciseMode={setModeModal}

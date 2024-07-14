@@ -13,7 +13,7 @@ import {
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
 
-export default function AddExerciseModal({ show, onClose }) {
+export default function AddExerciseModal({ show, onClose, selectedDate}) {
   const { user, loading, logout } = useContext(authContext);
 
 
@@ -27,6 +27,7 @@ export default function AddExerciseModal({ show, onClose }) {
         uid: user.uid,
         exerciseName: exerciseNameRef.current.value,
         exerciseDuration: exerciseDurationRef.current.value,
+        createdAt: selectedDate,
       };
       const collectionRef = collection(db, "exerciseLog");
       if (exerciseDurationRef.current.value > 0) {

@@ -16,7 +16,7 @@ import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
 
 
-export default function AddMealModal({ show, onClose }) {
+export default function AddMealModal({ show, onClose, selectedDate}) {
   const { user, loading, logout } = useContext(authContext);
 
   const proteinRef = useRef();
@@ -43,6 +43,7 @@ export default function AddMealModal({ show, onClose }) {
       carbohydrate: carbRef.current.value,
       mealName: mealNameRef.current.value,
       weight: weightRef.current.value,
+      createdAt: selectedDate,
     };
     const collectionRef = collection(db, "mealLog");
     if (mealNameRef.current.value != "") {
@@ -207,6 +208,7 @@ export default function AddMealModal({ show, onClose }) {
                 foodCarb={food.foodCarb}
                 foodCal={food.foodCal}
                 foodWeight={food.foodWeight}
+                selectedDate={selectedDate}
               />
             );
           })}
