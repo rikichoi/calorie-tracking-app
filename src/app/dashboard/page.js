@@ -53,6 +53,10 @@ export default function Dashboard() {
   const [proteinProgress, setProteinProgress] = useState(0);
   const [carbProgress, setCarbProgress] = useState(0);
   const [fatProgress, setFatProgress] = useState(0);
+  const [barproteinProgress, setbarProteinProgress] = useState(0);
+  const [barcarbProgress, setbarCarbProgress] = useState(0);
+  const [barfatProgress, setbarFatProgress] = useState(0);
+  const [barmaintenanceCalories, setbarMaintenanceCalories] = useState(0);
 
   function getConsumedAndRemainingCalories(mealLog) {
     let filteredList = mealLog.filter((meal) =>
@@ -99,6 +103,76 @@ export default function Dashboard() {
     setCarbProgress((carb / 361) * 100);
     setFatProgress((fat / 73) * 100);
   }
+
+  useEffect(() => {
+    const getProteinBar = () => {
+      if (proteinProgress >= 100) {
+        setbarProteinProgress(100);
+      }
+      if (proteinProgress < 100) {
+        setbarProteinProgress(proteinProgress);
+      }
+    };
+    const getCarbBar = () => {
+      if (carbProgress >= 100) {
+        setbarCarbProgress(100);
+      }
+      if (carbProgress < 100) {
+        setbarCarbProgress(carbProgress);
+      }
+    };
+    const getFatBar = () => {
+      if (fatProgress >= 100) {
+        setbarFatProgress(100);
+      }
+      if (fatProgress < 100) {
+        setbarFatProgress(fatProgress);
+      }
+    };
+    const getMaintenanceBar = () => {
+      if (maintenanceCalories >= 100) {
+        setbarMaintenanceCalories(100);
+      }
+      if (maintenanceCalories < 100) {
+        setbarMaintenanceCalories(maintenanceCalories);
+      }
+    };
+    getProteinBar();
+    getMaintenanceBar();
+    getCarbBar();
+    getFatBar();
+    // if(proteinProgress >= 100 & carbProgress <= 100 & fatProgress <=100){
+    //   setbarCarbProgress(carbProgress);
+    //   setbarFatProgress(fatProgress);
+    //   setbarProteinProgress(100);
+    // }
+    // if(carbProgress >= 100 & proteinProgress <= 100 & fatProgress <=100){
+    //   setbarCarbProgress(100);
+    //   setbarFatProgress(fatProgress);
+    //   setbarProteinProgress(proteinProgress);
+    // }
+    // if(fatProgress >= 100 & carbProgress <= 100 & proteinProgress <=100){
+    //   setbarCarbProgress(carbProgress);
+    //   setbarFatProgress(100);
+    //   setbarProteinProgress(proteinProgress);
+    // }
+    // if(fatProgress >= 100 & carbProgress >= 100 & proteinProgress >=100){
+    //   setbarCarbProgress(100);
+    //   setbarFatProgress(100);
+    //   setbarProteinProgress(100);
+    // }
+    // if(fatProgress <= 100 & carbProgress <= 100 & proteinProgress <=100){
+    //   setbarCarbProgress(carbProgress);
+    //   setbarFatProgress(fatProgress);
+    //   setbarProteinProgress(proteinProgress);
+    // }
+  }, [
+    carbCalories,
+    fatCalories,
+    proteinCalories,
+    maintenanceCalories,
+    startDate,
+  ]);
 
   const deleteMealHandler = async (mealLogId) => {
     const docRef = doc(db, "mealLog", mealLogId);
@@ -246,22 +320,16 @@ export default function Dashboard() {
               Good morning, {user.displayName}
             </h1>
             <p className="text-gray-500 text-sm pt-2 pb-4 font-light font-Inter">
-              Here&apos;s your daily summary
+              Here&apos;s your summary for <span className="font-bold">{new Date(startDate).toDateString()}</span>
             </p>
           </div>
           <div className="flex justify-end gap-2">
-            <button
+            {/* <button
               onClick={() => deleteAllMealExerciseHandler(mealLog, exerciseLog)}
               className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
             >
               Reset All
-            </button>
-            <button
-              onClick={() => console.log(exerciseLog)}
-              className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
-            >
-              LOG
-            </button>
+            </button> */}
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
@@ -310,8 +378,8 @@ export default function Dashboard() {
               <LinearProgress
                 variant="determinate"
                 color="success"
-                InputProps={{ inputProps: { min: 0, max: 100 } }}
-                value={proteinProgress}
+                maxValue="100"
+                value={barproteinProgress}
                 className="w-full min-h-3 rounded-xl transition-all"
               />
               <li className="text-sm">
@@ -320,8 +388,7 @@ export default function Dashboard() {
               <LinearProgress
                 variant="determinate"
                 color="warning"
-                InputProps={{ inputProps: { min: 0, max: 100 } }}
-                value={fatProgress}
+                value={barfatProgress}
                 className="w-full min-h-3 rounded-xl transition-all"
               />
               <li className="text-sm">
@@ -331,7 +398,7 @@ export default function Dashboard() {
               <LinearProgress
                 variant="determinate"
                 color="secondary"
-                value={carbProgress}
+                value={barcarbProgress}
                 className="w-full min-h-3 rounded-xl transition-all"
               />
             </ul>
@@ -344,7 +411,7 @@ export default function Dashboard() {
           <LinearProgress
             variant="determinate"
             color="primary"
-            value={parseInt(maintenanceCalories)}
+            value={barmaintenanceCalories}
             className="w-full min-h-3 rounded-xl transition-all"
             maxValue={100}
           />
@@ -359,7 +426,7 @@ export default function Dashboard() {
                 onClick={() => deleteAllMealHandler(mealLog)}
                 className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
               >
-                Reset Meal
+                Reset Meals
               </button>
               <button
                 onClick={() => (
@@ -418,7 +485,7 @@ export default function Dashboard() {
                 onClick={() => deleteAllExerciseHandler(exerciseLog)}
                 className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
               >
-                Reset Exercise
+                Reset Exercises
               </button>
               <button
                 onClick={() => (
