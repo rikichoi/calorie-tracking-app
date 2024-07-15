@@ -31,6 +31,9 @@ import { authContext } from "@/lib/store/auth-context";
 import Home from "../page";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import BmiCalculatorModal from "@/components/modals/BmiCalculatorModal";
+import { MdOutlineCalculate } from "react-icons/md";
+import { FaCircleArrowRight } from "react-icons/fa6";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -278,7 +281,7 @@ export default function Dashboard() {
     <main
       className={`${
         openModal
-          ? "fixed overflow-hidden pt-[4.6rem] top-0 left-0 right-0 "
+          ? "fixed overflow-hidden pt-[6.1rem] top-0 left-0 right-0 "
           : ""
       }`}
     >
@@ -312,6 +315,12 @@ export default function Dashboard() {
             onClose={setOpenModal}
           />
         )}
+        {modeModal == "bmiCalculator" && (
+          <BmiCalculatorModal
+            show={openModal}
+            onClose={setOpenModal}
+          />
+        )}
       </Modal>
       <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
         <div className="w-5/6 grid grid-cols-2">
@@ -320,20 +329,25 @@ export default function Dashboard() {
               Good morning, {user.displayName}
             </h1>
             <p className="text-gray-500 text-sm pt-2 pb-4 font-light font-Inter">
-              Here&apos;s your summary for <span className="font-bold">{new Date(startDate).toDateString()}</span>
+              Here&apos;s your summary for{" "}
+              <span className="font-bold">
+                {new Date(startDate).toDateString()}
+              </span>
             </p>
           </div>
           <div className="flex justify-end gap-2">
-            {/* <button
-              onClick={() => deleteAllMealExerciseHandler(mealLog, exerciseLog)}
-              className="bg-red-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
+            <button
+              onClick={() => (setModeModal("bmiCalculator"), setOpenModal(!openModal))}
+              className="bg-orange-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-40 h-14 flex justify-center pt-0.5"
             >
-              Reset All
-            </button> */}
+              <MdOutlineCalculate className="text-3xl text-center"/><span className="text-center">BMI Calculator</span>
+            </button>
+            <h2 className="flex text-xl h-3/4 items-center">Date Selector <FaCircleArrowRight className="text-2xl ml-2 flex justify-center"/></h2>
             <DatePicker
+              className="w-28 text-center h-14 hover:shadow-gray-900 transition-all duration-100  hover:shadow-inner hover:cursor-pointer"
               selected={startDate}
               onChange={(date) => setStartDate(date)}
-            />
+            ></DatePicker>
           </div>
         </div>
         {/* Left Overview Section */}
@@ -378,7 +392,6 @@ export default function Dashboard() {
               <LinearProgress
                 variant="determinate"
                 color="success"
-                maxValue="100"
                 value={barproteinProgress}
                 className="w-full min-h-3 rounded-xl transition-all"
               />
@@ -413,7 +426,6 @@ export default function Dashboard() {
             color="primary"
             value={barmaintenanceCalories}
             className="w-full min-h-3 rounded-xl transition-all"
-            maxValue={100}
           />
           <p>{consumedCalories}/2362</p>
         </div>

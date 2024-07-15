@@ -11,9 +11,9 @@ export default function Navbar() {
   const { googleLoginHandler } = useContext(authContext);
 
   return (
-    <div>
+    <div className="sticky bg-white z-20 top-0">
       {user && !loading && (
-        <div className="sticky bg-white z-50 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
+        <div className="sticky bg-white z-20 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
           <div className="flex justify-end items-center col-span-3 h-full">
             <Image
               src={Logo}
@@ -55,8 +55,7 @@ export default function Navbar() {
             <div className=" text-lg col-span-5 flex flex-row gap-14 justify-end w-full">
               <div class="dropdown">
                 <button
-                  className="hover:shadow-gray-900 transition-all duration-100 active:scale-110 font-semibold hover:shadow-none hover:opacity-60 "
-                  class="dropbtn"
+                  className="hover:shadow-gray-900 text-lg transition-all duration-100 active:scale-110 font-semibold hover:shadow-none hover:opacity-60 "
                 >
                   Products
                 </button>
