@@ -34,6 +34,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import BmiCalculatorModal from "@/components/modals/BmiCalculatorModal";
 import { MdOutlineCalculate } from "react-icons/md";
 import { FaCircleArrowRight } from "react-icons/fa6";
+import { toast } from "react-toastify";
+
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -181,6 +183,7 @@ export default function Dashboard() {
     const docRef = doc(db, "mealLog", mealLogId);
     try {
       await deleteDoc(docRef);
+      toast.success("Meal removed successfully!");
       setMealLog((prevState) => {
         return prevState.filter((i) => i.id !== mealLogId);
       });
@@ -193,6 +196,7 @@ export default function Dashboard() {
     const docRef = doc(db, "exerciseLog", exerciseLogId);
     try {
       await deleteDoc(docRef);
+      toast.success("Exercise removed successfully!");
       setExerciseLog((prevState) => {
         return prevState.filter((i) => i.id !== exerciseLogId);
       });
@@ -213,12 +217,14 @@ export default function Dashboard() {
   function deleteAllMealHandler(mealLog) {
     for (var i = 0, len = mealLog.length; i < len; i++) {
       deleteMealHandler(mealLog[i].id);
+      toast.success("All meals removed successfully!");
     }
   }
 
   function deleteAllExerciseHandler(exerciseLog) {
     for (var i = 0, len = exerciseLog.length; i < len; i++) {
       deleteExerciseHandler(exerciseLog[i].id);
+      toast.success("All exercises removed successfully!");
     }
   }
 
@@ -325,10 +331,10 @@ export default function Dashboard() {
       <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
         <div className="w-5/6 grid grid-cols-2">
           <div>
-            <h1 className="text-2xl font-bold font-Epilogue">
+            <h1 className="text-2xl font-bold ">
               Good morning, {user.displayName}
             </h1>
-            <p className="text-gray-500 text-sm pt-2 pb-4 font-light font-Inter">
+            <p className="text-gray-500 text-sm pt-2 pb-4 font-light ">
               Here&apos;s your summary for{" "}
               <span className="font-bold">
                 {new Date(startDate).toDateString()}
@@ -444,7 +450,7 @@ export default function Dashboard() {
                 onClick={() => (
                   setModeModal("addMeal"), setOpenModal(!openModal)
                 )}
-                className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                className="bg-green-700 items-center border-black text-white border-2 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
               >
                 + Add Meal
               </button>
@@ -503,7 +509,7 @@ export default function Dashboard() {
                 onClick={() => (
                   setModeModal("addExercise"), setOpenModal(!openModal)
                 )}
-                className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
               >
                 + Add Exercise
               </button>

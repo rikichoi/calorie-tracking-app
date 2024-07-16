@@ -12,6 +12,8 @@ import {
 } from "firebase/firestore";
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
+import { toast } from "react-toastify";
+
 
 export default function AddExerciseModal({ show, onClose, selectedDate}) {
   const { user, loading, logout } = useContext(authContext);
@@ -33,6 +35,7 @@ export default function AddExerciseModal({ show, onClose, selectedDate}) {
       if (exerciseDurationRef.current.value > 0) {
       try {
         const docSnap = await addDoc(collectionRef, newExercise);
+        toast.success("Exercise logged successfully!")
         exerciseDurationRef.current.value = "";
 
       } catch (error) {

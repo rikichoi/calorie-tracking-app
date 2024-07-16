@@ -14,6 +14,8 @@ import {
 } from "firebase/firestore";
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
+import { toast } from "react-toastify";
+
 
 export default function FoodListModal({
   foodId,
@@ -45,6 +47,7 @@ export default function FoodListModal({
     const collectionRef = collection(db, "mealLog");
       try {
         await addDoc(collectionRef, newFood);
+        toast.success("Meal logged successfully!")
       } catch (error) {
         console.log(error.message);
       }

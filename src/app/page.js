@@ -23,21 +23,21 @@ export default function Home() {
             className="rounded-xl brightness-[50%] max-h-[500px] object-cover absolute"
           />
           <div className="relative mt-64 items-center ml-24">
-            <h1 className="text-white text-5xl brightness-150 font-semibold mb-2">
+            <h1 className="text-white text-5xl brightness-150 font-bold mb-2">
               Welcome to Calorie Tracker
             </h1>
-            <p className="text-white w-5/6 mb-5">
+            <p className="text-white font-sans w-5/6 mb-5">
               Track your daily calorie intake, log your meals and exercise, and
               calculate your BMI. Get started by signing in or signing up for
               free today.
             </p>
-            <button
-              onClick={googleLoginHandler}
-              className="flex justify-center items-center rounded-xl max-w-64 w-full h-16 mr-2 text-white font-semibold bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+            <a
+              href={'/login'}
+              className="flex justify-center items-center rounded-xl max-w-64 w-full h-16 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
             >
               <FcGoogle className="text-4xl mr-3"> </FcGoogle>
-              <span className="text-xl text-[#262a3b]">Get Started!</span>
-            </button>
+              <span className="text-xl !font-opensans font-semibold">Get Started!</span>
+            </a>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
@@ -9,14 +9,14 @@ import {
   deleteDoc,
   doc,
   where,
-  query
+  query,
 } from "firebase/firestore";
 import FoodListModal from "./FoodListModal";
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
+import { toast } from "react-toastify";
 
-
-export default function AddMealModal({ show, onClose, selectedDate}) {
+export default function AddMealModal({ show, onClose, selectedDate }) {
   const { user, loading, logout } = useContext(authContext);
 
   const proteinRef = useRef();
@@ -29,8 +29,7 @@ export default function AddMealModal({ show, onClose, selectedDate}) {
   const [foodList, setFoodList] = useState([]);
   const [manualLog, setManualLog] = useState(false);
   const [logText, setLogText] = useState("Manual Entry");
-  const [search, setSearch] = useState('');
-
+  const [search, setSearch] = useState("");
 
   const addMealHandler = async (e) => {
     e.preventDefault();
@@ -49,6 +48,7 @@ export default function AddMealModal({ show, onClose, selectedDate}) {
     if (mealNameRef.current.value != "") {
       try {
         const docSnap = await addDoc(collectionRef, newMeal);
+        toast.success("Meal logged successfully!");
 
         calorieRef.current.value = "";
         proteinRef.current.value = "";
@@ -100,12 +100,11 @@ export default function AddMealModal({ show, onClose, selectedDate}) {
     }
   }
 
-  function switchLogText(){
-    if (logText == "Manual Entry"){
-      setLogText("View Food List")
-    }
-    else{
-      setLogText("Manual Entry")
+  function switchLogText() {
+    if (logText == "Manual Entry") {
+      setLogText("View Food List");
+    } else {
+      setLogText("Manual Entry");
     }
   }
 
@@ -193,25 +192,31 @@ export default function AddMealModal({ show, onClose, selectedDate}) {
         </form>
       ) : (
         <div className="grid gap-6 mb-5">
-            {/* console.log(foodList.filter(food => food.foodName.toLowerCase().includes(search))); */}
+          {/* console.log(foodList.filter(food => food.foodName.toLowerCase().includes(search))); */}
 
-          <input className="mx-4" onChange={(e) => setSearch(e.target.value)} placeholder="Search all foods..."></input>
-          {foodList.filter((food)=>food.foodName.toLowerCase().includes(search)).map((food) => {
-            return (
-              <FoodListModal
-                foodId={food.id}
-                key={food.id}
-                foodImage={food.foodImage}
-                foodName={food.foodName}
-                foodFat={food.foodFat}
-                foodProtein={food.foodProtein}
-                foodCarb={food.foodCarb}
-                foodCal={food.foodCal}
-                foodWeight={food.foodWeight}
-                selectedDate={selectedDate}
-              />
-            );
-          })}
+          <input
+            className="mx-4"
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search all foods..."
+          ></input>
+          {foodList
+            .filter((food) => food.foodName.toLowerCase().includes(search))
+            .map((food) => {
+              return (
+                <FoodListModal
+                  foodId={food.id}
+                  key={food.id}
+                  foodImage={food.foodImage}
+                  foodName={food.foodName}
+                  foodFat={food.foodFat}
+                  foodProtein={food.foodProtein}
+                  foodCarb={food.foodCarb}
+                  foodCal={food.foodCal}
+                  foodWeight={food.foodWeight}
+                  selectedDate={selectedDate}
+                />
+              );
+            })}
         </div>
       )}
     </div>
