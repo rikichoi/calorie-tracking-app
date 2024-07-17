@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ViewContextProvider from "@/lib/store/view-context";
 
 import AuthContextProvider from "@/lib/store/auth-context";
 
@@ -23,9 +24,11 @@ export default function RootLayout({ children }) {
       </head>
       <body className="bg-gray-50">
         <AuthContextProvider>
+          <ViewContextProvider>
           <ToastContainer />
           <Navbar />
           {children}
+          </ViewContextProvider>
         </AuthContextProvider>
       </body>
     </html>

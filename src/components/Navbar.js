@@ -7,10 +7,26 @@ import { authContext } from "@/lib/store/auth-context";
 import { FcGoogle } from "react-icons/fc";
 import { FaUser } from "react-icons/fa";
 
+import ViewContextProvider, { viewContext } from "@/lib/store/view-context";
+
 export default function Navbar() {
   const { user, loading, logout } = useContext(authContext);
   const { googleLoginHandler } = useContext(authContext);
   const [selectedPage, setSelectedPage] = useState("");
+  const {
+    sectionInView,
+    homeValue,
+    featuresValue,
+    pricingValue,
+    supportValue,
+    contactValue,
+    getContactValue,
+    getFeaturesValue,
+    getHomeValue,
+    getPricingValue,
+    getSupportValue,
+  } = useContext(viewContext);
+  
 
   return (
     <div className="sticky bg-white z-20 top-0">
@@ -65,39 +81,39 @@ export default function Navbar() {
           <div className="xl:block lg:block md:block sm:hidden text-gray-950 w-full md:col-span-6 text-center justify-center items-center">
             <div className=" text-base  h-full items-center justify-center flex flex-row ">
               <Link
-                href={"/"}
+                href={""}
                 onClick={()=>setSelectedPage("")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${selectedPage==='' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Home</p>
+                <p className={`${homeValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Home</p>
               </Link>
               <Link
-                href={"/features"}
+                href={"#features"}
                 onClick={()=>setSelectedPage("Features")}                
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${selectedPage==='Features' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Features</p>
+                <p className={`${featuresValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Features</p>
               </Link>
               <Link
-                href={"pricing"}
+                href={"#pricing"}
                 onClick={()=>setSelectedPage("Pricing")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${selectedPage==='Pricing' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Pricing</p>
+                <p className={`${pricingValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Pricing</p>
               </Link>
               <Link
-                href={"support"}
+                href={"#support"}
                 onClick={()=>setSelectedPage("Support")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${selectedPage==='Support' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Support</p>
+                <p className={`${supportValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Support</p>
               </Link>
               <Link
-                href={"contact"}
+                href={"#contact"}
                 onClick={()=>setSelectedPage("Contact")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${selectedPage==='Contact' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Contact</p>
+                <p className={`${contactValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Contact</p>
               </Link>
             </div>
           </div>
