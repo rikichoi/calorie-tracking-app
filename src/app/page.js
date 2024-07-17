@@ -160,7 +160,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid py-36 mx-auto grid-cols-8 w-5/6">
+          <div className="grid py-36 px-20 mx-auto grid-cols-8 w-5/6">
             <div className="col-span-3">
               <h2 className="font-poppins font-semibold text-4xl">
                 What makes us <span className="text-[#f54748]">unique</span>{" "}
