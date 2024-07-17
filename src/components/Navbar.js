@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Logo from "../images/logo.png";
 import Link from "next/link";
@@ -10,9 +10,12 @@ import { FaUser } from "react-icons/fa";
 export default function Navbar() {
   const { user, loading, logout } = useContext(authContext);
   const { googleLoginHandler } = useContext(authContext);
+  const [selectedPage, setSelectedPage] = useState("");
 
   return (
     <div className="sticky bg-white z-20 top-0">
+
+      {/* If user does not exist then show this section */}
       {user && !loading && (
         <div className="sticky bg-white z-20 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
           <div className="flex justify-end items-center col-span-3 h-full">
@@ -45,58 +48,74 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+{/* If user exists then show this section */}
+
       {!user && (
         <div className="sticky bg-white z-50 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
-          <div className="flex justify-end items-center col-span-2 h-full">
+          <div className="flex justify-center items-center   sm:justify-start md:col-span-3 sm:col-span-7 h-full">
             <a href="#">
               <Image
                 src={Logo}
                 alt="HealthDiary Logo"
-                className="p-1 min-w-40 min-h-24 max-h-16 max-w-28"
+                className="p-1 sm:min-w-32 sm:ml-5 sm:min-h-20 min-w-40 min-h-24 max-h-16 max-w-28"
               />
             </a>
           </div>
-          <div className="text-gray-950 w-full col-span-8 text-center justify-center items-center px-52">
-            <div className=" text-base  h-full items-center  flex flex-row gap-14 justify-end w-full">
-              <a
-                href="#"
-                className="hover:opacity-60 hover:bg-slate-300 text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+          <div className="xl:block lg:block md:block sm:hidden text-gray-950 w-full md:col-span-6 text-center justify-center items-center">
+            <div className=" text-base  h-full items-center justify-center flex flex-row ">
+              <Link
+                href={"/"}
+                onClick={()=>setSelectedPage("")}
+                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p>Home</p>
-              </a>
-              <a
-                href="#"
-                className="hover:opacity-60 hover:bg-slate-300 text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                <p className={`${selectedPage==='' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Home</p>
+              </Link>
+              <Link
+                href={"/features"}
+                onClick={()=>setSelectedPage("Features")}                
+                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p>Products</p>
-              </a>
-              <a
-                href="#"
-                className="hover:opacity-60 hover:bg-slate-300 text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                <p className={`${selectedPage==='Features' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Features</p>
+              </Link>
+              <Link
+                href={"pricing"}
+                onClick={()=>setSelectedPage("Pricing")}
+                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p>Support</p>
-              </a>
-              <a
-                href="#"
-                className="hover:opacity-60 hover:bg-slate-300 text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                <p className={`${selectedPage==='Pricing' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Pricing</p>
+              </Link>
+              <Link
+                href={"support"}
+                onClick={()=>setSelectedPage("Support")}
+                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p>Blog</p>
-              </a>
-              <a
-                href="#"
-                className="hover:opacity-60 hover:bg-slate-300 text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                <p className={`${selectedPage==='Support' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Support</p>
+              </Link>
+              <Link
+                href={"contact"}
+                onClick={()=>setSelectedPage("Contact")}
+                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p>About</p>
-              </a>
+                <p className={`${selectedPage==='Contact' ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Contact</p>
+              </Link>
             </div>
           </div>
-          <div className="flex col-span-2 w-full items-center justify-center ">
+          <div className="xl:flex lg:flex md:flex sm:hidden md:col-span-3 w-full items-center justify-center ">
+            <a
+              href="/login"
+              className="flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+            >
+              <span className="text-lg font-poppins">Log in</span>
+            </a>
+          </div>
+          <div className="sm:flex md:hidden flex col-span-5 w-full items-center justify-center ">
             <a
               href="/login"
               className="flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
             >
               <FcGoogle className="text-2xl mr-3"> </FcGoogle>{" "}
-              <span className="font-bold">Get Started!</span>
+              <span className="font-bold">Small</span>
             </a>
           </div>
         </div>

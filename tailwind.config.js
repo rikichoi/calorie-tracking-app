@@ -5,7 +5,19 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-
+  theme: {
+    extend: {
+      fontFamily: {
+        roboto: "'Roboto', sans-serif",
+        ubuntu: "'Ubuntu', sans-serif",
+        inter: "'Inter', sans-serif",
+        opensans: "'Open Sans', sans-serif",
+        poppins: "'Poppins', sans-serif",
+      },
+      screens: { 
+        'sm': { 'max': '768px' }, },
+    },
+  },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
