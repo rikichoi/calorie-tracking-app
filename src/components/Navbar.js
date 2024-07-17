@@ -26,11 +26,9 @@ export default function Navbar() {
     getPricingValue,
     getSupportValue,
   } = useContext(viewContext);
-  
 
   return (
     <div className="sticky bg-white z-20 top-0">
-
       {/* If user does not exist then show this section */}
       {user && !loading && (
         <div className="sticky bg-white z-20 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
@@ -51,7 +49,7 @@ export default function Navbar() {
                   className="w-11 h-11 rounded-full mr-3"
                 />
               ) : (
-                <FaUser className="w-11 h-11 mr-3"/>
+                <FaUser className="w-11 h-11 mr-3" />
               )}
 
               <button
@@ -65,55 +63,70 @@ export default function Navbar() {
         </div>
       )}
 
-{/* If user exists then show this section */}
+      {/* If user exists then show this section */}
 
       {!user && (
         <div className="sticky bg-white z-50 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
           <div className="flex justify-center items-center   sm:justify-start md:col-span-3 sm:col-span-7 h-full">
-            <a href="#">
+            <Link href={"/"}>
               <Image
                 src={Logo}
                 alt="HealthDiary Logo"
                 className="p-1 sm:min-w-32 sm:ml-5 sm:min-h-20 min-w-40 min-h-24 max-h-16 max-w-28"
               />
-            </a>
+            </Link>
           </div>
           <div className="xl:block lg:block md:block sm:hidden text-gray-950 w-full md:col-span-6 text-center justify-center items-center">
-            <div className=" text-base  h-full items-center justify-center flex flex-row ">
+            <div className="font-poppins text-base  h-full items-center justify-center flex flex-row ">
               <Link
-                href={""}
-                onClick={()=>setSelectedPage("")}
+                href={"/"}
+                // onClick={()=>setSelectedPage("")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${homeValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Home</p>
+                {/* <p className={`${homeValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Home</p> */}
+                <p className="">
+                  Home
+                </p>
               </Link>
               <Link
-                href={"#features"}
-                onClick={()=>setSelectedPage("Features")}                
+                href={"/#features"}
+                // onClick={()=>setSelectedPage("Features")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${featuresValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Features</p>
+                {/* <p className={`${featuresValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Features</p> */}
+                <p className="">
+                Features
+                </p>
               </Link>
               <Link
-                href={"#pricing"}
-                onClick={()=>setSelectedPage("Pricing")}
+                href={"/#pricing"}
+                // onClick={()=>setSelectedPage("Pricing")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${pricingValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Pricing</p>
+                {/* <p className={`${pricingValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Pricing</p> */}
+                <p className="">
+                Pricing
+                </p>
               </Link>
               <Link
-                href={"#support"}
-                onClick={()=>setSelectedPage("Support")}
+                href={"/#support"}
+                // onClick={()=>setSelectedPage("Support")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${supportValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Support</p>
+                {/* <p className={`${supportValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Support</p> */}
+                <p className="">
+                Support
+                </p>
               </Link>
               <Link
-                href={"#contact"}
-                onClick={()=>setSelectedPage("Contact")}
+                href={"/#contact"}
+                // onClick={()=>setSelectedPage("Contact")}
                 className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
               >
-                <p className={`${contactValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Contact</p>
+                {/* <p className={`${contactValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Contact</p> */}
+                <p className="">
+                Contact
+                </p>
               </Link>
             </div>
           </div>

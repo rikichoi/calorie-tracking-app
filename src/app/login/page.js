@@ -34,7 +34,7 @@ export default function LoginPage() {
   }, [user]);
 
   return (
-    <div className=" min-h-screen h-[1000px]">
+    <div className="mt-24 min-h-screen h-[1000px]">
       <div className="justify-center grid">
         <form className="justify-center gap-3 grid grid-rows-2">
           <input

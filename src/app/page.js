@@ -14,10 +14,14 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa";
 import FeaturesImage from "../images/features-image.png";
 import NewsletterImg from "../images/newsletter-image.png";
-import { MdOutlineNotes } from "react-icons/md";
+import { MdMail, MdOutlineNotes } from "react-icons/md";
 import { FaQuestionCircle } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
+import { FaPhoneAlt } from "react-icons/fa";
 
 import ViewContextProvider, { viewContext } from "@/lib/store/view-context";
+import Link from "next/link";
 
 export default function Home() {
   const homeRef = useRef(null);
@@ -25,7 +29,7 @@ export default function Home() {
   const featuresRef = useRef(null);
   const featuresIsInView = useInView(featuresRef, { amount: 0.15 });
   const pricingRef = useRef(null);
-  const pricingIsInView = useInView(pricingRef, { amount: 0.46 });
+  const pricingIsInView = useInView(pricingRef, { amount: 0.6 });
   const supportRef = useRef(null);
   const supportIsInView = useInView(supportRef, { amount: 0.32 });
   const contactRef = useRef(null);
@@ -66,7 +70,7 @@ export default function Home() {
         <div
           ref={homeRef}
           id="home"
-          className="scroll-mt-28 py-20 w-full min-h-[570px]  grid justify-items-center "
+          className=" py-20 w-full min-h-[570px]  grid justify-items-center "
         >
           <Image
             src={MainImage}
@@ -92,8 +96,8 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div ref={featuresRef} id="features">
-          <div className="scroll-mt-24 border-y-2 flex flex-col py-20 gap-16 items-center w-full bg-[#edeef2] h-full">
+        <div className="scroll-mt-24" ref={featuresRef} id="features">
+          <div className="border-y-2 flex flex-col py-20 gap-16 items-center w-full bg-[#edeef2] h-full">
             <div className="grid grid-rows-2 w-5/6">
               <h2 className="text-4xl font-semibold">
                 What can you do with Calorie Tracker?
@@ -298,19 +302,19 @@ export default function Home() {
           className="scroll-mt-24 w-full py-10 justify-center"
         >
           <div className="bg-[#ffaa5f] w-4/5 p-12 rounded-3xl mx-auto grid grid-rows-6">
-            <h5 className="row-span-1 text-center">
+            <div className="row-span-1 text-center">
               <h4 className="text-gray-500">F.A.Q.</h4>
-            </h5>
-            <h2 className="row-span-1 text-center">
+            </div>
+            <div className="row-span-1 text-center">
               <h2 className="font-ubuntu text-4xl">
                 Frequently Asked Questions
               </h2>
-            </h2>
+            </div>
             <ul className="row-span-4 px-52 space-y-3">
               <li className="">
                 <h4 className="flex pb-2 font-ubuntu text-lg font-medium">
-                  <FaQuestionCircle className="text-[#ffeeb5] text-4xl mr-3" /> How do I download
-                  the app?
+                  <FaQuestionCircle className="text-[#ffeeb5] text-4xl mr-3" />{" "}
+                  How do I download the app?
                 </h4>
                 To download the app, go to the App Store (for iOS devices) or
                 Google Play Store (for Android devices) on your mobile device.
@@ -328,7 +332,7 @@ export default function Home() {
               </li>
               <li>
                 <h4 className="flex pb-2 font-ubuntu text-lg font-medium">
-                  <FaQuestionCircle className="text-[#ffeeb5]  text-4xl mr-3"/>
+                  <FaQuestionCircle className="text-[#ffeeb5]  text-4xl mr-3" />
                   How do I contact customer support?
                 </h4>
                 Look for a &quot;Contact us&quot; or &quot;Support&quot; option
@@ -345,20 +349,46 @@ export default function Home() {
           id="contact"
           className="bg-[#edeef2] scroll-mt-24 border-y-2 w-full py-10 justify-center"
         >
-          <div className="p-12 mx-auto grid grid-rows-2">
-            <div className="">
-              <h1 className="">Get in Touch</h1>
-              <h2 className="">We would like to hear from you!</h2>
+          <div className="p-12 mx-auto grid grid-rows-3">
+            <div className="text-center font-poppins space-y-4">
+              <h1 className="text-4xl">Get in Touch</h1>
+              <h2 className="text-lg">We would love to hear from you!</h2>
             </div>
-            <div className="grid grid-cols-3">
-              <div className="col-span-1 bg-red-400  ">
-                <p>Our Location</p>
+            <div className="row-span-2 grid grid-cols-3 gap-10 px-36 font-poppins">
+              <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">
+                <div>
+                  <FaLocationDot className=" bg-gray-300 row-span-1 text-blue-700 h-16 w-16 rounded-full p-5" />
+                </div>
+                <div className="grid grid-rows-2">
+                  <h4 className=" text-xl">Our Location</h4>
+                  <p className="text-gray-500">
+                    7/13 Devington St, Hawthorn, NWS, 2912
+                  </p>
+                </div>
               </div>
-              <div className="col-span-1 bg-green-400  ">
-                <p>Call Us On</p>
+              <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">
+                <div>
+                  <FaPhoneAlt className=" bg-gray-300 row-span-1 text-blue-700 h-16 w-16 rounded-full p-5" />
+                </div>
+                <div className="grid grid-rows-2">
+                  <h4 className=" text-xl">Call Us On</h4>
+                  <div className="space-y-2">
+                    <p className="text-gray-500">+61 06 2196 7537</p>
+                    <p className="text-gray-500">+61 06 2196 7500</p>
+                  </div>
+                </div>
               </div>
-              <div className="col-span-1 bg-slate-500  ">
-                <p>Email us</p>
+              <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">
+                <div>
+                  <MdMail className=" bg-gray-300 row-span-1 text-blue-700 h-16 w-16 rounded-full p-5" />
+                </div>
+                <div className="grid grid-rows-2">
+                  <h4 className=" text-xl">Email Us</h4>
+                  <div className="space-y-2">
+                    <p className="text-gray-500">healthdiary@gmail.com</p>
+                    <p className="text-gray-500">hdiary@gmail.com</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -366,24 +396,24 @@ export default function Home() {
 
         <div className="mt-12 w-5/6 min-h-28 grid grid-cols-4 gap-5">
           <div>
-            <a href="#">
+            <Link href={""}>
               <h5 className="text-gray-500 text-center">About Us</h5>
-            </a>
+            </Link>
           </div>
           <div>
-            <a href="#">
+            <Link href={""}>
               <h5 className="text-gray-500  text-center">Contact Us</h5>
-            </a>
+            </Link>
           </div>
           <div>
-            <a href="#">
+            <Link href={""}>
               <h5 className="text-gray-500  text-center">Privacy Policy</h5>
-            </a>
+            </Link>
           </div>
           <div>
-            <a href="#">
+            <Link href={""}>
               <h5 className="text-gray-500  text-center">Terms of Service</h5>
-            </a>
+            </Link>
           </div>
         </div>
       </main>
