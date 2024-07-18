@@ -346,7 +346,7 @@ export default function Dashboard() {
             >
               <MdOutlineCalculate className="text-3xl text-center"/><span className="text-center">BMI Calculator</span>
             </button>
-            <h2 className="flex text-xl h-3/4 items-center">Date Selector <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center"/></h2>
+            <h2 className="flex text-xl h-3/4 font-bold items-center">Date Selector <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center"/></h2>
             <DatePicker
               className="w-28 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
               selected={startDate}
@@ -390,7 +390,7 @@ export default function Dashboard() {
             <ul className="space-y-3 w-full">
               <span className="font-bold">Nutrition Intake Breakdown</span>
               <li className="text-sm">
-                Protein ({parseInt(proteinProgress)}%) | {proteinCalories}g /
+                Protein ({parseInt(proteinProgress)}%) | {proteinCalories.toFixed(1)}g /
                 136g
               </li>
               <LinearProgress
@@ -400,7 +400,7 @@ export default function Dashboard() {
                 className="w-full min-h-3 rounded-xl transition-all"
               />
               <li className="text-sm">
-                Fats ({parseInt(fatProgress)}%) | {fatCalories}g / 73g
+                Fats ({parseInt(fatProgress)}%) | {fatCalories.toFixed(1)}g / 73g
               </li>{" "}
               <LinearProgress
                 variant="determinate"
@@ -409,7 +409,7 @@ export default function Dashboard() {
                 className="w-full min-h-3 rounded-xl transition-all"
               />
               <li className="text-sm">
-                Carbohydrates ({parseInt(carbProgress)}%) | {carbCalories}g /
+                Carbohydrates ({parseInt(carbProgress)}%) | {carbCalories.toFixed(1)}g /
                 361g
               </li>{" "}
               <LinearProgress

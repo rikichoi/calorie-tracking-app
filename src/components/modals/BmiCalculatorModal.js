@@ -47,16 +47,16 @@ export default function BmiCalculatorModal({ show, onClose }) {
         setBmiRange("");
       }
       if (bmiValue > 0 && bmiValue < 18.5) {
-        setBmiRange("Underweight");
+        setBmiRange(<span className="text-red-600">&nbsp;Underweight&nbsp;</span>);
       }
       if (bmiValue >= 18.5 && bmiValue <= 24.9) {
-        setBmiRange("Healthy");
+        setBmiRange(<span className="text-green-600">&nbsp;Healthy&nbsp;</span>);
       }
       if (bmiValue >= 25 && bmiValue < 29.9) {
-        setBmiRange("Overweight");
+        setBmiRange(<span className="text-orange-600">&nbsp;Overweight&nbsp;</span>);
       }
       if (bmiValue >= 30) {
-        setBmiRange("Obese");
+        setBmiRange(<span className="text-red-600">&nbsp;Obese&nbsp;</span>);
       }
     };
     calculateBmiRange();
