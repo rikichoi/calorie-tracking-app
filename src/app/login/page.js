@@ -34,8 +34,9 @@ export default function LoginPage() {
   }, [user]);
 
   return (
-    <div className="mt-24 min-h-screen h-[1000px]">
+    <div className="mt-24 font-poppins">
       <div className="justify-center grid">
+        <h1 className="text-2xl text-center pb-5">Login</h1>
         <form className="justify-center gap-3 grid grid-rows-2">
           <input
             onChange={handleChange}
@@ -56,10 +57,9 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => (
-              emailPasswordLoginHandler(loginData.email, loginData.password),
-              router.push("/")
+              emailPasswordLoginHandler(loginData.email, loginData.password)
             )}
-            className="bg-green-700"
+            className="bg-[#f54748] text-lg text-white border-2 border-black rounded-3xl py-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
           >
             Login
           </button>
@@ -71,7 +71,7 @@ export default function LoginPage() {
         </div>
         <button
           onClick={googleLoginHandler}
-          className="flex mt-3 justify-center items-center rounded-xl max-w-64 w-full h-16 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+          className="mx-auto flex mt-3 justify-center items-center rounded-xl w-full h-16 border-2 border-black text-white font-semibold bg-[#e04949] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
         >
           <FcGoogle className="text-4xl mr-3"> </FcGoogle>
           <span className="text-xl !font-opensans font-semibold">

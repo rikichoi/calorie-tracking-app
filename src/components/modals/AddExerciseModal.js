@@ -51,7 +51,7 @@ export default function AddExerciseModal({ show, onClose, selectedDate}) {
     exerciseDurationRef.current.value = "";
   }
   return (
-    <form onSubmit={addExerciseHandler} className="px-3">
+    <form onSubmit={addExerciseHandler} className="px-3 font-poppins">
       <div className="w-full flex flex-row justify-end p-4">
         <button
           type="reset"
@@ -69,14 +69,14 @@ export default function AddExerciseModal({ show, onClose, selectedDate}) {
           type="string"
           min={0.0}
           placeholder="Enter Exercise"
-          className="rounded-md p-1 border-2 border-black bg-[#C8CFA0] placeholder-opacity-100"
+          className="rounded-md p-1 border-2 bg-white border-gray-400 placeholder-opacity-100"
         >
           <option value="Running">Running</option>
           <option value="Swimming">Swimming</option>
           <option value="Jumping">Jumping</option>
         </select>
       </div>
-      <div className="flex flex-col ">
+      <div className="pt-5 flex flex-col ">
         <label>Duration (mins)</label>
         <input
           ref={exerciseDurationRef}

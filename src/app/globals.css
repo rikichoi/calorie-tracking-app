@@ -33,5 +33,5 @@ body {
 } */
 
 input {
-  @apply rounded-md p-1 border-2 border-black bg-[#C8CFA0] placeholder-opacity-100
+  @apply rounded-md p-1 border-2 border-gray-400 placeholder-opacity-100
 }

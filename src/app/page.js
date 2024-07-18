@@ -75,7 +75,7 @@ export default function Home() {
           <Image
             src={MainImage}
             alt="Fruits"
-            className="rounded-xl brightness-[50%] max-h-[500px] object-cover absolute"
+            className="rounded-xl border-2 border-black brightness-[50%] max-h-[500px] object-cover absolute"
           />
           <div className="relative mt-64 items-center ml-24">
             <h1 className="text-white font-poppins text-5xl brightness-150 font-bold mb-2">
@@ -102,7 +102,7 @@ export default function Home() {
               <h2 className="text-4xl font-semibold">
                 What can you do with Calorie Tracker?
               </h2>
-              <h3>
+              <h3 className="text-gray-500">
                 Our app empowers you to take control of your health and fitness
                 journey. Use our calculator to stay on top of your health and
                 fitness. Whether you&apos;re jogging, weightlifting, or just
@@ -241,7 +241,7 @@ export default function Home() {
                   BMI calculation
                 </li>
               </ul>
-              <button className=" bg-black text-white hover:border-2 hover:border-white font-poppins w-2/3 mx-auto rounded-xl">
+              <button className=" bg-black text-white hover:border-2 mt-3 hover:border-white font-poppins w-2/3 mx-auto rounded-xl">
                 Get 7 Day Free Trial
               </button>
             </div>
@@ -265,7 +265,7 @@ export default function Home() {
                   Personalized meal plans
                 </li>
               </ul>
-              <button className=" bg-gray-700 hover:border-black hover:border-2 hover:bg-[#f54748] text-white font-poppins w-2/3 mx-auto rounded-xl">
+              <button className=" bg-gray-700 hover:border-black mt-3 hover:border-2 hover:bg-[#f54748] text-white font-poppins w-2/3 mx-auto rounded-xl">
                 Get 7 Day Free Trial
               </button>
             </div>

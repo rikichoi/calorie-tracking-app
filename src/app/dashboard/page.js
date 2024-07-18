@@ -217,14 +217,12 @@ export default function Dashboard() {
   function deleteAllMealHandler(mealLog) {
     for (var i = 0, len = mealLog.length; i < len; i++) {
       deleteMealHandler(mealLog[i].id);
-      toast.success("All meals removed successfully!");
     }
   }
 
   function deleteAllExerciseHandler(exerciseLog) {
     for (var i = 0, len = exerciseLog.length; i < len; i++) {
       deleteExerciseHandler(exerciseLog[i].id);
-      toast.success("All exercises removed successfully!");
     }
   }
 
@@ -328,7 +326,7 @@ export default function Dashboard() {
           />
         )}
       </Modal>
-      <main className="flex min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
+      <main className="flex font-poppins min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
         <div className="w-5/6 grid grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold ">
@@ -348,9 +346,9 @@ export default function Dashboard() {
             >
               <MdOutlineCalculate className="text-3xl text-center"/><span className="text-center">BMI Calculator</span>
             </button>
-            <h2 className="flex text-xl h-3/4 items-center">Date Selector <FaCircleArrowRight className="text-2xl ml-2 flex justify-center"/></h2>
+            <h2 className="flex text-xl h-3/4 items-center">Date Selector <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center"/></h2>
             <DatePicker
-              className="w-28 text-center h-14 hover:shadow-gray-900 transition-all duration-100  hover:shadow-inner hover:cursor-pointer"
+              className="w-28 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
               selected={startDate}
               onChange={(date) => setStartDate(date)}
             ></DatePicker>

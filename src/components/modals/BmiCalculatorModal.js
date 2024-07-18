@@ -63,7 +63,7 @@ export default function BmiCalculatorModal({ show, onClose }) {
   }, [bmiValue]);
 
   return (
-    <div className="grid h-[71vh] grid-rows-9">
+    <div className="grid h-[71vh] font-poppins grid-rows-9">
       <div className="w-full row-span-1 flex flex-row justify-end p-4">
         <button
           onClick={() => onClose(!show)}
