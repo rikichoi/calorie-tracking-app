@@ -192,7 +192,6 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
         </form>
       ) : (
         <div className="grid gap-6 mb-5">
-          {/* console.log(foodList.filter(food => food.foodName.toLowerCase().includes(search))); */}
 
           <input
             className="mx-4"

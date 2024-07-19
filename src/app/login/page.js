@@ -37,6 +37,9 @@ export default function LoginPage() {
     <div className="mt-24 font-poppins">
       <div className="justify-center grid">
         <h1 className="text-2xl text-center pb-5">Login</h1>
+        <p className="font-bold text-center text-orange-500">Demo Account Details</p>
+        <p className=" text-center"><span className="font-semibold">Email:</span> demo@gmail.com </p>
+        <p className=" text-center"><span className="font-semibold">Password:</span> demo123 </p>
         <form className="justify-center gap-3 grid grid-rows-2">
           <input
             onChange={handleChange}

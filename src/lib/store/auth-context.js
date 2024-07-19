@@ -33,7 +33,7 @@ export default function AuthContextProvider({children}){
         try {
             await createUserWithEmailAndPassword(auth, email, password)
             .then((cred)=>{
-                console.log('user created:', cred.user)
+
             }
         )
         } catch (error) {
@@ -45,7 +45,7 @@ export default function AuthContextProvider({children}){
         try {
             await signInWithEmailAndPassword(auth, email, password)
             .then((cred)=>{
-                console.log('user logged in:', cred.user)
+                
             }
         )
         } catch (error) {

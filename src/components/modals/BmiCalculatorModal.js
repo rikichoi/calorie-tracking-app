@@ -35,7 +35,7 @@ export default function BmiCalculatorModal({ show, onClose }) {
         setBmiValue(0);
       }
       if (data.weight > 0 && data.height > 0) {
-        setBmiValue(data.weight / (data.height / 100) ** 2);
+        setBmiValue((data.weight / (data.height / 100) ** 2).toFixed(1));
       }
     };
     calculateBmi();

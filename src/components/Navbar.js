@@ -77,54 +77,54 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="xl:block lg:block md:block sm:hidden text-gray-950 w-full md:col-span-6 text-center justify-center items-center">
-            <div className="font-poppins text-base  h-full items-center justify-center flex flex-row ">
+            <div className="font-poppins text-base  h-full items-center justify-between flex flex-row ">
               <Link
                 href={"/"}
                 // onClick={()=>setSelectedPage("")}
-                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                className="hover:opacity-60  text-center  flex items-center justify-center font-semibold"
               >
                 {/* <p className={`${homeValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Home</p> */}
-                <p className="">
+                <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
                   Home
                 </p>
               </Link>
               <Link
                 href={"/#features"}
                 // onClick={()=>setSelectedPage("Features")}
-                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                className="hover:opacity-60  text-center  flex items-center justify-center font-semibold"
               >
                 {/* <p className={`${featuresValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Features</p> */}
-                <p className="">
+                <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
                 Features
                 </p>
               </Link>
               <Link
                 href={"/#pricing"}
                 // onClick={()=>setSelectedPage("Pricing")}
-                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                className="hover:opacity-60  text-center  flex items-center justify-center font-semibold"
               >
                 {/* <p className={`${pricingValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Pricing</p> */}
-                <p className="">
+                <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
                 Pricing
                 </p>
               </Link>
               <Link
                 href={"/#support"}
                 // onClick={()=>setSelectedPage("Support")}
-                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                className="hover:opacity-60  text-center flex items-center justify-center font-semibold"
               >
                 {/* <p className={`${supportValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Support</p> */}
-                <p className="">
+                <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
                 Support
                 </p>
               </Link>
               <Link
                 href={"/#contact"}
                 // onClick={()=>setSelectedPage("Contact")}
-                className="hover:opacity-60  text-center  w-2/3 h-1/2 flex items-center justify-center font-semibold"
+                className="hover:opacity-60  text-center flex items-center justify-center font-semibold"
               >
                 {/* <p className={`${contactValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Contact</p> */}
-                <p className="">
+                <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
                 Contact
                 </p>
               </Link>

@@ -70,7 +70,7 @@ export default function Home() {
         <div
           ref={homeRef}
           id="home"
-          className=" py-20 w-full min-h-[570px]  grid justify-items-center "
+          className=" py-16 w-full min-h-[570px]  grid justify-items-center "
         >
           <Image
             src={MainImage}
@@ -352,7 +352,7 @@ export default function Home() {
           <div className="p-12 mx-auto grid grid-rows-3">
             <div className="text-center font-poppins space-y-4">
               <h1 className="text-4xl">Get in Touch</h1>
-              <h2 className="text-lg">We would love to hear from you!</h2>
+              <h2 className="text-lg">Want to get in touch? We&apos;d love to hear from you. Here&apos;s how you can reach us...</h2>
             </div>
             <div className="row-span-2 grid grid-cols-3 gap-10 px-36 font-poppins">
               <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">

@@ -330,7 +330,7 @@ export default function Dashboard() {
         <div className="w-5/6 grid grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold ">
-              Good morning, {user.displayName}
+              Good morning, {user.displayName||"demo"}
             </h1>
             <p className="text-gray-500 text-sm pt-2 pb-4 font-light ">
               Here&apos;s your summary for{" "}
@@ -342,7 +342,7 @@ export default function Dashboard() {
           <div className="flex justify-end gap-2">
             <button
               onClick={() => (setModeModal("bmiCalculator"), setOpenModal(!openModal))}
-              className="bg-orange-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-40 h-14 flex justify-center pt-0.5"
+              className="bg-orange-600 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-40 h-14 flex justify-center pt-0.5"
             >
               <MdOutlineCalculate className="text-3xl text-center"/><span className="text-center">BMI Calculator</span>
             </button>
