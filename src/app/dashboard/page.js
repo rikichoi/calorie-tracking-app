@@ -36,12 +36,11 @@ import { MdOutlineCalculate } from "react-icons/md";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
   const { user, loading, logout } = useContext(authContext);
-
+  const [displayName, setDisplayName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [mealLog, setMealLog] = useState([]);
   const [exerciseLog, setExerciseLog] = useState([]);
@@ -228,6 +227,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) return;
+    const getUserDisplayName = () => {
+      if (user.displayName) {
+        setDisplayName(user.displayName);
+      } else {
+        setDisplayName("Demo Account");
+      }
+    };
     const getMealLogData = async () => {
       const collectionRef = collection(db, "mealLog");
       const q = query(collectionRef, where("uid", "==", user.uid));
@@ -249,6 +255,7 @@ export default function Dashboard() {
       });
       setMealLog(data);
     };
+    getUserDisplayName();
     getMealLogData();
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
@@ -320,18 +327,13 @@ export default function Dashboard() {
           />
         )}
         {modeModal == "bmiCalculator" && (
-          <BmiCalculatorModal
-            show={openModal}
-            onClose={setOpenModal}
-          />
+          <BmiCalculatorModal show={openModal} onClose={setOpenModal} />
         )}
       </Modal>
       <main className="flex font-poppins min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
         <div className="w-5/6 grid grid-cols-2">
           <div>
-            <h1 className="text-2xl font-bold ">
-              Good morning, 
-            </h1>
+            <h1 className="text-2xl font-bold ">Good morning, {displayName}</h1>
             <p className="text-gray-500 text-sm pt-2 pb-4 font-light ">
               Here&apos;s your summary for{" "}
               <span className="font-bold">
@@ -341,12 +343,18 @@ export default function Dashboard() {
           </div>
           <div className="flex justify-end gap-2">
             <button
-              onClick={() => (setModeModal("bmiCalculator"), setOpenModal(!openModal))}
+              onClick={() => (
+                setModeModal("bmiCalculator"), setOpenModal(!openModal)
+              )}
               className="bg-orange-600 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-40 h-14 flex justify-center pt-0.5"
             >
-              <MdOutlineCalculate className="text-3xl text-center"/><span className="text-center">BMI Calculator</span>
+              <MdOutlineCalculate className="text-3xl text-center" />
+              <span className="text-center">BMI Calculator</span>
             </button>
-            <h2 className="flex text-xl h-3/4 font-bold items-center">Date Selector <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center"/></h2>
+            <h2 className="flex text-xl h-3/4 font-bold items-center">
+              Date Selector{" "}
+              <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center" />
+            </h2>
             <DatePicker
               className="w-28 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
               selected={startDate}
@@ -390,8 +398,8 @@ export default function Dashboard() {
             <ul className="space-y-3 w-full">
               <span className="font-bold">Nutrition Intake Breakdown</span>
               <li className="text-sm">
-                Protein ({parseInt(proteinProgress)}%) | {proteinCalories.toFixed(1)}g /
-                136g
+                Protein ({parseInt(proteinProgress)}%) |{" "}
+                {proteinCalories.toFixed(1)}g / 136g
               </li>
               <LinearProgress
                 variant="determinate"
@@ -400,7 +408,8 @@ export default function Dashboard() {
                 className="w-full min-h-3 rounded-xl transition-all"
               />
               <li className="text-sm">
-                Fats ({parseInt(fatProgress)}%) | {fatCalories.toFixed(1)}g / 73g
+                Fats ({parseInt(fatProgress)}%) | {fatCalories.toFixed(1)}g /
+                73g
               </li>{" "}
               <LinearProgress
                 variant="determinate"
@@ -409,8 +418,8 @@ export default function Dashboard() {
                 className="w-full min-h-3 rounded-xl transition-all"
               />
               <li className="text-sm">
-                Carbohydrates ({parseInt(carbProgress)}%) | {carbCalories.toFixed(1)}g /
-                361g
+                Carbohydrates ({parseInt(carbProgress)}%) |{" "}
+                {carbCalories.toFixed(1)}g / 361g
               </li>{" "}
               <LinearProgress
                 variant="determinate"
