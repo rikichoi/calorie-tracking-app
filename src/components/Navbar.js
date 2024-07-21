@@ -44,7 +44,7 @@ export default function Navbar() {
               {user.photoURL ? (
                 <img
                   src={user.photoURL}
-                  alt={user.displayName}
+                  alt={"user image"}
                   referrerPolicy="no-referrer"
                   className="w-11 h-11 rounded-full mr-3"
                 />

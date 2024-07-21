@@ -330,7 +330,7 @@ export default function Dashboard() {
         <div className="w-5/6 grid grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold ">
-              Good morning, {user.displayName||"demo"}
+              Good morning, 
             </h1>
             <p className="text-gray-500 text-sm pt-2 pb-4 font-light ">
               Here&apos;s your summary for{" "}
