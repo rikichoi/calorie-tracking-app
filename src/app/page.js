@@ -281,14 +281,14 @@ export default function Home() {
               <Image
                 alt="Energetic girl"
                 src={NewsletterImg}
-                className="max-w-36 md:hidden md:ml-0 absolute ml-32"
+                className="max-w-36 md:hidden md:ml-0 absolute ml-32 mr-5"
               />
             </div>
             <div className="md:col-span-4 md:px-5 col-span-2 text-center">
               <h1 className="md:text-lg md:pt-0 pt-10 pb-6 font-poppins text-2xl">
                 Sign up to our newsletter for daily fitness and health insights
               </h1>
-              <div className="flex flex-row">
+              <div className="flex justify-center flex-row">
                 <input
                   className="bg-white md:w-full w-2/3 px-3"
                   placeholder="enter your email address here"
