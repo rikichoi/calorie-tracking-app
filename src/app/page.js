@@ -10,7 +10,7 @@ import { authContext } from "@/lib/store/auth-context";
 import { FcGoogle } from "react-icons/fc";
 import Dashboard from "./dashboard/page";
 import { useInView } from "framer-motion";
-import { FaCircleCheck } from "react-icons/fa6";
+import { FaCheckCircle } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import FeaturesImage from "../images/features-image.png";
 import NewsletterImg from "../images/newsletter-image.png";
@@ -70,25 +70,25 @@ export default function Home() {
         <div
           ref={homeRef}
           id="home"
-          className=" py-16 w-full min-h-[570px]  grid justify-items-center "
+          className="md:py-0 py-16 md:max-h-[500px] w-full md:min-h-[450px] max-h-[570px] grid justify-items-center "
         >
           <Image
             src={MainImage}
             alt="Fruits"
-            className="rounded-xl border-2 border-black brightness-[50%] max-h-[500px] object-cover absolute"
+            className="md:w-full md:h-full md:rounded-none md:border-0 rounded-xl border-2 border-black brightness-[50%] max-h-[500px] object-cover absolute"
           />
-          <div className="relative mt-64 items-center ml-24">
+          <div className="relative md:w-full md:items-center md:mt-20 md:ml-0 md:text-center md:h-full mt-64 items-center ml-24">
             <h1 className="text-white font-poppins text-5xl brightness-150 font-bold mb-2">
               Welcome to Calorie Tracker
             </h1>
-            <p className="text-white font-opensans w-5/6 mb-5">
+            <p className="text-white font-opensans w-5/6 md:w-full md:py-6 mb-5">
               Track your daily calorie intake, log your meals and exercise, and
               calculate your BMI. Get started by signing in or signing up for
               free today.
             </p>
             <a
               href={"/login"}
-              className="flex justify-center items-center rounded-xl max-w-64 w-full h-16 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+              className="flex md:max-w-none justify-center border-2 items-center rounded-xl max-w-64 w-full h-16 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
             >
               <span className="text-xl font-poppins font-semibold">
                 Get Started!
@@ -98,11 +98,11 @@ export default function Home() {
         </div>
         <div className="scroll-mt-24" ref={featuresRef} id="features">
           <div className="border-y-2 flex flex-col py-20 gap-16 items-center w-full bg-[#edeef2] h-full">
-            <div className="grid grid-rows-2 w-5/6">
-              <h2 className="text-4xl font-semibold">
+            <div className="grid md:grid-rows-3 grid-rows-2 w-5/6">
+              <h2 className="md:row-span-1 md:text-2xl text-4xl font-semibold">
                 What can you do with Calorie Tracker?
               </h2>
-              <h3 className="text-gray-500">
+              <h3 className="md:row-span-2 text-gray-500">
                 Our app empowers you to take control of your health and fitness
                 journey. Use our calculator to stay on top of your health and
                 fitness. Whether you&apos;re jogging, weightlifting, or just
@@ -110,48 +110,48 @@ export default function Home() {
                 every step of the way.
               </h3>
             </div>
-            <div className=" w-5/6 grid grid-cols-4 gap-5">
-              <div>
+            <div className="w-5/6 md:w-3/6 grid md:grid-cols-1 grid-cols-4 gap-5">
+              <div className="md:bg-zinc-50 md:py-10 md:px-3 md:drop-shadow-2xl shadow- md:rounded-xl md:w-full">
                 <Image
                   alt="Various Fruits"
                   src={NutritionImage}
-                  className="rounded-xl max-h-[137px] object-cover "
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
                 />
-                <h3 className="pt-4">Log your meals</h3>
+                <h3 className="pt-4 pb-2 font-semibold">Log your meals</h3>
                 <h4 className="text-gray-500 text-sm">
                   Track both your calories and macronutrients
                 </h4>
               </div>
-              <div>
+              <div className="md:bg-zinc-50 md:py-10 md:px-3 md:drop-shadow-2xl shadow- md:rounded-xl md:w-full">
                 <Image
                   alt="People Jogging"
                   src={FitnessImage}
-                  className="rounded-xl max-h-[137px] object-cover "
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
                 />
-                <h3 className="pt-4">Log your exercises</h3>
+                <h3 className="pt-4 pb-2 font-semibold">Log your exercises</h3>
                 <h4 className="text-gray-500 text-sm">
                   See how many calories you&apos;ve burned
                 </h4>
               </div>
-              <div>
+              <div className="md:bg-zinc-50 md:py-10 md:px-3 md:drop-shadow-2xl shadow- md:rounded-xl md:w-full">
                 <Image
                   alt="Scale"
                   src={BMIImage}
-                  className="rounded-xl max-h-[137px] object-cover"
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
                 />
-                <h3 className="pt-4">Calculate your BMI</h3>
+                <h3 className="pt-4 pb-2 font-semibold">Calculate your BMI</h3>
                 <h4 className="text-gray-500 text-sm">
                   Use our calculator to find out if you&apos;re at a healthy
                   weight
                 </h4>
               </div>
-              <div>
+              <div className="md:bg-zinc-50 md:py-10 md:px-3 md:drop-shadow-2xl shadow- md:rounded-xl md:w-full">
                 <Image
                   alt="Goal Setting"
                   src={TargetImage}
-                  className="rounded-xl max-h-[137px] object-cover"
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
                 />
-                <h3 className="pt-4">Set a target weight</h3>
+                <h3 className="pt-4 pb-2 font-semibold">Set a target weight</h3>
                 <h4 className="text-gray-500 text-sm">
                   Use our calculator to see how many calories you should be
                   eating
@@ -160,7 +160,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid py-36 px-20 mx-auto grid-cols-8 w-5/6">
+          <div className="md:grid-cols-1 md:px-3 md:py-10 grid py-36 px-20 mx-auto grid-cols-8 w-5/6">
             <div className="col-span-3">
               <h2 className="font-poppins font-semibold text-4xl">
                 What makes us <span className="text-[#f54748]">unique</span>{" "}
@@ -171,24 +171,30 @@ export default function Home() {
               </h3>
               <ul className="pt-7 space-y-4 text-lg">
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className="text-green-600 text-3xl" /> Log your
-                  meals and activity at any occasion.
+                  <FaCheckCircle className="text-green-600 md:text-2xl text-3xl " />
+                  <p className="md:text-sm">
+                    Log your meals and activity at any occasion.
+                  </p>
                 </li>
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className="text-green-600 text-3xl" />
-                  Access an all-encompassing database.
+                  <FaCheckCircle className="text-green-600 md:text-2xl text-3xl" />
+                  <p className="md:text-sm">
+                    Access an all-encompassing database.
+                  </p>
                 </li>
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className="text-green-600 text-3xl" />
-                  Keep track and achieve your goals.
+                  <FaCheckCircle className="text-green-600 md:text-2xl text-3xl" />
+                  <p className="md:text-sm">
+                    Keep track and achieve your goals.
+                  </p>
                 </li>
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className="text-green-600 text-3xl" />
-                  Available on all platforms.
+                  <FaCheckCircle className="text-green-600  md:text-2xl text-3xl" />
+                  <p className="md:text-sm">Available on all platforms.</p>
                 </li>
               </ul>
 
-              <button className="mt-10 h-16 w-40 rounded-2xl font-poppins font-semibold text-lg text-white border-2 bg-[#f54748] flex items-center justify-center">
+              <button className="mt-10 h-16 w-40 hover:shadow-inner hover:shadow-black rounded-2xl font-poppins font-semibold text-lg text-white border-2 bg-[#f54748] flex items-center justify-center">
                 Learn More
                 <FaArrowRight className="ml-2" />
               </button>
@@ -199,7 +205,7 @@ export default function Home() {
               <Image
                 alt="Doctor with food"
                 src={FeaturesImage}
-                className=" object-cover"
+                className="md:hidden object-cover"
               />
             </div>
           </div>
@@ -210,7 +216,7 @@ export default function Home() {
           id="pricing"
           className="bg-[#edeef2] scroll-mt-24 py-20 border-y-2 w-full justify-center grid grid-rows-7"
         >
-          <div className="row-span-1 w-full px-96 pt-10 space-y-6 text-center">
+          <div className="row-span-1 w-full md:px-5 px-80 pt-10 space-y-6 text-center">
             <h2 className="font-poppins text-4xl">
               <span className="bg-[#f54748] px-3 font-semibold text-white">
                 Achieve
@@ -221,23 +227,23 @@ export default function Home() {
               We offer competitive prices for all users
             </h3>
           </div>
-          <div className="row-span-4 px-56 pt-10 grid grid-cols-2 gap-24 w-full">
-            <div className="bg-[#f54748] h-5/6 text-white border-2 p-6 rounded-3xl border-black grid grid-rows-5">
+          <div className="row-span-4 md:grid-cols-1 md:pt-0 md:px-32 px-56 pt-10 grid grid-cols-2 gap-24 w-full">
+            <div className="bg-[#f54748] md:h-full h-5/6 text-white border-2 p-6 rounded-3xl border-black grid grid-rows-5">
               <div className="font-poppins row-span-2 space-y-5 text-center">
                 <h3 className="text-3xl">Standard</h3>
                 <h2 className="text-5xl">$30/mth</h2>
               </div>
               <ul className="row-span-2 space-y-5 pt-2">
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className=" text-3xl" />
+                  <FaCheckCircle className=" text-3xl" />
                   Limited food database
                 </li>
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className=" text-3xl" />
+                  <FaCheckCircle className=" text-3xl" />
                   Basic calorie tracking
                 </li>
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className=" text-3xl" />
+                  <FaCheckCircle className=" text-3xl" />
                   BMI calculation
                 </li>
               </ul>
@@ -246,22 +252,22 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="bg-white h-5/6 text-black border-2 p-6 rounded-3xl border-black grid grid-rows-5">
+            <div className="bg-white md:h-full h-5/6 text-black border-2 p-6 rounded-3xl border-black grid grid-rows-5">
               <div className="font-poppins row-span-2 space-y-5 text-center">
                 <h3 className="text-3xl">Premium</h3>
                 <h2 className="text-5xl">$60/mth</h2>
               </div>
               <ul className="row-span-2 space-y-5 pt-2">
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className="text-green-600 text-3xl" />
+                  <FaCheckCircle className="text-green-600 text-3xl" />
                   Comprehensive food database
                 </li>
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className="text-green-600 text-3xl" />
+                  <FaCheckCircle className="text-green-600 text-3xl" />
                   Advanced calorie tracking
                 </li>
                 <li className="flex gap-2 items-center">
-                  <FaCircleCheck className="text-green-600 text-3xl" />
+                  <FaCheckCircle className="text-green-600 text-3xl" />
                   Personalized meal plans
                 </li>
               </ul>
@@ -270,28 +276,28 @@ export default function Home() {
               </button>
             </div>
           </div>
-          <div className="row-span-2 rounded-3xl bg-blue-300 grid grid-cols-4 w-5/6 h-4/5 border-2 border-black mx-auto">
+          <div className="row-span-2 md:h-2/5 md:my-auto rounded-3xl bg-blue-300 grid grid-cols-4 w-5/6 h-4/5 border-2 border-black mx-auto">
             <div className="col-span-1 flex items-end">
               <Image
                 alt="Energetic girl"
                 src={NewsletterImg}
-                className="w-36 absolute ml-32"
+                className="max-w-36 md:hidden md:ml-0 absolute ml-32"
               />
             </div>
-            <div className="col-span-2 text-center">
-              <h1 className="pt-10 pb-6 font-poppins text-2xl">
+            <div className="md:col-span-4 md:px-5 col-span-2 text-center">
+              <h1 className="md:text-lg md:pt-0 pt-10 pb-6 font-poppins text-2xl">
                 Sign up to our newsletter for daily fitness and health insights
               </h1>
-              <div className="flex flex-row justify-center items-center">
+              <div className="flex flex-row">
                 <input
-                  className="bg-white w-2/3 px-3"
+                  className="bg-white md:w-full w-2/3 px-3"
                   placeholder="enter your email address here"
                 ></input>{" "}
                 <FaArrowRight className="hover:cursor-pointer hover:text-gray-600 active:scale-110 transition-all ml-2 text-3xl" />
               </div>
             </div>
             <div className="col-span-1 ">
-              <MdOutlineNotes className="text-[200px] my-auto" />
+              <MdOutlineNotes className="md:hidden text-[200px] my-auto" />
             </div>
           </div>
         </div>
@@ -301,7 +307,7 @@ export default function Home() {
           id="support"
           className="scroll-mt-24 w-full py-10 justify-center"
         >
-          <div className="bg-[#ffaa5f] w-4/5 p-12 rounded-3xl mx-auto grid grid-rows-6">
+          <div className="bg-[#ffaa5f] md:px-0 w-4/5 p-12 rounded-3xl mx-auto grid grid-rows-6">
             <div className="row-span-1 text-center">
               <h4 className="text-gray-500">F.A.Q.</h4>
             </div>
@@ -310,7 +316,7 @@ export default function Home() {
                 Frequently Asked Questions
               </h2>
             </div>
-            <ul className="row-span-4 px-52 space-y-3">
+            <ul className="row-span-4 md:px-5 px-52 space-y-3">
               <li className="">
                 <h4 className="flex pb-2 font-ubuntu text-lg font-medium">
                   <FaQuestionCircle className="text-[#ffeeb5] text-4xl mr-3" />{" "}
@@ -349,12 +355,15 @@ export default function Home() {
           id="contact"
           className="bg-[#edeef2] scroll-mt-24 border-y-2 w-full py-10 justify-center"
         >
-          <div className="p-12 mx-auto grid grid-rows-3">
-            <div className="text-center font-poppins space-y-4">
+          <div className="md:py-0 p-12 md:grid-rows-1 mx-auto grid grid-rows-3">
+            <div className="md:py-10 text-center font-poppins space-y-4">
               <h1 className="text-4xl">Get in Touch</h1>
-              <h2 className="text-lg">Want to get in touch? We&apos;d love to hear from you. Here&apos;s how you can reach us...</h2>
+              <h2 className="text-lg">
+                Want to get in touch? We&apos;d love to hear from you.
+                Here&apos;s how you can reach us...
+              </h2>
             </div>
-            <div className="row-span-2 grid grid-cols-3 gap-10 px-36 font-poppins">
+            <div className="row-span-2 md:grid-cols-1 md:px-5 grid grid-cols-3 gap-10 px-36 font-poppins">
               <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">
                 <div>
                   <FaLocationDot className=" bg-gray-300 row-span-1 text-blue-700 h-16 w-16 rounded-full p-5" />

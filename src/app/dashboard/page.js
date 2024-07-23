@@ -330,8 +330,8 @@ export default function Dashboard() {
           <BmiCalculatorModal show={openModal} onClose={setOpenModal} />
         )}
       </Modal>
-      <main className="flex font-poppins min-h-screen h-[1000px] flex-col items-center pr-24 pl-24 pt-8 ">
-        <div className="w-5/6 grid grid-cols-2">
+      <main className="flex font-poppins min-h-screen h-[1000px] flex-col items-center md:px-2 px-24 pt-8 ">
+        <div className="w-5/6 grid md:grid-cols-1 grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold ">Good morning, {displayName}</h1>
             <p className="text-gray-500 text-sm pt-2 pb-4 font-light ">
@@ -341,31 +341,31 @@ export default function Dashboard() {
               </span>
             </p>
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex md:grid md:grid-cols-1 justify-end gap-2">
             <button
               onClick={() => (
                 setModeModal("bmiCalculator"), setOpenModal(!openModal)
               )}
-              className="bg-orange-600 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-40 h-14 flex justify-center pt-0.5"
+              className="bg-orange-600 md:w-full md:mb-4 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-40 h-14 flex justify-center pt-0.5"
             >
               <MdOutlineCalculate className="text-3xl text-center" />
               <span className="text-center">BMI Calculator</span>
             </button>
-            <h2 className="flex text-xl h-3/4 font-bold items-center">
+            <h2 className="flex text-xl md:w-full h-3/4 font-bold items-center">
               Date Selector{" "}
               <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center" />
             </h2>
             <DatePicker
-              className="w-28 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
+              className="w-28 md:w-full md:mb-5 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
               selected={startDate}
               onChange={(date) => setStartDate(date)}
             ></DatePicker>
           </div>
         </div>
         {/* Left Overview Section */}
-        <div className="w-5/6 grid grid-cols-2 gap-4">
-          <div className="bg-gray-200 items-center min-h-[250px] rounded-xl pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
-            <ul className="pl-12 col-span-2">
+        <div className="w-5/6 md:w-full md:grid-cols-1 grid grid-cols-2 gap-4">
+          <div className="bg-gray-200 items-center min-h-[250px] rounded-xl md:text-sm md:pl-10 pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
+            <ul className="pl-12 md:pl-0 md:col-span-1 col-span-2">
               <li className="text-sm">You have consumed</li>
               <li className="text-lg pt-3 font-bold">
                 <span className="">{consumedCalories}</span> / 2362
@@ -376,7 +376,7 @@ export default function Dashboard() {
               </li>
             </ul>
 
-            <div className="items-center justify-center flex min-h-full">
+            <div className="items-center md:col-span-2 justify-center flex min-h-full">
               <Doughnut
                 className="p-2 "
                 data={{
@@ -394,7 +394,7 @@ export default function Dashboard() {
             </div>
           </div>
           {/* Right Overview Section */}
-          <div className="bg-gray-200 min-h-full rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
+          <div className="md:py-5 bg-gray-200 min-h-full rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
             <ul className="space-y-3 w-full">
               <span className="font-bold">Nutrition Intake Breakdown</span>
               <li className="text-sm">
@@ -445,7 +445,7 @@ export default function Dashboard() {
         {/* Meal Logging Section */}
         <div className="border- w-5/6">
           <div className="w-full mt-8 mb-5 flex flex-row">
-            <h1 className="text-2xl font-bold w-full">Recent Meals</h1>
+            <h1 className="md:text-lg text-2xl font-bold w-full">Recent Meals</h1>
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => deleteAllMealHandler(mealLog)}
@@ -504,7 +504,7 @@ export default function Dashboard() {
         {/* Exercise Logging Section */}
         <div className="w-5/6">
           <div className="w-full mt-8 mb-5 flex flex-row">
-            <h1 className="text-2xl font-bold w-full">Recent Exercise</h1>
+            <h1 className="md:text-lg text-2xl font-bold w-full">Recent Exercise</h1>
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => deleteAllExerciseHandler(exerciseLog)}

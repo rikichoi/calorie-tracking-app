@@ -36,14 +36,14 @@ export default function Navbar() {
       {/* If user does not exist then show this section */}
       {user && !loading && (
         <div className="sticky bg-white z-20 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
-          <div className="flex justify-end items-center col-span-3 h-full">
+          <div className="md:col-span-4 flex justify-end items-center col-span-3 h-full">
             <Image
               src={Logo}
               alt="HealthDiary Logo"
-              className="p-1 min-w-40 min-h-24 max-h-16 max-w-28"
+              className="max-h-16 max-w-28"
             />
           </div>
-          <div className="pl-64 w-full text-sm col-span-9 text-right justify-end items-center grid grid-cols-8">
+          <div className="pl-64 md:pl-0 md:col-span-8 w-full text-sm col-span-9 text-right justify-end items-center grid grid-cols-8">
             <div className=" flex col-span-10 w-full justify-end ">
               {user.photoURL ? (
                 <img
