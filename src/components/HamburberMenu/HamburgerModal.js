@@ -36,7 +36,7 @@ export default function HamburgerModal({ show, onClose }) {
           </h1>
         </Link>
         <Link
-          href={"/listings"}
+          href={"/#features"}
           className="row-span-1 h-full p-3 border-b-2 border-zinc-800 items-center  flex hover:bg-zinc-300 bg-zinc-200 w-full"
         >
           <FaList className="text-3xl text-zinc-700 mx-5"/>
@@ -45,7 +45,7 @@ export default function HamburgerModal({ show, onClose }) {
           </h1>
         </Link>
         <Link
-          href={"/learn"}
+          href={"/#pricing"}
           className="row-span-1 h-full p-3 border-b-2 border-zinc-800 items-center flex hover:bg-zinc-300 bg-zinc-200 w-full"
         >
           <IoIosSchool className="text-3xl text-zinc-700 mx-5"/>
@@ -54,7 +54,7 @@ export default function HamburgerModal({ show, onClose }) {
           </h1>
         </Link>
         <Link
-          href={"/contact"}
+          href={"/#support"}
           className="row-span-1 h-full p-3 border-b-2 border-zinc-800 items-center flex hover:bg-zinc-300 bg-zinc-200 w-full"
         >
           <FaBookOpen className="text-3xl text-zinc-700 mx-5"/>
@@ -63,7 +63,7 @@ export default function HamburgerModal({ show, onClose }) {
           </h1>
         </Link>
         <Link
-          href={"/"}
+          href={"/#contact"}
           className="row-span-1 h-full p-3 border-b-2 border-zinc-800 items-center  flex hover:bg-zinc-300 bg-zinc-200 w-full"
         >
           <FaPhone className="text-3xl text-zinc-700 mx-5"/>

@@ -96,7 +96,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="scroll-mt-24" ref={featuresRef} id="features">
+        <div className="md:scroll-mt-12 scroll-mt-24" ref={featuresRef} id="features">
           <div className="border-y-2 flex flex-col py-20 gap-16 items-center w-full bg-[#edeef2] h-full">
             <div className="grid md:grid-rows-3 grid-rows-2 w-5/6">
               <h2 className="md:row-span-1 md:text-2xl text-4xl font-semibold">
