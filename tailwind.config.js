@@ -15,7 +15,8 @@ module.exports = {
         poppins: "'Poppins', sans-serif",
       },
       screens: { 
-        'sm': { 'max': '768px' }, },
+        'md': { 'max': '1100px' }, 
+      },
     },
   },
     extend: {

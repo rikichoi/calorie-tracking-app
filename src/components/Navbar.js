@@ -6,12 +6,16 @@ import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
 import { FcGoogle } from "react-icons/fc";
 import { FaUser } from "react-icons/fa";
+import { MdOutlineMenu } from "react-icons/md";
+import { IoCloseSharp } from "react-icons/io5";
+import HamburgerModal from "./HamburberMenu/HamburgerModal";
 
 import ViewContextProvider, { viewContext } from "@/lib/store/view-context";
 
 export default function Navbar() {
   const { user, loading, logout } = useContext(authContext);
   const { googleLoginHandler } = useContext(authContext);
+  const [openMenu, setOpenMenu] = useState(false);
   const [selectedPage, setSelectedPage] = useState("");
   const {
     sectionInView,
@@ -67,16 +71,21 @@ export default function Navbar() {
 
       {!user && (
         <div className="sticky bg-white z-50 top-0 min-h-[6rem] grid grid-cols-12 border-b-2">
-          <div className="flex justify-center items-center   sm:justify-start md:col-span-3 sm:col-span-7 h-full">
+          {openMenu ? (
+            <HamburgerModal show={openMenu} onClose={setOpenMenu} />
+          ) : (
+            ""
+          )}
+          <div className="flex justify-center items-center   col-span-3 h-full">
             <Link href={"/"}>
               <Image
                 src={Logo}
                 alt="HealthDiary Logo"
-                className="p-1 sm:min-w-32 sm:ml-5 sm:min-h-20 min-w-40 min-h-24 max-h-16 max-w-28"
+                className="p-1 min-w-40 min-h-24 max-h-16 max-w-28"
               />
             </Link>
           </div>
-          <div className="xl:block lg:block md:block sm:hidden text-gray-950 w-full md:col-span-6 text-center justify-center items-center">
+          <div className="md:hidden text-gray-950 w-full col-span-6 text-center justify-center items-center">
             <div className="font-poppins text-base  h-full items-center justify-between flex flex-row ">
               <Link
                 href={"/"}
@@ -95,7 +104,7 @@ export default function Navbar() {
               >
                 {/* <p className={`${featuresValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Features</p> */}
                 <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
-                Features
+                  Features
                 </p>
               </Link>
               <Link
@@ -105,7 +114,7 @@ export default function Navbar() {
               >
                 {/* <p className={`${pricingValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Pricing</p> */}
                 <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
-                Pricing
+                  Pricing
                 </p>
               </Link>
               <Link
@@ -115,7 +124,7 @@ export default function Navbar() {
               >
                 {/* <p className={`${supportValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Support</p> */}
                 <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
-                Support
+                  Support
                 </p>
               </Link>
               <Link
@@ -125,27 +134,28 @@ export default function Navbar() {
               >
                 {/* <p className={`${contactValue===true ? 'border-orange-600 border-b-2 text-orange-600 transition-all':''}`}>Contact</p> */}
                 <p className="hover:border-b-2 hover:border-orange-600 hover:text-orange-600 transition-all">
-                Contact
+                  Contact
                 </p>
               </Link>
             </div>
           </div>
-          <div className="xl:flex lg:flex md:flex sm:hidden md:col-span-3 w-full items-center justify-center ">
+          <div className="md:col-span-9 md:justify-end col-span-3 flex w-full items-center justify-center ">
             <a
               href="/login"
-              className="flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+              className="md:w-auto md:px-3 flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
             >
               <span className="text-lg font-poppins">Log in</span>
             </a>
-          </div>
-          <div className="sm:flex md:hidden flex col-span-5 w-full items-center justify-center ">
-            <a
-              href="/login"
-              className="flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+            <button
+              onClick={() => setOpenMenu(!openMenu)}
+              className="md:flex hidden h-14 w-14 mr-2 border-2 border-gray-800 justify-center items-center rounded-2xl"
             >
-              <FcGoogle className="text-2xl mr-3"> </FcGoogle>{" "}
-              <span className="font-bold">Small</span>
-            </a>
+              {openMenu === true ? (
+                <IoCloseSharp className="text-3xl" />
+              ) : (
+                <MdOutlineMenu className="text-3xl" />
+              )}
+            </button>
           </div>
         </div>
       )}
