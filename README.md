@@ -32,7 +32,7 @@ Below is a non-exhaustive list of technologies used throughout the project:
 
 
 | Front-end  | Back-end || API  |
-| ------------- | ------------- || ------------- |
-| React  | Firestore (NoSQL)  || Firebase API  | 
-| NextJS  | Firestorage (Image storage)  || ------------- |
-| TailwindCSS  | FireAuth  || ------------- |
+| :---: | :---: | :---: |
+| React  | Firestore (NoSQL)  | Firebase API  | 
+| NextJS  | Firestorage (Image storage)  |  |
+| TailwindCSS  | FireAuth  |  |
