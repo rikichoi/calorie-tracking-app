@@ -30,8 +30,9 @@ https://calorie-tracker-app-one.vercel.app/
 
 Below is a non-exhaustive list of technologies used throughout the project:
 
+
 | Front-end  | Back-end || API  |
 | ------------- | ------------- || ------------- |
 | React  | Firestore (NoSQL)  || Firebase API  | 
-| NextJS  | Firestorage (Image storage)  |
-| TailwindCSS  | FireAuth  |
+| NextJS  | Firestorage (Image storage)  || ------------- |
+| TailwindCSS  | FireAuth  || ------------- |
