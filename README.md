@@ -4,23 +4,23 @@ Nutrition Tracker attempting to promote good health habits by enabling users to 
 
 Highlight features include:
 
-*Fully functioning CRUD operations for logging meals and exercises
+* Fully functioning CRUD operations for logging meals and exercises
 
-*Option to Manually log meals and exercises with user inputs
+* Option to Manually log meals and exercises with user inputs
 
-*Option to Select and Log meals from a list of pre-existing foods from the database
+* Option to Select and Log meals from a list of pre-existing foods from the database
 
-*Dynamic data visualisation of their daily nutrition and calorie intake (Doughnut Charts and Progress Bars)
+* Dynamic data visualisation of their daily nutrition and calorie intake (Doughnut Charts and Progress Bars)
 
-*Date-specific data tracking - allowing users to modify previous entries whenever they please
+* Date-specific data tracking - allowing users to modify previous entries whenever they please
 
-*User-specific data
+* User-specific data
 
-*User Authentication via Email & Password or Google Account
+* User Authentication via Email & Password or Google Account
 
-*Fully responsive design - compatible with mobile devices
+* Fully responsive design - compatible with mobile devices
 
-*Custom logo!
+* Custom logo!
 
 ## Deployed on Vercel
 
