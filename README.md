@@ -2,7 +2,11 @@
 ## Full-Stack Diet and Exercise Tracking Web App
 Nutrition Tracker attempting to promote good health habits by enabling users to track their calories wherever, and whenever. 
 
-Highlight features include:
+## Deployed on Vercel
+
+https://calorie-tracker-app-one.vercel.app/
+
+## Highlight Features Include:
 
 * Fully functioning CRUD operations for logging meals and exercises
 
@@ -21,10 +25,6 @@ Highlight features include:
 * Fully responsive design - compatible with mobile devices
 
 * Custom logo!
-
-## Deployed on Vercel
-
-https://calorie-tracker-app-one.vercel.app/
 
 ## Tech-Stack
 
