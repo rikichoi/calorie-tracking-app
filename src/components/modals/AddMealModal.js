@@ -30,10 +30,9 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
   const [manualLog, setManualLog] = useState(false);
   const [logText, setLogText] = useState("Manual Entry");
   const [search, setSearch] = useState("");
+  const [errors, setErrors] = useState({});
 
-  const addMealHandler = async (e) => {
-    e.preventDefault();
-
+  const addMealHandler = async () => {
     const newMeal = {
       uid: user.uid,
       calorie: calorieRef.current.value,
@@ -108,6 +107,36 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
     }
   }
 
+  const validate = () => {
+    let errors = {};
+    if (!mealNameRef.current.value) {
+      errors.name = "Please enter a name";
+    }
+    if (!calorieRef.current.value && !isNaN(calorieRef.current.value)) {
+      errors.calorie = "Please enter calories in numbers";
+    }
+    if (!proteinRef.current.value && !isNaN(proteinRef.current.value)) {
+      errors.protein = "Please enter protein in numbers";
+    }
+    if (!carbRef.current.value && !isNaN(carbRef.current.value)) {
+      errors.carb = "Please enter carbs in numbers";
+    }
+    if (!fatRef.current.value && !isNaN(fatRef.current.value)) {
+      errors.fat = "Please enter fat in numbers";
+    }
+    if (!weightRef.current.value && !isNaN(weightRef.current.value)) {
+      errors.weight = "Please enter weight in numbers";
+    }
+    return errors;
+  };
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if(Object.keys(errors).length) return setErrors(errors);
+    await addMealHandler();
+  };
+
   return (
     <div className="font-poppins">
       <div className="w-full flex flex-row justify-end p-4">
@@ -127,16 +156,16 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
         </button>
       </div>
       {manualLog ? (
-        <form onSubmit={addMealHandler} className="px-3 flex flex-col gap-4">
+        <form onSubmit={onSubmitHandler} className="px-3 flex flex-col gap-4">
           <div className="flex flex-col">
             <label>Name</label>
             <input
               ref={mealNameRef}
               type="string"
-              min={0.0}
               placeholder="Enter Name"
             />
           </div>
+          {errors.name?<p>ERROR ERROR</p>:""}
           <div className="flex flex-col">
             <label>Calories</label>
             <input
@@ -192,7 +221,6 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
         </form>
       ) : (
         <div className="grid gap-6 mb-5">
-
           <input
             className="mx-4"
             onChange={(e) => setSearch(e.target.value)}
