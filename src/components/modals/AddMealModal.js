@@ -55,6 +55,7 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
         carbRef.current.value = "";
         mealNameRef.current.value = "";
         weightRef.current.value = "";
+        setErrors({});
       } catch (error) {
         console.log(error.message);
       }
@@ -110,31 +111,31 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
   const validate = () => {
     let errors = {};
     if (!mealNameRef.current.value) {
-      errors.name = "Please enter a name";
+      errors.name = "Please enter a meal name";
     }
-    if (!calorieRef.current.value && !isNaN(calorieRef.current.value)) {
+    if (!calorieRef.current.value || isNaN(calorieRef.current.value)) {
       errors.calorie = "Please enter calories in numbers";
     }
-    if (!proteinRef.current.value && !isNaN(proteinRef.current.value)) {
+    if (!proteinRef.current.value || isNaN(proteinRef.current.value)) {
       errors.protein = "Please enter protein in numbers";
     }
-    if (!carbRef.current.value && !isNaN(carbRef.current.value)) {
+    if (!carbRef.current.value || isNaN(carbRef.current.value)) {
       errors.carb = "Please enter carbs in numbers";
     }
-    if (!fatRef.current.value && !isNaN(fatRef.current.value)) {
+    if (!fatRef.current.value || isNaN(fatRef.current.value)) {
       errors.fat = "Please enter fat in numbers";
     }
-    if (!weightRef.current.value && !isNaN(weightRef.current.value)) {
+    if (!weightRef.current.value || isNaN(weightRef.current.value)) {
       errors.weight = "Please enter weight in numbers";
     }
     return errors;
   };
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = (e) => {
     e.preventDefault();
     let errors = validate();
-    if(Object.keys(errors).length) return setErrors(errors);
-    await addMealHandler();
+    if (Object.keys(errors).length > 0) return setErrors(errors);
+    addMealHandler();
   };
 
   return (
@@ -159,58 +160,71 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
         <form onSubmit={onSubmitHandler} className="px-3 flex flex-col gap-4">
           <div className="flex flex-col">
             <label>Name</label>
-            <input
-              ref={mealNameRef}
-              type="string"
-              placeholder="Enter Name"
-            />
+            <input ref={mealNameRef} placeholder="Enter Name" />
+            {errors.name ? <p className="text-red-600">{errors.name}</p> : ""}
           </div>
-          {errors.name?<p>ERROR ERROR</p>:""}
           <div className="flex flex-col">
             <label>Calories</label>
             <input
               ref={calorieRef}
-              type="number"
+
               min={0.0}
               placeholder="Enter Calories"
             />
+            {errors.calorie ? (
+              <p className="text-red-600">{errors.calorie}</p>
+            ) : (
+              ""
+            )}
           </div>
           <div className="flex flex-col">
             <label>Protein</label>
             <input
               ref={proteinRef}
-              type="number"
+      
               min={0.0}
               placeholder="Enter Protein"
             />
+            {errors.protein ? (
+              <p className="text-red-600">{errors.protein}</p>
+            ) : (
+              ""
+            )}
           </div>
           <div className="flex flex-col">
             <label>Carbohydrates</label>
             <input
               ref={carbRef}
-              type="number"
+             
               min={0.0}
               placeholder="Enter Carbohydrates"
             />
+            {errors.carb ? <p className="text-red-600">{errors.carb}</p> : ""}
           </div>
           <div className="flex flex-col">
             <label>Fat</label>
             <input
               ref={fatRef}
-              type="number"
+         
               min={0.0}
               placeholder="Enter Fat"
             />
+            {errors.fat ? <p className="text-red-600">{errors.fat}</p> : ""}
           </div>
 
           <div className="flex flex-col">
             <label>Weight</label>
             <input
               ref={weightRef}
-              type="string"
+         
               min={0.0}
               placeholder="Enter Weight"
             />
+            {errors.weight ? (
+              <p className="text-red-600">{errors.weight}</p>
+            ) : (
+              ""
+            )}
           </div>
           <button
             type="submit"

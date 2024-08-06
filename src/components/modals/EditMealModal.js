@@ -12,8 +12,10 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { Smokum } from "next/font/google";
+import { toast } from "react-toastify";
 
 export default function EditMealModal({ sMeal, show, onClose }) {
+  const [errors, setErrors] = useState({});
   const proteinRef = useRef();
   const carbRef = useRef();
   const fatRef = useRef();
@@ -33,7 +35,9 @@ export default function EditMealModal({ sMeal, show, onClose }) {
       weight: weightRef.current.value,
     };
     try {
-      await updateDoc(docRef, newMeal), {};
+      await updateDoc(docRef, newMeal)
+      toast.success("Meal editted successfully!");
+      setErrors({});
     } catch (error) {
       console.log(error.message);
     }
@@ -47,6 +51,36 @@ export default function EditMealModal({ sMeal, show, onClose }) {
     calorieRef.current.value = sMeal[2];
     proteinRef.current.value = sMeal[3];
   }, [sMeal]);
+
+  const validate = () => {
+    let errors = {};
+    if (!mealNameRef.current.value) {
+      errors.name = "Please enter a meal name";
+    }
+    if (!calorieRef.current.value || isNaN(calorieRef.current.value)) {
+      errors.calorie = "Please enter calories in numbers";
+    }
+    if (!proteinRef.current.value || isNaN(proteinRef.current.value)) {
+      errors.protein = "Please enter protein in numbers";
+    }
+    if (!carbRef.current.value || isNaN(carbRef.current.value)) {
+      errors.carb = "Please enter carbs in numbers";
+    }
+    if (!fatRef.current.value || isNaN(fatRef.current.value)) {
+      errors.fat = "Please enter fat in numbers";
+    }
+    if (!weightRef.current.value || isNaN(weightRef.current.value)) {
+      errors.weight = "Please enter weight in numbers";
+    }
+    return errors;
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if (Object.keys(errors).length) return setErrors(errors);
+    editMealHandler(sMeal[0]);
+  };
 
   return (
     <div className=" flex flex-col items-center">
@@ -80,6 +114,7 @@ export default function EditMealModal({ sMeal, show, onClose }) {
             defaultValue={mealNameRef}
             placeholder="Enter Name"
           ></input>
+          {errors.name ? <p className="text-red-600">{errors.name}</p> : ""}
         </div>
         <div className="flex flex-col">
           <label>Calories</label>
@@ -90,6 +125,11 @@ export default function EditMealModal({ sMeal, show, onClose }) {
             defaultValue={calorieRef}
             placeholder="Enter Calories"
           />
+          {errors.calorie ? (
+            <p className="text-red-600">{errors.calorie}</p>
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex flex-col">
           <label>Protein</label>
@@ -100,6 +140,11 @@ export default function EditMealModal({ sMeal, show, onClose }) {
             defaultValue={Number(proteinRef)}
             placeholder="Enter Protein"
           />
+          {errors.protein ? (
+            <p className="text-red-600">{errors.protein}</p>
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex flex-col">
           <label>Carbohydrates</label>
@@ -110,6 +155,7 @@ export default function EditMealModal({ sMeal, show, onClose }) {
             defaultValue={carbRef}
             placeholder="Enter Carbohydrate"
           />
+          {errors.carb ? <p className="text-red-600">{errors.carb}</p> : ""}
         </div>
         <div className="flex flex-col">
           <label>Fat</label>
@@ -120,6 +166,7 @@ export default function EditMealModal({ sMeal, show, onClose }) {
             defaultValue={fatRef}
             placeholder="Enter Fat"
           />
+          {errors.fat ? <p className="text-red-600">{errors.fat}</p> : ""}
         </div>
 
         <div className="flex flex-col">
@@ -131,10 +178,11 @@ export default function EditMealModal({ sMeal, show, onClose }) {
             defaultValue={weightRef}
             placeholder="Enter Weight"
           />
+          {errors.weight ? <p className="text-red-600">{errors.weight}</p> : ""}
         </div>
       </div>
       <button
-        onClick={() => editMealHandler(sMeal[0])}
+        onClick={(e) => submitHandler(e)}
         className="rounded-xl w-24 h-11 m-7 text-white font-semibold border-2 border-black bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
       >
         Update

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRef, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import {
@@ -17,13 +17,11 @@ import { toast } from "react-toastify";
 
 export default function AddExerciseModal({ show, onClose, selectedDate}) {
   const { user, loading, logout } = useContext(authContext);
-
-
+  const [errors, setErrors] = useState({});
   const exerciseNameRef = useRef();
   const exerciseDurationRef = useRef();
 
-  const addExerciseHandler = async (e) => {
-      e.preventDefault();
+  const addExerciseHandler = async () => {
 
       const newExercise = {
         uid: user.uid,
@@ -37,7 +35,7 @@ export default function AddExerciseModal({ show, onClose, selectedDate}) {
         const docSnap = await addDoc(collectionRef, newExercise);
         toast.success("Exercise logged successfully!")
         exerciseDurationRef.current.value = "";
-
+        setErrors({});
       } catch (error) {
         console.log(error.message);
       }
@@ -50,8 +48,28 @@ export default function AddExerciseModal({ show, onClose, selectedDate}) {
     exerciseNameRef.current.value = "";
     exerciseDurationRef.current.value = "";
   }
+
+  const validate = () => {
+    let errors = {};
+    if(!exerciseNameRef.current.value){
+      errors.name="Please select an exercise"
+    }
+    if(!exerciseDurationRef.current.value||isNaN(exerciseDurationRef.current.value)){
+      errors.duration="Please enter duration in numbers"
+    }
+    return errors;
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if(Object.keys(errors).length) return setErrors(errors);
+    addExerciseHandler();
+  }
+
+
   return (
-    <form onSubmit={addExerciseHandler} className="px-3 font-poppins">
+    <form onSubmit={submitHandler} className="px-3 font-poppins">
       <div className="w-full flex flex-row justify-end p-4">
         <button
           type="reset"
@@ -75,15 +93,18 @@ export default function AddExerciseModal({ show, onClose, selectedDate}) {
           <option value="Swimming">Swimming</option>
           <option value="Jumping">Jumping</option>
         </select>
+        {errors.name ? <p className="text-red-600">{errors.name}</p> : ""}
+
       </div>
       <div className="pt-5 flex flex-col ">
         <label>Duration (mins)</label>
         <input
           ref={exerciseDurationRef}
-          type="number"
           min={0.0}
           placeholder="Enter Duration"
         />
+                  {errors.duration ? <p className="text-red-600">{errors.duration}</p> : ""}
+
       </div>
       <button className="rounded-xl w-24 h-11 m-7 text-white font-semibold border-2 border-black bg-green-600 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110">
         Log

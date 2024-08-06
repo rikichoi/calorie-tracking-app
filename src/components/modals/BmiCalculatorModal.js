@@ -2,6 +2,7 @@
 import { React, useEffect, useState } from "react";
 
 export default function BmiCalculatorModal({ show, onClose }) {
+  const [errors, setErrors] = useState({});
   const [genderInput, setGenderInput] = useState("");
   const [ageInput, setAgeInput] = useState(0);
   const [heightInput, setHeightInput] = useState(0);
@@ -24,6 +25,19 @@ export default function BmiCalculatorModal({ show, onClose }) {
   };
 
   useEffect(() => {
+    const validate = () => {
+      let errors = {};
+      if (data.age && isNaN(data.age)) {
+        errors.age = "Please enter age in numbers";
+      }
+      if (data.height && isNaN(data.height)) {
+        errors.height = "Please enter height in numbers";
+      }
+      if (data.weight && isNaN(data.weight)) {
+        errors.weight = "Please enter in numbers";
+      }
+      setErrors(errors);
+    };
     const calculateBmi = () => {
       if (data.weight == 0 && data.height != 0) {
         setBmiValue(0);
@@ -39,6 +53,8 @@ export default function BmiCalculatorModal({ show, onClose }) {
       }
     };
     calculateBmi();
+    validate();
+    console.log(isNaN(data.age));
   }, [data]);
 
   useEffect(() => {
@@ -47,13 +63,19 @@ export default function BmiCalculatorModal({ show, onClose }) {
         setBmiRange("");
       }
       if (bmiValue > 0 && bmiValue < 18.5) {
-        setBmiRange(<span className="text-red-600">&nbsp;Underweight&nbsp;</span>);
+        setBmiRange(
+          <span className="text-red-600">&nbsp;Underweight&nbsp;</span>
+        );
       }
       if (bmiValue >= 18.5 && bmiValue <= 24.9) {
-        setBmiRange(<span className="text-green-600">&nbsp;Healthy&nbsp;</span>);
+        setBmiRange(
+          <span className="text-green-600">&nbsp;Healthy&nbsp;</span>
+        );
       }
       if (bmiValue >= 25 && bmiValue < 29.9) {
-        setBmiRange(<span className="text-orange-600">&nbsp;Overweight&nbsp;</span>);
+        setBmiRange(
+          <span className="text-orange-600">&nbsp;Overweight&nbsp;</span>
+        );
       }
       if (bmiValue >= 30) {
         setBmiRange(<span className="text-red-600">&nbsp;Obese&nbsp;</span>);
@@ -91,9 +113,7 @@ export default function BmiCalculatorModal({ show, onClose }) {
               <h2 className="row-span-1">
                 Weight (kg) <span className="text-red-600">*</span>
               </h2>
-              <h2 className="row-span-1">
-                BMI
-              </h2>
+              <h2 className="row-span-1">BMI</h2>
             </div>
             <div className="col-span-2 flex w-full flex-row justify-between ">
               <div className="grid grid-rows-5 w-full gap-10">
@@ -120,16 +140,33 @@ export default function BmiCalculatorModal({ show, onClose }) {
                   name="age"
                   className="h-8 w-full"
                 ></input>
+                {errors.age ? (
+                  <p className=" text-red-600">{errors.age}</p>
+                ) : (
+                  ""
+                )}
                 <input
                   onChange={handleChange}
                   name="height"
                   className="h-8 w-full"
                 ></input>
+                {errors.height ? (
+                  <p className=" text-red-600">{errors.height}</p>
+                ) : (
+                  ""
+                )}
+
                 <input
                   onChange={handleChange}
                   name="weight"
                   className="h-8 w-full"
                 ></input>
+                {errors.weight ? (
+                  <p className=" text-red-600">{errors.weight}</p>
+                ) : (
+                  ""
+                )}
+
                 <input
                   value={bmiValue}
                   disabled
