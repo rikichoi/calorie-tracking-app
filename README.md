@@ -1,37 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# HealthDiary
+## Full-Stack Diet and Exercise Tracking Web App
+Nutrition Tracker attempting to promote good health habits by enabling users to track their calories wherever, and whenever. 
 
-## Getting Started
+## Deployed on Vercel
 
-First, run the development server:
+https://calorie-tracker-app-one.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Highlight Features Include:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* Fully functioning CRUD operations for logging meals and exercises
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+* Option to Manually log meals and exercises with user inputs
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+* Option to Select and Log meals from a list of pre-existing foods from the database
 
-## Learn More
+* Dynamic data visualisation of their daily nutrition and calorie intake (Doughnut Charts and Progress Bars)
 
-To learn more about Next.js, take a look at the following resources:
+* Date-specific data tracking - allowing users to modify previous entries whenever they please
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* User-specific data
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+* User Authentication via Email & Password or Google Account
 
-## Deploy on Vercel
+* Fully responsive design - compatible with mobile devices
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* Custom logo!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# calorie-tracking-app
+## Tech-Stack
+
+Below is a non-exhaustive list of technologies used throughout the project:
+
+| Front-end | Back-end | API |
+| --- | --- | --- |
+| React | FireAuth | Firebase API |
+| NextJS | Firestore (NoSQL) |  |
+| TailwindCSS | Firestorage (Image storage) |  |
