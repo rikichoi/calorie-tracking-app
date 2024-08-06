@@ -76,12 +76,12 @@ export default function Navbar() {
           ) : (
             ""
           )}
-          <div className="flex justify-center items-center   col-span-3 h-full">
+          <div className="flex justify-center items-center col-span-3 h-full">
             <Link href={"/"}>
               <Image
                 src={Logo}
                 alt="HealthDiary Logo"
-                className="p-1 min-w-40 min-h-24 max-h-16 max-w-28"
+                className="p-1 h-full max-h-24 w-4/5"
               />
             </Link>
           </div>

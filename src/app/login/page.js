@@ -15,6 +15,7 @@ export default function LoginPage() {
     password: "",
   };
   const [loginData, setLoginData] = useState(inputData);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -33,24 +34,56 @@ export default function LoginPage() {
     checkUserExists();
   }, [user]);
 
+  const validate = () => {
+    let errors = {};
+    if (
+      !loginData.email ||
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(loginData.email)
+    ) {
+      errors.email = "Please enter a valid email";
+    }
+    if (!loginData.password) {
+      errors.password = "Please enter a password";
+    }
+    return errors;
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if (Object.keys(errors).length) return setErrors(errors);
+    emailPasswordLoginHandler(loginData.email, loginData.password);
+    setErrors({});
+  };
+
   return (
     <div className="mt-24 font-poppins">
       <div className="justify-center grid">
         <h1 className="text-2xl text-center pb-5">Login</h1>
-        <p className="font-bold text-center text-orange-500">Demo Account Details</p>
-        <p className=" text-center"><span className="font-semibold">Email:</span> demo@gmail.com </p>
-        <p className=" text-center"><span className="font-semibold">Password:</span> demo123 </p>
+        <p className="font-bold text-center text-orange-500">
+          Demo Account Details
+        </p>
+        <p className=" text-center">
+          <span className="font-semibold">Email:</span> demo@gmail.com{" "}
+        </p>
+        <p className=" text-center">
+          <span className="font-semibold">Password:</span> demo123{" "}
+        </p>
         <form className="justify-center gap-3 grid grid-rows-2">
           <input
             onChange={handleChange}
             name="email"
             placeholder="email"
           ></input>
+          {errors.email ? <p className="text-red-600">{errors.email}</p> : ""}
+
           <input
             onChange={handleChange}
             name="password"
             placeholder="password"
           ></input>
+          {errors.password ? <p className="text-red-600">{errors.password}</p> : ""}
+
           <p>
             Don&apos;t have an account?{" "}
             <a href="/signup" className="text-blue-400 hover:underline">
@@ -59,9 +92,7 @@ export default function LoginPage() {
           </p>
           <button
             type="button"
-            onClick={() => (
-              emailPasswordLoginHandler(loginData.email, loginData.password)
-            )}
+            onClick={(e) => submitHandler(e)}
             className="bg-[#f54748] text-lg text-white border-2 border-black rounded-3xl py-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
           >
             Login

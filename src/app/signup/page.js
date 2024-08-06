@@ -15,6 +15,7 @@ export default function SignupPage() {
     password: "",
   };
   const [signupData, setSignupData] = useState(inputData);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const checkUserExists = () => {
@@ -33,6 +34,28 @@ export default function SignupPage() {
     setSignupData({ ...signupData, [e.target.name]: e.target.value });
   };
 
+  const validate = () => {
+    let errors = {};
+    if (
+      !signupData.email ||
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(signupData.email)
+    ) {
+      errors.email = "Please enter a valid email";
+    }
+    if (!signupData.password) {
+      errors.password = "Please enter a password";
+    }
+    return errors;
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if (Object.keys(errors).length) return setErrors(errors);
+    signupWithEmailPassword(signupData.email, signupData.password);
+    setErrors({});
+  };
+
   return (
     <div className="mt-24 font-poppins">
       <div className="justify-center grid">
@@ -43,11 +66,19 @@ export default function SignupPage() {
             name="email"
             placeholder="email"
           ></input>
+          {errors.email ? <p className="text-red-600">{errors.email}</p> : ""}
+
           <input
             onChange={handleChange}
             name="password"
             placeholder="password"
           ></input>
+          {errors.password ? (
+            <p className="text-red-600">{errors.password}</p>
+          ) : (
+            ""
+          )}
+
           <p>
             Already have an account?{" "}
             <a href="/login" className="text-blue-400 hover:underline">
@@ -56,9 +87,7 @@ export default function SignupPage() {
           </p>
           <button
             type="button"
-            onClick={() => (
-              signupWithEmailPassword(signupData.email, signupData.password)
-            )}
+            onClick={(e) => submitHandler(e)}
             className="bg-[#f54748] text-lg text-white border-2 border-black rounded-3xl py-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
           >
             Sign up
