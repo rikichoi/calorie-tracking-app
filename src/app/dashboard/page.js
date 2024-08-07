@@ -257,15 +257,16 @@ export default function Dashboard() {
     };
     getUserDisplayName();
     getMealLogData();
-    getConsumedAndRemainingCalories(mealLog);
-    getNutritionValues(mealLog);
   }, [
     user,
     openModal,
-    getConsumedAndRemainingCalories,
-    getNutritionValues,
-    mealLog,
   ]);
+
+  useEffect(() => {
+    getConsumedAndRemainingCalories(mealLog);
+    getNutritionValues(mealLog);
+  }, [mealLog])
+  
 
   useEffect(() => {
     if (!user) return;
@@ -445,7 +446,9 @@ export default function Dashboard() {
         {/* Meal Logging Section */}
         <div className="border- w-5/6">
           <div className="w-full mt-8 mb-5 flex flex-row">
-            <h1 className="md:text-lg text-2xl font-bold w-full">Recent Meals</h1>
+            <h1 className="md:text-lg text-2xl font-bold w-full">
+              Recent Meals
+            </h1>
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => deleteAllMealHandler(mealLog)}
@@ -504,7 +507,9 @@ export default function Dashboard() {
         {/* Exercise Logging Section */}
         <div className="w-5/6">
           <div className="w-full mt-8 mb-5 flex flex-row">
-            <h1 className="md:text-lg text-2xl font-bold w-full">Recent Exercise</h1>
+            <h1 className="md:text-lg text-2xl font-bold w-full">
+              Recent Exercise
+            </h1>
             <div className="flex w-full justify-end justify-items-end">
               <button
                 onClick={() => deleteAllExerciseHandler(exerciseLog)}
