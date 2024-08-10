@@ -35,10 +35,13 @@ import BmiCalculatorModal from "@/components/modals/BmiCalculatorModal";
 import { MdOutlineCalculate } from "react-icons/md";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import { UserContext } from "@/lib/store/user-context";
+import UserSettingsModal from "@/components/modals/UserSettingsModal";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
+  const { userData } = useContext(UserContext);
   const { user, loading, logout } = useContext(authContext);
   const [displayName, setDisplayName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
@@ -61,6 +64,12 @@ export default function Dashboard() {
   const [barcarbProgress, setbarCarbProgress] = useState(0);
   const [barfatProgress, setbarFatProgress] = useState(0);
   const [barmaintenanceCalories, setbarMaintenanceCalories] = useState(0);
+
+  useEffect(() => {
+    if (!userData) {
+      setOpenModal(true);
+    }
+  }, [userData]);
 
   function getConsumedAndRemainingCalories(mealLog) {
     let filteredList = mealLog.filter((meal) =>
@@ -257,16 +266,12 @@ export default function Dashboard() {
     };
     getUserDisplayName();
     getMealLogData();
-  }, [
-    user,
-    openModal,
-  ]);
+  }, [user, openModal]);
 
   useEffect(() => {
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
-  }, [mealLog])
-  
+  }, [mealLog]);
 
   useEffect(() => {
     if (!user) return;
@@ -297,8 +302,8 @@ export default function Dashboard() {
           : ""
       }`}
     >
-      {/* Add Meal Modal Section */}
       <Modal show={openModal} onClose={setOpenModal}>
+        {userData ? "":<UserSettingsModal show={openModal} onClose={setOpenModal} />}
         {modeModal == "addExercise" && (
           <AddExerciseModal
             show={openModal}
@@ -326,6 +331,9 @@ export default function Dashboard() {
             show={openModal}
             onClose={setOpenModal}
           />
+        )}
+        {modeModal == "bmiCalculator" && (
+          <BmiCalculatorModal show={openModal} onClose={setOpenModal} />
         )}
         {modeModal == "bmiCalculator" && (
           <BmiCalculatorModal show={openModal} onClose={setOpenModal} />

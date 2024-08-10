@@ -14,6 +14,7 @@ import {
 export const UserContext = createContext({
   userData: [],
   setUserData: () => {},
+  postUserData: async () => {},
 });
 
 export default function UserContextProvider({ children }) {
@@ -21,29 +22,62 @@ export default function UserContextProvider({ children }) {
   const [userData, setUserData] = useState([]);
 
   // TODO: Create getUserData, postUserData, putUserData, deleteUserData functions
-  useEffect(() => {
-    const getUserData = async () => {
-      const collectionRef = collection(db, "userData");
-      let q = query(
-        collectionRef,
-        where("userID", "==", "oHJR25TMC1SASTiKMyNnjV5ZMLx1")
-      );
-      const docsSnap = await getDocs(q);
+  
+  const getUserData = async () => {
+    const collectionRef = collection(db, "userData");
+    let q = query(collectionRef, where("userID", "==", user.uid));
+    const docsSnap = await getDocs(q);
     //   const docsSnap = await getDocs(collectionRef);
-      const data = docsSnap.docs.map((doc) => {
-        return {
-          ...doc.data()
-        };
-      });
-      setUserData(data[0]);
-    };
+    const data = docsSnap.docs.map((doc) => {
+      return {
+        ...doc.data(),
+      };
+    });
+    setUserData(data[0]);
+  };
+  
+  useEffect(() => {
+    if (!user) return;
     getUserData();
-  }, []);
+  }, [user]);
+
+  const postUserData = async (
+    userActivity,
+    userBmi,
+    userHeight,
+    userWeight,
+    userMaintenanceCalories,
+    userID
+  ) => {
+    const newUserData = {
+      userID: userID,
+      userActivity: userActivity,
+      userBmiHistory: userBmi,
+      userHeight: userHeight,
+      userWeightHistory: userWeight,
+      userMaintenanceCalories: userMaintenanceCalories,
+    };
+    const collectionRef = collection(db, "userData");
+    try {
+      const docSnap = await addDoc(collectionRef, newUserData);
+      // toast.success("User logged successfully!");
+
+      // calorieRef.current.value = "";
+      // proteinRef.current.value = "";
+      // fatRef.current.value = "";
+      // carbRef.current.value = "";
+      // mealNameRef.current.value = "";
+      // weightRef.current.value = "";
+      await getUserData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   console.log(userData);
 
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ userData, setUserData, postUserData }}>
       {children}
     </UserContext.Provider>
   );
