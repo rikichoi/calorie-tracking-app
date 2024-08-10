@@ -6,7 +6,7 @@ import { useServerInsertedHTML } from "next/navigation";
 
 export default function UserSettingsModal({ show, onClose }) {
   const { user } = useContext(authContext);
-  const { userData, postUserData } = useContext(UserContext);
+  const { userData, postUserData, editUserData } = useContext(UserContext);
   const [errors, setErrors] = useState({});
   const [genderInput, setGenderInput] = useState("");
   const [ageInput, setAgeInput] = useState(0);
@@ -17,7 +17,7 @@ export default function UserSettingsModal({ show, onClose }) {
 
   const [data, setData] = useState({
     activity: 1.2,
-    bmiValue: 0,
+    bmiValue: "",
     gender: "",
     height: "",
     weight: "",
@@ -27,26 +27,61 @@ export default function UserSettingsModal({ show, onClose }) {
 
   const handleChange = (e) => {
     if (e.target.type == "number" || e.target.name === "activity") {
-      setData({ ...data, [e.target.name]: parseInt(e.target.value) });
+      setData({ ...data, [e.target.name]: parseFloat(e.target.value) });
     } else {
       setData({ ...data, [e.target.name]: e.target.value });
     }
   };
 
+  const validate = () => {
+    let errors = {};
+    if (!data.gender) {
+      errors.gender = "Please select your gender";
+    }
+    if (!data.age || isNaN(data.age) || data.age < 0) {
+      errors.age = "Please enter age in numbers";
+    }
+    if (!data.height || isNaN(data.height) || data.height < 0) {
+      errors.height = "Please enter height in numbers";
+    }
+    if (!data.weight || isNaN(data.weight) || data.weight < 0) {
+      errors.weight = "Please enter in numbers";
+    }
+    console.log(errors);
+    return errors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let errors = validate();
+    console.log(errors);
+    if (Object.keys(errors).length) {
+      return setErrors(errors);
+    }
+
+    {
+      userData
+        ? editUserData(
+            data.activity,
+            data.bmiValue,
+            data.height,
+            data.weight,
+            data.maintenanceCalories,
+            user.uid
+          )
+        : postUserData(
+            data.activity,
+            data.bmiValue,
+            data.height,
+            data.weight,
+            data.maintenanceCalories,
+            user.uid
+          );
+    }
+    onClose(!show);
+  };
+
   useEffect(() => {
-    const validate = () => {
-      let errors = {};
-      if (data.age && isNaN(data.age)) {
-        errors.age = "Please enter age in numbers";
-      }
-      if (data.height && isNaN(data.height)) {
-        errors.height = "Please enter height in numbers";
-      }
-      if (data.weight && isNaN(data.weight)) {
-        errors.weight = "Please enter in numbers";
-      }
-      setErrors(errors);
-    };
     const calculateBmi = () => {
       if (data.weight == 0 && data.height != 0) {
         setBmiValue(0);
@@ -58,12 +93,21 @@ export default function UserSettingsModal({ show, onClose }) {
         setBmiValue(0);
       }
       if (data.weight > 0 && data.height > 0) {
-        setBmiValue((data.weight / (data.height / 100) ** 2).toFixed(2));
+        setBmiValue(
+          parseFloat((data.weight / (data.height / 100) ** 2).toFixed(2))
+        );
       }
     };
     calculateBmi();
     validate();
   }, [data]);
+
+  useEffect(() => {
+    setData({
+      ...data,
+      bmiValue: parseFloat((data.weight / (data.height / 100) ** 2).toFixed(2)),
+    });
+  }, [data.weight, data.height]);
 
   useEffect(() => {
     const calculateBmiRange = () => {
@@ -97,15 +141,27 @@ export default function UserSettingsModal({ show, onClose }) {
       if (!data.gender && !data.age && !data.height && !data.weight) {
         return;
       }
-      if (data.gender && data.gender == "Male" && data.age && data.height && data.weight) {
+      if (
+        data.gender &&
+        data.gender == "Male" &&
+        data.age &&
+        data.height &&
+        data.weight
+      ) {
         let bmr = 10 * data.weight + 6.25 * data.height - 5 * data.age + 5;
         let maintenanceCalories = bmr * data.activity;
-        setData({...data, maintenanceCalories: maintenanceCalories});
+        setData({ ...data, maintenanceCalories: maintenanceCalories });
       }
-      if (data.gender && data.gender == "Female" && data.age && data.height && data.weight) {
+      if (
+        data.gender &&
+        data.gender == "Female" &&
+        data.age &&
+        data.height &&
+        data.weight
+      ) {
         let bmr = 10 * data.weight + 6.25 * data.height - 5 * data.age - 161;
         let maintenanceCalories = bmr * data.activity;
-        setData({...data, maintenanceCalories: maintenanceCalories});
+        setData({ ...data, maintenanceCalories: maintenanceCalories });
       }
     };
     calculateMaintenanceCalories();
@@ -136,7 +192,7 @@ export default function UserSettingsModal({ show, onClose }) {
         </h1>
       </div>
       <div className="row-span-7 text-lg mx-20">
-        <div className="row-span-1 grid grid-rows-6">
+        <form onSubmit={handleSubmit} className="row-span-1 flex flex-col">
           <div className="grid row-span-5 grid-cols-3">
             <div className="flex flex-col gap-10">
               <h2 className="row-span-1">
@@ -180,13 +236,10 @@ export default function UserSettingsModal({ show, onClose }) {
                   onChange={handleChange}
                   name="age"
                   type="number"
+                  required
                   className="h-8 w-full"
                 ></input>
-                {errors.age ? (
-                  <p className=" text-red-600">{errors.age}</p>
-                ) : (
-                  ""
-                )}
+
                 <select
                   onChange={handleChange}
                   name="activity"
@@ -210,34 +263,22 @@ export default function UserSettingsModal({ show, onClose }) {
                     Super active
                   </option>
                 </select>
-                {errors.age ? (
-                  <p className=" text-red-600">{errors.age}</p>
-                ) : (
-                  ""
-                )}
+
                 <input
                   onChange={handleChange}
                   name="height"
                   type="number"
+                  required
                   className="h-8 w-full"
                 ></input>
-                {errors.height ? (
-                  <p className=" text-red-600">{errors.height}</p>
-                ) : (
-                  ""
-                )}
 
                 <input
                   onChange={handleChange}
                   name="weight"
                   type="number"
+                  required
                   className="h-8 w-full"
                 ></input>
-                {errors.weight ? (
-                  <p className=" text-red-600">{errors.weight}</p>
-                ) : (
-                  ""
-                )}
 
                 <input
                   value={bmiValue}
@@ -258,21 +299,12 @@ export default function UserSettingsModal({ show, onClose }) {
           )}
           <button
             // onClick={() => console.log(data)}
-            onClick={() =>
-              postUserData(
-                data.activity,
-                data.bmiValue,
-                data.height,
-                data.weight,
-                data.maintenanceCalories,
-                user.uid
-              )
-            }
-            className="hover:shadow-gray-900 mt-6 transition-all duration-100 mx-auto hover:shadow-inner active:scale-110 w-2/3 h-10 rounded-full bg-green-700 border-2 border-black text-white font-bold"
+            type="submit"
+            className="hover:shadow-gray-900 my-6 transition-all duration-100 mx-auto hover:shadow-inner active:scale-110 w-2/3 h-10 rounded-full bg-green-700 border-2 border-black text-white font-bold"
           >
             Confirm
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

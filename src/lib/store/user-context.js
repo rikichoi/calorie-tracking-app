@@ -9,17 +9,22 @@ import {
   doc,
   where,
   query,
+  FieldValue,
+  updateDoc
 } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 export const UserContext = createContext({
   userData: [],
   setUserData: () => {},
   postUserData: async () => {},
+  editUserData: async () => {},
 });
 
 export default function UserContextProvider({ children }) {
   const { user } = useContext(authContext);
   const [userData, setUserData] = useState([]);
+  const [userDataID, setUserDataID] = useState("");
 
   // TODO: Create getUserData, postUserData, putUserData, deleteUserData functions
   
@@ -28,11 +33,15 @@ export default function UserContextProvider({ children }) {
     let q = query(collectionRef, where("userID", "==", user.uid));
     const docsSnap = await getDocs(q);
     //   const docsSnap = await getDocs(collectionRef);
-    const data = docsSnap.docs.map((doc) => {
+    let dataID = docsSnap.docs.map((doc) => {
+      return doc.id;
+    });
+    let data = docsSnap.docs.map((doc) => {
       return {
         ...doc.data(),
       };
     });
+    setUserDataID(dataID[0]);
     setUserData(data[0]);
   };
   
@@ -52,32 +61,56 @@ export default function UserContextProvider({ children }) {
     const newUserData = {
       userID: userID,
       userActivity: userActivity,
-      userBmiHistory: userBmi,
+      userBmiHistory: [userBmi],
       userHeight: userHeight,
-      userWeightHistory: userWeight,
+      userWeightHistory: [userWeight],
       userMaintenanceCalories: userMaintenanceCalories,
     };
     const collectionRef = collection(db, "userData");
     try {
       const docSnap = await addDoc(collectionRef, newUserData);
-      // toast.success("User logged successfully!");
+      toast.success("User Settings Saved");
 
-      // calorieRef.current.value = "";
-      // proteinRef.current.value = "";
-      // fatRef.current.value = "";
-      // carbRef.current.value = "";
-      // mealNameRef.current.value = "";
-      // weightRef.current.value = "";
       await getUserData();
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  console.log(userData);
+  const editUserData = async (
+    userActivity,
+    userBmi,
+    userHeight,
+    userWeight,
+    userMaintenanceCalories,
+    userID
+  ) => {
+    const collectionRef = collection(db, "userData");
+    const docRef = doc(collectionRef, userDataID);
+    let newBmiHistory = new Array(userData.userBmiHistory);
+    newBmiHistory[0].push(userBmi);
+    let newWeightHistory = new Array(userData.userWeightHistory);
+    newWeightHistory[0].push(userWeight);
+    const newUserData = {
+      userID: userID,
+      userActivity: userActivity,
+      userBmiHistory: newBmiHistory[0],
+      userHeight: userHeight,
+      userWeightHistory: newWeightHistory[0],
+      userMaintenanceCalories: userMaintenanceCalories,
+    };
+    try {
+      await updateDoc(docRef, newUserData)
+      toast.success("User Settings Updated Successfully!");
+      await getUserData();
+      // setErrors({});
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
-    <UserContext.Provider value={{ userData, setUserData, postUserData }}>
+    <UserContext.Provider value={{ userData, setUserData, postUserData, editUserData }}>
       {children}
     </UserContext.Provider>
   );

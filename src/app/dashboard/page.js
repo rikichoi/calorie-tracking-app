@@ -37,6 +37,7 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { UserContext } from "@/lib/store/user-context";
 import UserSettingsModal from "@/components/modals/UserSettingsModal";
+import { IoSettings } from "react-icons/io5";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -53,7 +54,7 @@ export default function Dashboard() {
   const [selectedExercise, setselectedExercise] = useState([]);
   const [maintenanceCalories, setMaintenanceCalories] = useState(0);
   const [consumedCalories, setConsumedCalories] = useState(0);
-  const [remainingCalories, setremainingCalories] = useState(2362);
+  const [remainingCalories, setremainingCalories] = useState(0.1);
   const [proteinCalories, setProteinCalories] = useState(0);
   const [carbCalories, setCarbCalories] = useState(0);
   const [fatCalories, setFatCalories] = useState(0);
@@ -68,7 +69,9 @@ export default function Dashboard() {
   useEffect(() => {
     if (!userData) {
       setOpenModal(true);
+      return;
     }
+    setremainingCalories(userData.userMaintenanceCalories);
   }, [userData]);
 
   function getConsumedAndRemainingCalories(mealLog) {
@@ -79,7 +82,8 @@ export default function Dashboard() {
         .includes(new Date(startDate).toISOString().split("T")[0])
     );
     let sum = 0;
-    let remaining = 2362;
+    let remaining =
+      (userData && userData.userMaintenanceCalories && userData.userMaintenanceCalories);
     for (var i = 0, len = filteredList.length; i < len; i++) {
       sum += Number(filteredList[i].calorie);
       remaining -= Number(filteredList[i].calorie);
@@ -303,7 +307,11 @@ export default function Dashboard() {
       }`}
     >
       <Modal show={openModal} onClose={setOpenModal}>
-        {userData ? "":<UserSettingsModal show={openModal} onClose={setOpenModal} />}
+        {userData ? (
+          ""
+        ) : (
+          <UserSettingsModal show={openModal} onClose={setOpenModal} />
+        )}
         {modeModal == "addExercise" && (
           <AddExerciseModal
             show={openModal}
@@ -333,10 +341,7 @@ export default function Dashboard() {
           />
         )}
         {modeModal == "bmiCalculator" && (
-          <BmiCalculatorModal show={openModal} onClose={setOpenModal} />
-        )}
-        {modeModal == "bmiCalculator" && (
-          <BmiCalculatorModal show={openModal} onClose={setOpenModal} />
+          <UserSettingsModal show={openModal} onClose={setOpenModal} />
         )}
       </Modal>
       <main className="flex font-poppins min-h-screen h-[1000px] flex-col items-center md:px-2 px-24 pt-8 ">
@@ -355,10 +360,10 @@ export default function Dashboard() {
               onClick={() => (
                 setModeModal("bmiCalculator"), setOpenModal(!openModal)
               )}
-              className="bg-orange-600 md:w-full md:mb-4 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-40 h-14 flex justify-center pt-0.5"
+              className="bg-orange-600 md:w-full md:mb-4 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  px-2 h-14 flex justify-center pt-0.5"
             >
-              <MdOutlineCalculate className="text-3xl text-center" />
-              <span className="text-center">BMI Calculator</span>
+              <IoSettings className="text-3xl mr-2 text-center" />
+              <span className="text-center">Profile Settings</span>
             </button>
             <h2 className="flex text-xl md:w-full h-3/4 font-bold items-center">
               Date Selector{" "}
@@ -377,11 +382,14 @@ export default function Dashboard() {
             <ul className="pl-12 md:pl-0 md:col-span-1 col-span-2">
               <li className="text-sm">You have consumed</li>
               <li className="text-lg pt-3 font-bold">
-                <span className="">{consumedCalories}</span> / 2362
+                <span className="">{consumedCalories}</span> /{" "}
+                {userData && userData.userMaintenanceCalories
+                  ? userData.userMaintenanceCalories.toFixed(1)
+                  : ""}
               </li>
               <li className="font-bold">Calories</li>
               <li className="mt-5 text-center flex font-bold text-gray-800 ">
-                {remainingCalories} remaining
+                {remainingCalories?remainingCalories.toFixed(1):""} cal remaining
               </li>
             </ul>
 
@@ -449,7 +457,12 @@ export default function Dashboard() {
             value={barmaintenanceCalories}
             className="w-full min-h-3 rounded-xl transition-all"
           />
-          <p>{consumedCalories}/2362</p>
+          <p>
+            {consumedCalories}/
+            {userData && userData.userMaintenanceCalories
+              ? userData.userMaintenanceCalories.toFixed(1)
+              : ""}
+          </p>
         </div>
         {/* Meal Logging Section */}
         <div className="border- w-5/6">
