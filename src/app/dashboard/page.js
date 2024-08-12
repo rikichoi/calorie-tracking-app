@@ -279,7 +279,7 @@ export default function Dashboard() {
   useEffect(() => {
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
-  }, [mealLog]);
+  }, [mealLog, startDate]);
 
   useEffect(() => {
     if (!user) return;
