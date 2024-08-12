@@ -38,6 +38,7 @@ import { toast } from "react-toastify";
 import { UserContext } from "@/lib/store/user-context";
 import UserSettingsModal from "@/components/modals/UserSettingsModal";
 import { IoSettings } from "react-icons/io5";
+import Analytics from "@/components/HealthMetrics";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -65,6 +66,7 @@ export default function Dashboard() {
   const [barcarbProgress, setbarCarbProgress] = useState(0);
   const [barfatProgress, setbarFatProgress] = useState(0);
   const [barmaintenanceCalories, setbarMaintenanceCalories] = useState(0);
+  const [tabMode, setTabMode] = useState("Dashboard");
 
   useEffect(() => {
     if (!userData) {
@@ -83,7 +85,9 @@ export default function Dashboard() {
     );
     let sum = 0;
     let remaining =
-      (userData && userData.userMaintenanceCalories && userData.userMaintenanceCalories);
+      userData &&
+      userData.userMaintenanceCalories &&
+      userData.userMaintenanceCalories;
     for (var i = 0, len = filteredList.length; i < len; i++) {
       sum += Number(filteredList[i].calorie);
       remaining -= Number(filteredList[i].calorie);
@@ -344,7 +348,7 @@ export default function Dashboard() {
           <UserSettingsModal show={openModal} onClose={setOpenModal} />
         )}
       </Modal>
-      <main className="flex font-poppins min-h-screen h-[1000px] flex-col items-center md:px-2 px-24 pt-8 ">
+      <div className="flex font-poppins min-h-screen h-[1000px] flex-col items-center md:px-2 px-24 pt-8 ">
         <div className="w-5/6 grid md:grid-cols-1 grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold ">Good morning, {displayName}</h1>
@@ -376,209 +380,309 @@ export default function Dashboard() {
             ></DatePicker>
           </div>
         </div>
-        {/* Left Overview Section */}
-        <div className="w-5/6 md:w-full md:grid-cols-1 grid grid-cols-2 gap-4">
-          <div className="bg-gray-200 items-center min-h-[250px] rounded-xl md:text-sm md:pl-10 pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
-            <ul className="pl-12 md:pl-0 md:col-span-1 col-span-2">
-              <li className="text-sm">You have consumed</li>
-              <li className="text-lg pt-3 font-bold">
-                <span className="">{consumedCalories}</span> /{" "}
+
+        <div class="border-b border-gray-200 dark:border-gray-700 mb-3">
+          <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+            <li class="me-2">
+              <button
+                onClick={() => setTabMode("Dashboard")}
+                class={`${
+                  tabMode == "Dashboard"
+                    ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
+                    : " border-black "
+                }inline-flex hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 items-center justify-center p-4 rounded-t-lg active group`}
+                aria-current="page"
+              >
+                <svg
+                  class={`${
+                    tabMode == "Dashboard"
+                      ? "text-blue-600 dark:text-blue-500 "
+                      : " "
+                  }w-4 h-4 me-2  group-hover:text-gray-500  dark:group-hover:text-gray-300`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 18 18"
+                >
+                  <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
+                </svg>
+                Dashboard
+              </button>
+            </li>
+            <li class="me-2">
+              <button
+                onClick={() => setTabMode("Analytics")}
+                class={`${
+                  tabMode == "Analytics"
+                    ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
+                    : " border-black "
+                }inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`}
+              >
+                <svg
+                  class={`${
+                    tabMode == "Analytics"
+                      ? "text-blue-600 dark:text-blue-500 "
+                      : " "
+                  }w-4 h-4 me-2 group-hover:text-gray-500  dark:group-hover:text-gray-300`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M5 11.424V1a1 1 0 1 0-2 0v10.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.228 3.228 0 0 0 0-6.152ZM19.25 14.5A3.243 3.243 0 0 0 17 11.424V1a1 1 0 0 0-2 0v10.424a3.227 3.227 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.243 3.243 0 0 0 2.25-3.076Zm-6-9A3.243 3.243 0 0 0 11 2.424V1a1 1 0 0 0-2 0v1.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0V8.576A3.243 3.243 0 0 0 13.25 5.5Z" />
+                </svg>
+                Analytics
+              </button>
+            </li>
+            <li class="me-2">
+              <button
+                onClick={() => setTabMode("Discover")}
+                class={`${
+                  tabMode == "Discover"
+                    ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
+                    : " border-black "
+                }inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`}
+              >
+                <svg
+                  class={`${
+                    tabMode == "Discover"
+                      ? "text-blue-600 dark:text-blue-500 "
+                      : " "
+                  }w-4 h-4 me-2 group-hover:text-gray-500  dark:group-hover:text-gray-300`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 18 20"
+                >
+                  <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+                </svg>
+                Discover
+              </button>
+            </li>
+            <li>
+              <a class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">
+                Assistant
+              </a>
+            </li>
+          </ul>
+        </div>
+        {tabMode == "Dashboard" ? (
+          <div className="w-full flex flex-col items-center">
+            <div className="w-5/6 md:w-full md:grid-cols-1 grid grid-cols-2 gap-4">
+              <div className="bg-gray-200 items-center min-h-[250px] rounded-xl md:text-sm md:pl-10 pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
+                <ul className="pl-12 md:pl-0 md:col-span-1 col-span-2">
+                  <li className="text-sm">You have consumed</li>
+                  <li className="text-lg pt-3 font-bold">
+                    <span className="">{consumedCalories}</span> /{" "}
+                    {userData && userData.userMaintenanceCalories
+                      ? userData.userMaintenanceCalories.toFixed(1)
+                      : ""}
+                  </li>
+                  <li className="font-bold">Calories</li>
+                  <li className="mt-5 text-center flex font-bold text-gray-800 ">
+                    {remainingCalories ? remainingCalories.toFixed(1) : ""} cal
+                    remaining
+                  </li>
+                </ul>
+
+                <div className="items-center md:col-span-2 justify-center flex min-h-full">
+                  <Doughnut
+                    className="p-2 "
+                    data={{
+                      labels: [`Consumed Calories`, `Remaining Calories`],
+                      datasets: [
+                        {
+                          label: "Calories",
+                          data: [consumedCalories, remainingCalories],
+                          backgroundColor: ["#FFA500", "#000000"],
+                          borderWidth: 5,
+                        },
+                      ],
+                    }}
+                  />
+                </div>
+              </div>
+              {/* Right Overview Section */}
+              <div className="md:py-5 bg-gray-200 min-h-full rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
+                <ul className="space-y-3 w-full">
+                  <span className="font-bold">Nutrition Intake Breakdown</span>
+                  <li className="text-sm">
+                    Protein ({parseInt(proteinProgress)}%) |{" "}
+                    {proteinCalories.toFixed(1)}g / 136g
+                  </li>
+                  <LinearProgress
+                    variant="determinate"
+                    color="success"
+                    value={barproteinProgress}
+                    className="w-full min-h-3 rounded-xl transition-all"
+                  />
+                  <li className="text-sm">
+                    Fats ({parseInt(fatProgress)}%) | {fatCalories.toFixed(1)}g
+                    / 73g
+                  </li>{" "}
+                  <LinearProgress
+                    variant="determinate"
+                    color="warning"
+                    value={barfatProgress}
+                    className="w-full min-h-3 rounded-xl transition-all"
+                  />
+                  <li className="text-sm">
+                    Carbohydrates ({parseInt(carbProgress)}%) |{" "}
+                    {carbCalories.toFixed(1)}g / 361g
+                  </li>{" "}
+                  <LinearProgress
+                    variant="determinate"
+                    color="secondary"
+                    value={barcarbProgress}
+                    className="w-full min-h-3 rounded-xl transition-all"
+                  />
+                </ul>
+              </div>
+            </div>
+            {/* Calorie Goal Progress Bar */}
+            <div className="w-5/6 mt-10">
+              {/* this might have to turn into a list so we can allow for mapping data */}
+              <p>Maintenance Calorie Goal</p>
+              <LinearProgress
+                variant="determinate"
+                color="primary"
+                value={barmaintenanceCalories}
+                className="w-full min-h-3 rounded-xl transition-all"
+              />
+              <p>
+                {consumedCalories}/
                 {userData && userData.userMaintenanceCalories
                   ? userData.userMaintenanceCalories.toFixed(1)
                   : ""}
-              </li>
-              <li className="font-bold">Calories</li>
-              <li className="mt-5 text-center flex font-bold text-gray-800 ">
-                {remainingCalories?remainingCalories.toFixed(1):""} cal remaining
-              </li>
-            </ul>
+              </p>
+            </div>
+            {/* Meal Logging Section */}
+            <div className="border- w-5/6">
+              <div className="w-full mt-8 mb-5 flex flex-row">
+                <h1 className="md:text-lg text-2xl font-bold w-full">
+                  Recent Meals
+                </h1>
+                <div className="flex w-full justify-end justify-items-end">
+                  <button
+                    onClick={() => deleteAllMealHandler(mealLog)}
+                    className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                  >
+                    Reset Meals
+                  </button>
+                  <button
+                    onClick={() => (
+                      setModeModal("addMeal"), setOpenModal(!openModal)
+                    )}
+                    className="bg-green-700 items-center border-black text-white border-2 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                  >
+                    + Add Meal
+                  </button>
+                </div>
+              </div>
+              <div className="grid gap-6 mb-5 ">
+                {mealLog
+                  .filter((meal) =>
+                    new Date(meal.createdAt.toDate())
+                      .toISOString()
+                      .split("T")[0]
+                      .includes(new Date(startDate).toISOString().split("T")[0])
+                  )
+                  .map((meal) => {
+                    return (
+                      <LogMealItem
+                        editMealMode={setModeModal}
+                        show={openModal}
+                        onClose={setOpenModal}
+                        deleteMeal={deleteMealHandler}
+                        selectedMeal={[
+                          meal.id,
+                          meal.mealImage,
+                          meal.mealCal,
+                          meal.mealProtein,
+                          meal.mealWeight,
+                          meal.mealName,
+                          meal.mealFat,
+                          meal.mealCarbs,
+                        ]}
+                        selectMeal={setSelectedMeal}
+                        mealId={meal.id}
+                        key={meal.id}
+                        mealImage={meal.mealImage}
+                        mealName={meal.mealName}
+                        mealCal={meal.mealCal}
+                        mealProtein={meal.mealProtein}
+                        mealWeight={meal.mealWeight}
+                      />
+                    );
+                  })}
+              </div>
+            </div>
+            {/* Exercise Logging Section */}
+            <div className="w-5/6">
+              <div className="w-full mt-8 mb-5 flex flex-row">
+                <h1 className="md:text-lg text-2xl font-bold w-full">
+                  Recent Exercise
+                </h1>
+                <div className="flex w-full justify-end justify-items-end">
+                  <button
+                    onClick={() => deleteAllExerciseHandler(exerciseLog)}
+                    className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
+                  >
+                    Reset Exercises
+                  </button>
+                  <button
+                    onClick={() => (
+                      setModeModal("addExercise"), setOpenModal(!openModal)
+                    )}
+                    className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
+                  >
+                    + Add Exercise
+                  </button>
+                </div>
+              </div>
+              <div className="grid gap-6 mb-5 ">
+                {exerciseLog
+                  .filter((exercise) =>
+                    new Date(exercise.createdAt.toDate())
+                      .toISOString()
+                      .split("T")[0]
+                      .includes(new Date(startDate).toISOString().split("T")[0])
+                  )
+                  .map((exercise) => {
+                    return (
+                      <LogExerciseItem
+                        editExerciseMode={setModeModal}
+                        show={openModal}
+                        onClose={setOpenModal}
+                        selectedExercise={[
+                          exercise.id,
+                          exercise.exerciseName,
+                          exercise.exerciseDuration,
+                        ]}
+                        selectExercise={setselectedExercise}
+                        deleteExercise={deleteExerciseHandler}
+                        exerciseId={exercise.id}
+                        key={exercise.id}
+                        exerciseName={exercise.exerciseName}
+                        exerciseDuration={exercise.exerciseDuration}
+                      />
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
 
-            <div className="items-center md:col-span-2 justify-center flex min-h-full">
-              <Doughnut
-                className="p-2 "
-                data={{
-                  labels: [`Consumed Calories`, `Remaining Calories`],
-                  datasets: [
-                    {
-                      label: "Calories",
-                      data: [consumedCalories, remainingCalories],
-                      backgroundColor: ["#FFA500", "#000000"],
-                      borderWidth: 5,
-                    },
-                  ],
-                }}
-              />
-            </div>
+        {tabMode == "Analytics" ? (
+          <div className="w-full flex flex-col items-center">
+            <Analytics />
           </div>
-          {/* Right Overview Section */}
-          <div className="md:py-5 bg-gray-200 min-h-full rounded-xl px-5 flex items-center shadow-xl border-2 border-gray-600">
-            <ul className="space-y-3 w-full">
-              <span className="font-bold">Nutrition Intake Breakdown</span>
-              <li className="text-sm">
-                Protein ({parseInt(proteinProgress)}%) |{" "}
-                {proteinCalories.toFixed(1)}g / 136g
-              </li>
-              <LinearProgress
-                variant="determinate"
-                color="success"
-                value={barproteinProgress}
-                className="w-full min-h-3 rounded-xl transition-all"
-              />
-              <li className="text-sm">
-                Fats ({parseInt(fatProgress)}%) | {fatCalories.toFixed(1)}g /
-                73g
-              </li>{" "}
-              <LinearProgress
-                variant="determinate"
-                color="warning"
-                value={barfatProgress}
-                className="w-full min-h-3 rounded-xl transition-all"
-              />
-              <li className="text-sm">
-                Carbohydrates ({parseInt(carbProgress)}%) |{" "}
-                {carbCalories.toFixed(1)}g / 361g
-              </li>{" "}
-              <LinearProgress
-                variant="determinate"
-                color="secondary"
-                value={barcarbProgress}
-                className="w-full min-h-3 rounded-xl transition-all"
-              />
-            </ul>
-          </div>
-        </div>
-        {/* Calorie Goal Progress Bar */}
-        <div className="w-5/6 mt-10">
-          {/* this might have to turn into a list so we can allow for mapping data */}
-          <p>Maintenance Calorie Goal</p>
-          <LinearProgress
-            variant="determinate"
-            color="primary"
-            value={barmaintenanceCalories}
-            className="w-full min-h-3 rounded-xl transition-all"
-          />
-          <p>
-            {consumedCalories}/
-            {userData && userData.userMaintenanceCalories
-              ? userData.userMaintenanceCalories.toFixed(1)
-              : ""}
-          </p>
-        </div>
-        {/* Meal Logging Section */}
-        <div className="border- w-5/6">
-          <div className="w-full mt-8 mb-5 flex flex-row">
-            <h1 className="md:text-lg text-2xl font-bold w-full">
-              Recent Meals
-            </h1>
-            <div className="flex w-full justify-end justify-items-end">
-              <button
-                onClick={() => deleteAllMealHandler(mealLog)}
-                className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
-              >
-                Reset Meals
-              </button>
-              <button
-                onClick={() => (
-                  setModeModal("addMeal"), setOpenModal(!openModal)
-                )}
-                className="bg-green-700 items-center border-black text-white border-2 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
-              >
-                + Add Meal
-              </button>
-            </div>
-          </div>
-          <div className="grid gap-6 mb-5 ">
-            {mealLog
-              .filter((meal) =>
-                new Date(meal.createdAt.toDate())
-                  .toISOString()
-                  .split("T")[0]
-                  .includes(new Date(startDate).toISOString().split("T")[0])
-              )
-              .map((meal) => {
-                return (
-                  <LogMealItem
-                    editMealMode={setModeModal}
-                    show={openModal}
-                    onClose={setOpenModal}
-                    deleteMeal={deleteMealHandler}
-                    selectedMeal={[
-                      meal.id,
-                      meal.mealImage,
-                      meal.mealCal,
-                      meal.mealProtein,
-                      meal.mealWeight,
-                      meal.mealName,
-                      meal.mealFat,
-                      meal.mealCarbs,
-                    ]}
-                    selectMeal={setSelectedMeal}
-                    mealId={meal.id}
-                    key={meal.id}
-                    mealImage={meal.mealImage}
-                    mealName={meal.mealName}
-                    mealCal={meal.mealCal}
-                    mealProtein={meal.mealProtein}
-                    mealWeight={meal.mealWeight}
-                  />
-                );
-              })}
-          </div>
-        </div>
-        {/* Exercise Logging Section */}
-        <div className="w-5/6">
-          <div className="w-full mt-8 mb-5 flex flex-row">
-            <h1 className="md:text-lg text-2xl font-bold w-full">
-              Recent Exercise
-            </h1>
-            <div className="flex w-full justify-end justify-items-end">
-              <button
-                onClick={() => deleteAllExerciseHandler(exerciseLog)}
-                className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
-              >
-                Reset Exercises
-              </button>
-              <button
-                onClick={() => (
-                  setModeModal("addExercise"), setOpenModal(!openModal)
-                )}
-                className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
-              >
-                + Add Exercise
-              </button>
-            </div>
-          </div>
-          <div className="grid gap-6 mb-5 ">
-            {exerciseLog
-              .filter((exercise) =>
-                new Date(exercise.createdAt.toDate())
-                  .toISOString()
-                  .split("T")[0]
-                  .includes(new Date(startDate).toISOString().split("T")[0])
-              )
-              .map((exercise) => {
-                return (
-                  <LogExerciseItem
-                    editExerciseMode={setModeModal}
-                    show={openModal}
-                    onClose={setOpenModal}
-                    selectedExercise={[
-                      exercise.id,
-                      exercise.exerciseName,
-                      exercise.exerciseDuration,
-                    ]}
-                    selectExercise={setselectedExercise}
-                    deleteExercise={deleteExerciseHandler}
-                    exerciseId={exercise.id}
-                    key={exercise.id}
-                    exerciseName={exercise.exerciseName}
-                    exerciseDuration={exercise.exerciseDuration}
-                  />
-                );
-              })}
-          </div>
-        </div>
-      </main>
+        ) : (
+          ""
+        )}
+      </div>
     </main>
   );
 }
