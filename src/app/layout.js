@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ViewContextProvider from "@/lib/store/view-context";
+import UserContextProvider from "@/lib/store/user-context";
 import AuthContextProvider from "@/lib/store/auth-context";
 import { Analytics } from "@vercel/analytics/react"
 
@@ -25,11 +26,13 @@ export default function RootLayout({ children }) {
       <body className="bg-gray-50">
         <Analytics/>
         <AuthContextProvider>
+          <UserContextProvider>
           <ViewContextProvider>
           <ToastContainer />
           <Navbar />
           {children}
           </ViewContextProvider>
+          </UserContextProvider>
         </AuthContextProvider>
       </body>
     </html>
