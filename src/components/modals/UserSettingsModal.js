@@ -47,39 +47,9 @@ export default function UserSettingsModal({ show, onClose }) {
     if (!data.weight || isNaN(data.weight) || data.weight < 0) {
       errors.weight = "Please enter in numbers";
     }
-    console.log(errors);
     return errors;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let errors = validate();
-    console.log(errors);
-    if (Object.keys(errors).length) {
-      return setErrors(errors);
-    }
-
-    {
-      userData
-        ? editUserData(
-            data.activity,
-            data.bmiValue,
-            data.height,
-            data.weight,
-            data.maintenanceCalories,
-            user.uid
-          )
-        : postUserData(
-            data.activity,
-            data.bmiValue,
-            data.height,
-            data.weight,
-            data.maintenanceCalories,
-            user.uid
-          );
-    }
-    onClose(!show);
-  };
 
   useEffect(() => {
     const calculateBmi = () => {
@@ -107,7 +77,7 @@ export default function UserSettingsModal({ show, onClose }) {
       ...data,
       bmiValue: parseFloat((data.weight / (data.height / 100) ** 2).toFixed(2)),
     });
-  }, [data.weight, data.height]);
+  }, [data.height, data.weight, data.activity, data.age]);
 
   useEffect(() => {
     const calculateBmiRange = () => {
@@ -162,10 +132,42 @@ export default function UserSettingsModal({ show, onClose }) {
         let bmr = 10 * data.weight + 6.25 * data.height - 5 * data.age - 161;
         let maintenanceCalories = bmr * data.activity;
         setData({ ...data, maintenanceCalories: maintenanceCalories });
+        
       }
     };
     calculateMaintenanceCalories();
-  }, [bmiValue]);
+    console.log(data)
+  }, [bmiValue, data.height, data.weight, data.activity, data.age]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if (Object.keys(errors).length) {
+      return setErrors(errors);
+    }
+    {
+      userData
+        ? await editUserData(
+            data.activity,
+            data.bmiValue,
+            data.height,
+            data.weight,
+            data.maintenanceCalories,
+            user.uid
+          )
+        : await postUserData(
+            data.activity,
+            data.bmiValue,
+            data.height,
+            data.weight,
+            data.maintenanceCalories,
+            user.uid
+          );
+    }
+    console.log(data)
+    onClose(!show);
+  };
+
 
   return (
     <div className="grid h-[71vh] font-poppins grid-rows-9">

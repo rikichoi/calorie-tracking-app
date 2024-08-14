@@ -39,6 +39,7 @@ import { UserContext } from "@/lib/store/user-context";
 import UserSettingsModal from "@/components/modals/UserSettingsModal";
 import { IoSettings } from "react-icons/io5";
 import Analytics from "@/components/HealthMetrics";
+import Discover from "@/components/Discover";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -73,8 +74,11 @@ export default function Dashboard() {
       setOpenModal(true);
       return;
     }
-    setremainingCalories(userData.userMaintenanceCalories);
-  }, [userData]);
+    getConsumedAndRemainingCalories(mealLog);
+    getNutritionValues(mealLog);
+    setremainingCalories(userData.userMaintenanceCalories - consumedCalories);
+    setMaintenanceCalories((consumedCalories / userData.maintenanceCalories) * 100);
+  }, [consumedCalories, mealLog, userData]);
 
   function getConsumedAndRemainingCalories(mealLog) {
     let filteredList = mealLog.filter((meal) =>
@@ -92,12 +96,9 @@ export default function Dashboard() {
       sum += Number(filteredList[i].calorie);
       remaining -= Number(filteredList[i].calorie);
     }
-    if (sum == consumedCalories) {
-      return;
-    }
     {
-      setMaintenanceCalories((sum / 2362) * 100);
-      setremainingCalories(remaining);
+      setMaintenanceCalories((sum / userData.userMaintenanceCalories) * 100);
+      setremainingCalories(userData.userMaintenanceCalories - sum);
       setConsumedCalories(sum);
     }
   }
@@ -120,12 +121,22 @@ export default function Dashboard() {
     setProteinCalories(protein);
     setCarbCalories(carb);
     setFatCalories(fat);
-    setProteinProgress((protein / 136) * 100);
-    setCarbProgress((carb / 361) * 100);
-    setFatProgress((fat / 73) * 100);
+    setProteinProgress(
+      (protein / ((userData.userMaintenanceCalories * 0.35) / 4)) * 100
+    );
+    setCarbProgress(
+      (carb / ((userData.userMaintenanceCalories * 0.35) / 4)) * 100
+    );
+    setFatProgress(
+      (fat / ((userData.userMaintenanceCalories * 0.35) / 9)) * 100
+    );
   }
 
   useEffect(() => {
+    if (!userData) {
+      setOpenModal(true);
+      return;
+    }
     const getProteinBar = () => {
       if (proteinProgress >= 100) {
         setbarProteinProgress(100);
@@ -162,37 +173,17 @@ export default function Dashboard() {
     getMaintenanceBar();
     getCarbBar();
     getFatBar();
-    // if(proteinProgress >= 100 & carbProgress <= 100 & fatProgress <=100){
-    //   setbarCarbProgress(carbProgress);
-    //   setbarFatProgress(fatProgress);
-    //   setbarProteinProgress(100);
-    // }
-    // if(carbProgress >= 100 & proteinProgress <= 100 & fatProgress <=100){
-    //   setbarCarbProgress(100);
-    //   setbarFatProgress(fatProgress);
-    //   setbarProteinProgress(proteinProgress);
-    // }
-    // if(fatProgress >= 100 & carbProgress <= 100 & proteinProgress <=100){
-    //   setbarCarbProgress(carbProgress);
-    //   setbarFatProgress(100);
-    //   setbarProteinProgress(proteinProgress);
-    // }
-    // if(fatProgress >= 100 & carbProgress >= 100 & proteinProgress >=100){
-    //   setbarCarbProgress(100);
-    //   setbarFatProgress(100);
-    //   setbarProteinProgress(100);
-    // }
-    // if(fatProgress <= 100 & carbProgress <= 100 & proteinProgress <=100){
-    //   setbarCarbProgress(carbProgress);
-    //   setbarFatProgress(fatProgress);
-    //   setbarProteinProgress(proteinProgress);
-    // }
   }, [
+    consumedCalories,
+    remainingCalories,
+    maintenanceCalories,
+    userData,
+    proteinCalories,
     carbCalories,
     fatCalories,
-    proteinCalories,
-    maintenanceCalories,
-    startDate,
+    proteinProgress,
+    carbProgress,
+    fatProgress,
   ]);
 
   const deleteMealHandler = async (mealLogId) => {
@@ -274,12 +265,12 @@ export default function Dashboard() {
     };
     getUserDisplayName();
     getMealLogData();
-  }, [user, openModal]);
+  }, [user, openModal, userData]);
 
   useEffect(() => {
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
-  }, [mealLog, startDate]);
+  }, [userData, mealLog, startDate]);
 
   useEffect(() => {
     if (!user) return;
@@ -381,12 +372,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div class="border-b border-gray-200 dark:border-gray-700 mb-3">
-          <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-            <li class="me-2">
+        <div className="border-b border-gray-200 dark:border-gray-700 mb-3">
+          <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+            <li className="me-2">
               <button
                 onClick={() => setTabMode("Dashboard")}
-                class={`${
+                className={`${
                   tabMode == "Dashboard"
                     ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
                     : " border-black "
@@ -394,7 +385,7 @@ export default function Dashboard() {
                 aria-current="page"
               >
                 <svg
-                  class={`${
+                  className={`${
                     tabMode == "Dashboard"
                       ? "text-blue-600 dark:text-blue-500 "
                       : " "
@@ -409,17 +400,17 @@ export default function Dashboard() {
                 Dashboard
               </button>
             </li>
-            <li class="me-2">
+            <li className="me-2">
               <button
                 onClick={() => setTabMode("Analytics")}
-                class={`${
+                className={`${
                   tabMode == "Analytics"
                     ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
                     : " border-black "
                 }inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`}
               >
                 <svg
-                  class={`${
+                  className={`${
                     tabMode == "Analytics"
                       ? "text-blue-600 dark:text-blue-500 "
                       : " "
@@ -434,17 +425,17 @@ export default function Dashboard() {
                 Analytics
               </button>
             </li>
-            <li class="me-2">
+            <li className="me-2">
               <button
                 onClick={() => setTabMode("Discover")}
-                class={`${
+                className={`${
                   tabMode == "Discover"
                     ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
                     : " border-black "
                 }inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`}
               >
                 <svg
-                  class={`${
+                  className={`${
                     tabMode == "Discover"
                       ? "text-blue-600 dark:text-blue-500 "
                       : " "
@@ -460,7 +451,7 @@ export default function Dashboard() {
               </button>
             </li>
             <li>
-              <a class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">
+              <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">
                 Assistant
               </a>
             </li>
@@ -479,7 +470,11 @@ export default function Dashboard() {
                       : ""}
                   </li>
                   <li className="font-bold">Calories</li>
-                  <li className="mt-5 text-center flex font-bold text-gray-800 ">
+                  <li
+                    className={`${
+                      remainingCalories < 0 ? "text-red-600 " : " "
+                    }mt-5 text-center flex font-bold text-gray-800 `}
+                  >
                     {remainingCalories ? remainingCalories.toFixed(1) : ""} cal
                     remaining
                   </li>
@@ -488,12 +483,22 @@ export default function Dashboard() {
                 <div className="items-center md:col-span-2 justify-center flex min-h-full">
                   <Doughnut
                     className="p-2 "
+                    options={{
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                      },
+                    }}
                     data={{
                       labels: [`Consumed Calories`, `Remaining Calories`],
                       datasets: [
                         {
                           label: "Calories",
-                          data: [consumedCalories, remainingCalories],
+                          data: [
+                            consumedCalories,
+                            remainingCalories < 0 ? 0 : remainingCalories,
+                          ],
                           backgroundColor: ["#FFA500", "#000000"],
                           borderWidth: 5,
                         },
@@ -508,7 +513,13 @@ export default function Dashboard() {
                   <span className="font-bold">Nutrition Intake Breakdown</span>
                   <li className="text-sm">
                     Protein ({parseInt(proteinProgress)}%) |{" "}
-                    {proteinCalories.toFixed(1)}g / 136g
+                    {proteinCalories.toFixed(1)}g /{" "}
+                    {userData &&
+                      userData.userMaintenanceCalories &&
+                      ((userData.userMaintenanceCalories * 0.35) / 4).toFixed(
+                        1
+                      )}
+                    g
                   </li>
                   <LinearProgress
                     variant="determinate"
@@ -518,7 +529,11 @@ export default function Dashboard() {
                   />
                   <li className="text-sm">
                     Fats ({parseInt(fatProgress)}%) | {fatCalories.toFixed(1)}g
-                    / 73g
+                    /{" "}
+                    {userData &&
+                      userData.userMaintenanceCalories &&
+                      ((userData.userMaintenanceCalories * 0.2) / 9).toFixed(1)}
+                    g
                   </li>{" "}
                   <LinearProgress
                     variant="determinate"
@@ -528,7 +543,13 @@ export default function Dashboard() {
                   />
                   <li className="text-sm">
                     Carbohydrates ({parseInt(carbProgress)}%) |{" "}
-                    {carbCalories.toFixed(1)}g / 361g
+                    {carbCalories.toFixed(1)}g /{" "}
+                    {userData &&
+                      userData.userMaintenanceCalories &&
+                      ((userData.userMaintenanceCalories * 0.45) / 4).toFixed(
+                        1
+                      )}
+                    g
                   </li>{" "}
                   <LinearProgress
                     variant="determinate"
@@ -678,6 +699,14 @@ export default function Dashboard() {
         {tabMode == "Analytics" ? (
           <div className="w-full flex flex-col items-center">
             <Analytics />
+          </div>
+        ) : (
+          ""
+        )}
+
+        {tabMode == "Discover" ? (
+          <div className="w-full flex flex-col items-center">
+            <Discover />
           </div>
         ) : (
           ""
