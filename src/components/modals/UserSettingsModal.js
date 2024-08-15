@@ -4,7 +4,7 @@ import { UserContext } from "@/lib/store/user-context";
 import { authContext } from "@/lib/store/auth-context";
 import { useServerInsertedHTML } from "next/navigation";
 
-export default function UserSettingsModal({ show, onClose }) {
+export default function UserSettingsModal({ show, onClose, selectedDate }) {
   const { user } = useContext(authContext);
   const { userData, postUserData, editUserData } = useContext(UserContext);
   const [errors, setErrors] = useState({});
@@ -24,6 +24,16 @@ export default function UserSettingsModal({ show, onClose }) {
     age: "",
     maintenanceCalories: "",
   });
+
+  const initialState = {
+    activity: 1.2,
+    bmiValue: "",
+    gender: "",
+    height: "",
+    weight: "",
+    age: "",
+    maintenanceCalories: "",
+  };
 
   const handleChange = (e) => {
     if (e.target.type == "number" || e.target.name === "activity") {
@@ -47,38 +57,7 @@ export default function UserSettingsModal({ show, onClose }) {
     if (!data.weight || isNaN(data.weight) || data.weight < 0) {
       errors.weight = "Please enter in numbers";
     }
-    console.log(errors);
     return errors;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let errors = validate();
-    console.log(errors);
-    if (Object.keys(errors).length) {
-      return setErrors(errors);
-    }
-
-    {
-      userData
-        ? editUserData(
-            data.activity,
-            data.bmiValue,
-            data.height,
-            data.weight,
-            data.maintenanceCalories,
-            user.uid
-          )
-        : postUserData(
-            data.activity,
-            data.bmiValue,
-            data.height,
-            data.weight,
-            data.maintenanceCalories,
-            user.uid
-          );
-    }
-    onClose(!show);
   };
 
   useEffect(() => {
@@ -100,13 +79,6 @@ export default function UserSettingsModal({ show, onClose }) {
     };
     calculateBmi();
     validate();
-  }, [data]);
-
-  useEffect(() => {
-    setData({
-      ...data,
-      bmiValue: parseFloat((data.weight / (data.height / 100) ** 2).toFixed(2)),
-    });
   }, [data.weight, data.height]);
 
   useEffect(() => {
@@ -165,7 +137,44 @@ export default function UserSettingsModal({ show, onClose }) {
       }
     };
     calculateMaintenanceCalories();
-  }, [bmiValue]);
+  }, [
+    bmiValue,
+    data.height,
+    data.weight,
+    data.activity,
+    data.age,
+    data.bmiValue,
+  ]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if (Object.keys(errors).length) {
+      return setErrors(errors);
+    }
+    if (userData) {
+      await editUserData(
+        data.activity,
+        bmiValue,
+        data.height,
+        data.weight,
+        data.maintenanceCalories,
+        user.uid,
+        selectedDate
+      );
+      // setData(initialState);
+    } else {
+      await postUserData(
+        data.activity,
+        bmiValue,
+        data.height,
+        data.weight,
+        data.maintenanceCalories,
+        user.uid
+      );
+    }
+    onClose(!show);
+  };
 
   return (
     <div className="grid h-[71vh] font-poppins grid-rows-9">
@@ -299,7 +308,7 @@ export default function UserSettingsModal({ show, onClose }) {
           )}
           <button
             // onClick={() => console.log(data)}
-            type="submit"
+
             className="hover:shadow-gray-900 my-6 transition-all duration-100 mx-auto hover:shadow-inner active:scale-110 w-2/3 h-10 rounded-full bg-green-700 border-2 border-black text-white font-bold"
           >
             Confirm
