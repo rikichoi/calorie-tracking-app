@@ -80,7 +80,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (
-      !userData || userData == "undefined" && !userData.userMaintenanceCalories
+      !userData ||
+      (userData == "undefined" && !userData.userMaintenanceCalories)
     ) {
       setOpenModal(true);
       return;
@@ -133,21 +134,21 @@ export default function Dashboard() {
       carb += Number(filteredList[i].carbohydrate);
       fat += Number(filteredList[i].fat);
     }
-    if(userData && userData.userMaintenanceCalories){
-    setProteinCalories(protein);
-    setCarbCalories(carb);
-    setFatCalories(fat);
-    setProteinProgress(
-      (protein / ((userData.userMaintenanceCalories * 0.35) / 4)) * 100
-    );
-    setCarbProgress(
-      (carb / ((userData.userMaintenanceCalories * 0.35) / 4)) * 100
-    );
-    setFatProgress(
-      (fat / ((userData.userMaintenanceCalories * 0.35) / 9)) * 100
-    );
+    if (userData && userData.userMaintenanceCalories) {
+      setProteinCalories(protein);
+      setCarbCalories(carb);
+      setFatCalories(fat);
+      setProteinProgress(
+        (protein / ((userData.userMaintenanceCalories * 0.35) / 4)) * 100
+      );
+      setCarbProgress(
+        (carb / ((userData.userMaintenanceCalories * 0.35) / 4)) * 100
+      );
+      setFatProgress(
+        (fat / ((userData.userMaintenanceCalories * 0.35) / 9)) * 100
+      );
+    }
   }
-}
 
   useEffect(() => {
     if (!userData) {
@@ -207,7 +208,9 @@ export default function Dashboard() {
     const docRef = doc(db, "mealLog", mealLogId);
     try {
       await deleteDoc(docRef);
-      toast.success("Meal removed successfully!");
+      toast.success("Meal removed successfully!", {
+        position: "top-left"
+      });
       setMealLog((prevState) => {
         return prevState.filter((i) => i.id !== mealLogId);
       });
@@ -220,7 +223,9 @@ export default function Dashboard() {
     const docRef = doc(db, "exerciseLog", exerciseLogId);
     try {
       await deleteDoc(docRef);
-      toast.success("Exercise removed successfully!");
+      toast.success("Exercise removed successfully!", {
+        position: "top-left"
+      });
       setExerciseLog((prevState) => {
         return prevState.filter((i) => i.id !== exerciseLogId);
       });
@@ -229,12 +234,33 @@ export default function Dashboard() {
     }
   };
 
-  function deleteAllMealExerciseHandler(mealLog, exerciseLog) {
+  // function deleteAllMealExerciseHandler(mealLog, exerciseLog) {
+  //   for (var i = 0, len = mealLog.length; i < len; i++) {
+  //     deleteMealHandler(mealLog[i].id);
+  //   }
+  //   for (var i = 0, len = exerciseLog.length; i < len; i++) {
+  //     deleteExerciseHandler(exerciseLog[i].id);
+  //   }
+  // }
+
+  function deleteAllSelectedDateMealHandler(mealLog) {
     for (var i = 0, len = mealLog.length; i < len; i++) {
-      deleteMealHandler(mealLog[i].id);
+      if (
+        mealLog[i].createdAt.toDate().toDateString() == startDate.toDateString()
+      ) {
+        deleteMealHandler(mealLog[i].id);
+      }
     }
+  }
+
+  function deleteAllSelectedDateExerciseHandler(exerciseLog) {
     for (var i = 0, len = exerciseLog.length; i < len; i++) {
-      deleteExerciseHandler(exerciseLog[i].id);
+      if (
+        exerciseLog[i].createdAt.toDate().toDateString() ==
+        startDate.toDateString()
+      ) {
+        deleteExerciseHandler(exerciseLog[i].id);
+      }
     }
   }
 
@@ -503,7 +529,7 @@ export default function Dashboard() {
                 </ul>
 
                 <div className="items-center flex-col md:col-span-2 justify-center flex min-h-full">
-                  <ul className="hidden gap-3 mb-2 bg-black p-2 text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
+                  <ul className="mt-5 gap-3 mb-2 bg-black p-2 text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
                     {chartType.map((type) => (
                       <li key={type.label} className="w-full focus-within:z-10">
                         <button
@@ -522,7 +548,7 @@ export default function Dashboard() {
                   </ul>
                   {nutritionChart == "Doughnut" ? (
                     <Doughnut
-                      className="p-2 "
+                      className="p-2 max-h-[400px]"
                       options={{
                         plugins: {
                           legend: {
@@ -547,6 +573,7 @@ export default function Dashboard() {
                     />
                   ) : (
                     <Pie
+                    className="p-2 max-h-[400px]"
                       options={{
                         plugins: {
                           legend: {
@@ -653,9 +680,15 @@ export default function Dashboard() {
                 <div className="flex w-full justify-end justify-items-end">
                   <button
                     onClick={() => deleteAllMealHandler(mealLog)}
+                    className="bg-yellow-500 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                  >
+                    Reset
+                  </button>
+                  <button
+                    onClick={() => deleteAllSelectedDateMealHandler(mealLog)}
                     className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
                   >
-                    Reset Meals
+                    Remove
                   </button>
                   <button
                     onClick={() => (
@@ -663,7 +696,7 @@ export default function Dashboard() {
                     )}
                     className="bg-green-700 items-center border-black text-white border-2 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
                   >
-                    + Add Meal
+                    + Add
                   </button>
                 </div>
               </div>
@@ -712,11 +745,21 @@ export default function Dashboard() {
                   Recent Exercise
                 </h1>
                 <div className="flex w-full justify-end justify-items-end">
+                <button
+                    onClick={() =>
+                      deleteAllSelectedDateExerciseHandler(exerciseLog)
+                    }
+                    className="bg-yellow-500 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
+                  >
+                    Reset
+                  </button>
                   <button
-                    onClick={() => deleteAllExerciseHandler(exerciseLog)}
+                    onClick={() =>
+                      deleteAllSelectedDateExerciseHandler(exerciseLog)
+                    }
                     className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
                   >
-                    Reset Exercises
+                    Remove
                   </button>
                   <button
                     onClick={() => (
@@ -724,7 +767,7 @@ export default function Dashboard() {
                     )}
                     className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
                   >
-                    + Add Exercise
+                    + Add
                   </button>
                 </div>
               </div>

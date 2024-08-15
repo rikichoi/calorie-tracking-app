@@ -25,7 +25,9 @@ export default function EditExerciseModal({ sExercise, show, onClose }) {
     };
     try {
       await updateDoc(docRef, newExercise)
-      toast.success("Exercise editted successfully!");
+      toast.success("Exercise editted successfully!", {
+        position: "top-left"
+      });
       setErrors({});
     } catch (error) {
       console.log(error.message);

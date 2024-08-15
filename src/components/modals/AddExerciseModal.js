@@ -33,7 +33,9 @@ export default function AddExerciseModal({ show, onClose, selectedDate}) {
       if (exerciseDurationRef.current.value > 0) {
       try {
         const docSnap = await addDoc(collectionRef, newExercise);
-        toast.success("Exercise logged successfully!")
+        toast.success("Exercise logged successfully!", {
+          position: "top-left"
+        })
         exerciseDurationRef.current.value = "";
         setErrors({});
       } catch (error) {

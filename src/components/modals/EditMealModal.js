@@ -36,7 +36,9 @@ export default function EditMealModal({ sMeal, show, onClose }) {
     };
     try {
       await updateDoc(docRef, newMeal)
-      toast.success("Meal editted successfully!");
+      toast.success("Meal editted successfully!", {
+        position: "top-left"
+      });
       setErrors({});
     } catch (error) {
       console.log(error.message);

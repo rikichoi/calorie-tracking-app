@@ -47,7 +47,9 @@ export default function FoodListModal({
     const collectionRef = collection(db, "mealLog");
       try {
         await addDoc(collectionRef, newFood);
-        toast.success("Meal logged successfully!")
+        toast.success("Meal logged successfully!", {
+          position: "top-left"
+        })
       } catch (error) {
         console.log(error.message);
       }

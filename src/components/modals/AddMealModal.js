@@ -47,7 +47,9 @@ export default function AddMealModal({ show, onClose, selectedDate }) {
     if (mealNameRef.current.value != "") {
       try {
         const docSnap = await addDoc(collectionRef, newMeal);
-        toast.success("Meal logged successfully!");
+        toast.success("Meal logged successfully!", {
+          position: "top-left"
+        });
 
         calorieRef.current.value = "";
         proteinRef.current.value = "";
