@@ -56,15 +56,16 @@ export default function UserContextProvider({ children }) {
     userHeight,
     userWeight,
     userMaintenanceCalories,
-    userID
+    userID,
   ) => {
     const newUserData = {
       userID: userID,
       userActivity: userActivity,
-      userBmiHistory: [userBmi],
+      userBmiHistory: [{userBmi: userBmi, createdAt: new Date()}],
       userHeight: userHeight,
-      userWeightHistory: [userWeight],
+      userWeightHistory: [{userWeight: userWeight, createdAt: new Date()}],
       userMaintenanceCalories: userMaintenanceCalories,
+      createdAt: new Date()
     };
     const collectionRef = collection(db, "userData");
     try {
@@ -83,14 +84,15 @@ export default function UserContextProvider({ children }) {
     userHeight,
     userWeight,
     userMaintenanceCalories,
-    userID
+    userID,
+    selectedDate,
   ) => {
     const collectionRef = collection(db, "userData");
     const docRef = doc(collectionRef, userDataID);
     let newBmiHistory = new Array(userData.userBmiHistory);
-    newBmiHistory[0].push(userBmi);
+    newBmiHistory[0].push({userBmi, createdAt:selectedDate});
     let newWeightHistory = new Array(userData.userWeightHistory);
-    newWeightHistory[0].push(userWeight);
+    newWeightHistory[0].push({userWeight, createdAt:selectedDate});
     const newUserData = {
       userID: userID,
       userActivity: userActivity,
@@ -98,11 +100,13 @@ export default function UserContextProvider({ children }) {
       userHeight: userHeight,
       userWeightHistory: newWeightHistory[0],
       userMaintenanceCalories: userMaintenanceCalories,
+      createdAt: selectedDate
     };
     try {
       await updateDoc(docRef, newUserData)
       toast.success("User Settings Updated Successfully!");
       await getUserData();
+      console.log(newWeightHistory);
       // setErrors({});
     } catch (error) {
       console.log(error.message);

@@ -4,7 +4,7 @@ import React from "react";
 import { numberFormatter } from "@/lib/utils";
 import LogMealItem from "@/components/LogMealItem";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import { Doughnut, Pie } from "react-chartjs-2";
 import { useState, useRef, useEffect } from "react";
 import Modal from "@/components/Modal";
 import { db } from "@/lib/firebase";
@@ -40,10 +40,12 @@ import UserSettingsModal from "@/components/modals/UserSettingsModal";
 import { IoSettings } from "react-icons/io5";
 import Analytics from "@/components/HealthMetrics";
 import Discover from "@/components/Discover";
+import { MealContext } from "@/lib/store/meals-context";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
+  const { mealsData } = useContext(MealContext);
   const { userData } = useContext(UserContext);
   const { user, loading, logout } = useContext(authContext);
   const [displayName, setDisplayName] = useState("");
@@ -68,16 +70,27 @@ export default function Dashboard() {
   const [barfatProgress, setbarFatProgress] = useState(0);
   const [barmaintenanceCalories, setbarMaintenanceCalories] = useState(0);
   const [tabMode, setTabMode] = useState("Dashboard");
+  const [nutritionChart, setNutritionChart] = useState("Doughnut");
+  const chartType = [
+    {
+      label: "Doughnut",
+    },
+    { label: "Pie" },
+  ];
 
   useEffect(() => {
-    if (!userData) {
+    if (
+      !userData || userData == "undefined" && !userData.userMaintenanceCalories
+    ) {
       setOpenModal(true);
       return;
     }
     getConsumedAndRemainingCalories(mealLog);
     getNutritionValues(mealLog);
     setremainingCalories(userData.userMaintenanceCalories - consumedCalories);
-    setMaintenanceCalories((consumedCalories / userData.maintenanceCalories) * 100);
+    setMaintenanceCalories(
+      (consumedCalories / userData.maintenanceCalories) * 100
+    );
   }, [consumedCalories, mealLog, userData]);
 
   function getConsumedAndRemainingCalories(mealLog) {
@@ -97,9 +110,11 @@ export default function Dashboard() {
       remaining -= Number(filteredList[i].calorie);
     }
     {
-      setMaintenanceCalories((sum / userData.userMaintenanceCalories) * 100);
-      setremainingCalories(userData.userMaintenanceCalories - sum);
-      setConsumedCalories(sum);
+      if (userData && userData.userMaintenanceCalories) {
+        setMaintenanceCalories((sum / userData.userMaintenanceCalories) * 100);
+        setremainingCalories(userData.userMaintenanceCalories - sum);
+        setConsumedCalories(sum);
+      }
     }
   }
 
@@ -118,6 +133,7 @@ export default function Dashboard() {
       carb += Number(filteredList[i].carbohydrate);
       fat += Number(filteredList[i].fat);
     }
+    if(userData && userData.userMaintenanceCalories){
     setProteinCalories(protein);
     setCarbCalories(carb);
     setFatCalories(fat);
@@ -131,6 +147,7 @@ export default function Dashboard() {
       (fat / ((userData.userMaintenanceCalories * 0.35) / 9)) * 100
     );
   }
+}
 
   useEffect(() => {
     if (!userData) {
@@ -336,7 +353,11 @@ export default function Dashboard() {
           />
         )}
         {modeModal == "bmiCalculator" && (
-          <UserSettingsModal show={openModal} onClose={setOpenModal} />
+          <UserSettingsModal
+            show={openModal}
+            onClose={setOpenModal}
+            selectedDate={startDate}
+          />
         )}
       </Modal>
       <div className="flex font-poppins min-h-screen h-[1000px] flex-col items-center md:px-2 px-24 pt-8 ">
@@ -462,6 +483,7 @@ export default function Dashboard() {
             <div className="w-5/6 md:w-full md:grid-cols-1 grid grid-cols-2 gap-4">
               <div className="bg-gray-200 items-center min-h-[250px] rounded-xl md:text-sm md:pl-10 pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
                 <ul className="pl-12 md:pl-0 md:col-span-1 col-span-2">
+                  <li className="text-lg pb-5 font-bold">Daily Overview</li>
                   <li className="text-sm">You have consumed</li>
                   <li className="text-lg pt-3 font-bold">
                     <span className="">{consumedCalories}</span> /{" "}
@@ -480,31 +502,76 @@ export default function Dashboard() {
                   </li>
                 </ul>
 
-                <div className="items-center md:col-span-2 justify-center flex min-h-full">
-                  <Doughnut
-                    className="p-2 "
-                    options={{
-                      plugins: {
-                        legend: {
-                          display: false,
+                <div className="items-center flex-col md:col-span-2 justify-center flex min-h-full">
+                  <ul className="hidden gap-3 mb-2 bg-black p-2 text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
+                    {chartType.map((type) => (
+                      <li key={type.label} className="w-full focus-within:z-10">
+                        <button
+                          onClick={() => setNutritionChart(type.label)}
+                          value={type.label}
+                          className={
+                            nutritionChart == type.label
+                              ? "inline-block w-full p-2 text-gray-900 bg-gray-100 border-r border-gray-200 dark:border-gray-700 rounded-lg  dark:bg-gray-700 dark:text-white"
+                              : "inline-block w-full p-2 bg-white border-s-0 border-gray-200 dark:border-gray-700 rounded-lg hover:text-gray-700 hover:bg-gray-50 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                          }
+                        >
+                          {type.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  {nutritionChart == "Doughnut" ? (
+                    <Doughnut
+                      className="p-2 "
+                      options={{
+                        plugins: {
+                          legend: {
+                            display: false,
+                          },
                         },
-                      },
-                    }}
-                    data={{
-                      labels: [`Consumed Calories`, `Remaining Calories`],
-                      datasets: [
-                        {
-                          label: "Calories",
-                          data: [
-                            consumedCalories,
-                            remainingCalories < 0 ? 0 : remainingCalories,
-                          ],
-                          backgroundColor: ["#FFA500", "#000000"],
-                          borderWidth: 5,
+                      }}
+                      data={{
+                        labels: [`Consumed Calories`, `Remaining Calories`],
+                        datasets: [
+                          {
+                            label: "Calories",
+                            data: [
+                              consumedCalories,
+                              remainingCalories < 0 ? 0 : remainingCalories,
+                            ],
+                            backgroundColor: ["#FFA500", "#000000"],
+                            borderWidth: 5,
+                          },
+                        ],
+                      }}
+                    />
+                  ) : (
+                    <Pie
+                      options={{
+                        plugins: {
+                          legend: {
+                            display: false,
+                          },
                         },
-                      ],
-                    }}
-                  />
+                      }}
+                      data={{
+                        labels: ["Protein", "Fats", "Carbs"],
+                        datasets: [
+                          {
+                            label: "Grams",
+                            data: [
+                              proteinCalories ? proteinCalories : 1,
+                              fatCalories ? fatCalories : 1,
+                              carbCalories ? carbCalories : 1,
+                            ],
+                            backgroundColor: ["#388e3c", "#f57c00", "#0288d1"],
+                            borderColor: "black",
+                            borderWidth: 2,
+                          },
+                        ],
+                      }}
+                    />
+                  )}
                 </div>
               </div>
               {/* Right Overview Section */}
@@ -553,7 +620,7 @@ export default function Dashboard() {
                   </li>{" "}
                   <LinearProgress
                     variant="determinate"
-                    color="secondary"
+                    color="info"
                     value={barcarbProgress}
                     className="w-full min-h-3 rounded-xl transition-all"
                   />
