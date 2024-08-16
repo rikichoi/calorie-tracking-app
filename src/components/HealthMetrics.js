@@ -63,7 +63,6 @@ export default function Analytics() {
   const sortedBmiDateHistory = combinedBmiData.map((item) => item.date);
   const sortedBmiHistory = combinedBmiData.map((item) => item.bmi);
 
-
   useEffect(() => {
     getUserMealsData();
   }, []);
@@ -123,91 +122,181 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="w-full space-y-10 font-poppins">
-      <div className="w-full gap-10 flex flex-row">
-        <div className="w-1/2">
-          <div className="flex w-full flex-row items-center mb-4">
-            <select className="w-fit px-2">
-              {WeightChartType.map((type) => (
-                <option
-                  onClick={() => setWeightChart(type.label)}
-                  key={type.label}
-                  value={type.label}
-                >
-                  {type.label}
-                </option>
-              ))}
-            </select>
-            <h1 className="text-lg mx-auto pr-14">Weight History</h1>
+    <div className="w-full mt-8 font-poppins mb-8">
+      <div className="w-full gap-14 grid grid-cols-2 md:grid-cols-1">
+        <div className="flex flex-col gap-10 max-h-fit">
+          <div className="max-h-fit">
+            <div className="flex w-full flex-row items-center mb-4">
+              <select className="w-fit px-2">
+                {WeightChartType.map((type) => (
+                  <option
+                    onClick={() => setWeightChart(type.label)}
+                    key={type.label}
+                    value={type.label}
+                  >
+                    {type.label}
+                  </option>
+                ))}
+              </select>
+              <h1 className="text-lg mx-auto pr-14">Weight History</h1>
+            </div>
+            {weightChart === "Line" ? (
+              <Line
+                className="max-h-[40vh]"
+                options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                }}
+                data={{
+                  labels: sortedWeightDateHistory,
+                  datasets: [
+                    {
+                      label: "Weight History",
+                      data: sortedWeightHistory,
+                      fill: true,
+                      pointBackgroundColor: "orange",
+                      borderColor: "orange",
+                      backgroundColor: "orange",
+                      tension: 0.1,
+                    },
+                  ],
+                }}
+              />
+            ) : (
+              <Bar
+                options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                }}
+                data={{
+                  labels: sortedWeightDateHistory,
+                  responsive: true,
+                  offset: true,
+                  datasets: [
+                    {
+                      label: "Weight History",
+                      data: sortedWeightHistory,
+                      backgroundColor: [
+                        "rgba(255, 99, 132, 1)",
+                        "rgba(255, 159, 64, 1)",
+                        "rgba(255, 205, 86, 1",
+                        "rgba(75, 192, 192, 1)",
+                        "rgba(54, 162, 235, 1)",
+                        "rgba(153, 102, 255, 1)",
+                        "rgba(201, 203, 207, 1)",
+                      ],
+                      borderColor: [
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 159, 64)",
+                        "rgb(255, 205, 86)",
+                        "rgb(75, 192, 192)",
+                        "rgb(54, 162, 235)",
+                        "rgb(153, 102, 255)",
+                        "rgb(201, 203, 207)",
+                      ],
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+              />
+            )}
           </div>
-          {weightChart === "Line" ? (
-            <Line
-              options={{
-                plugins: {
-                  legend: {
-                    display: false,
+          <div className="max-h-fit">
+            <div className="flex w-full flex-row items-center mb-4">
+              <select className="w-fit px-2">
+                {BmiChartType.map((type) => (
+                  <option
+                    onClick={() => setBmiChart(type.label)}
+                    key={type.label}
+                    value={type.label}
+                  >
+                    {type.label}
+                  </option>
+                ))}
+              </select>
+              <h1 className="text-lg mx-auto pr-14">BMI History</h1>
+            </div>
+            {bmiChart === "Line" ? (
+              <Line
+                className="max-h-[40vh]"
+                options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
                   },
-                },
-              }}
-              data={{
-                labels: sortedWeightDateHistory,
-                datasets: [
-                  {
-                    label: "Weight History",
-                    data: sortedWeightHistory,
-                    fill: true,
-                    pointBackgroundColor: "orange",
-                    borderColor: "orange",
-                    backgroundColor: "orange",
-                    tension: 0.1,
+                }}
+                data={{
+                  labels: sortedBmiDateHistory,
+                  datasets: [
+                    {
+                      label: "BMI History",
+                      data: sortedBmiHistory,
+                      fill: true,
+                      pointBackgroundColor: "#ab47bc",
+                      borderColor: "#ab47bc",
+                      backgroundColor: "#ab47bc",
+                      tension: 0.1,
+                    },
+                  ],
+                }}
+              />
+            ) : (
+              <Bar
+                options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
                   },
-                ],
-              }}
-            />
-          ) : (
-            <Bar
-              options={{
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-              }}
-              data={{
-                labels: sortedWeightDateHistory,
-                responsive: true,
-                offset: true,
-                datasets: [
-                  {
-                    label: "Weight History",
-                    data: sortedWeightHistory,
-                    backgroundColor: [
-                      "rgba(255, 99, 132, 1)",
-                      "rgba(255, 159, 64, 1)",
-                      "rgba(255, 205, 86, 1",
-                      "rgba(75, 192, 192, 1)",
-                      "rgba(54, 162, 235, 1)",
-                      "rgba(153, 102, 255, 1)",
-                      "rgba(201, 203, 207, 1)",
-                    ],
-                    borderColor: [
-                      "rgb(255, 99, 132)",
-                      "rgb(255, 159, 64)",
-                      "rgb(255, 205, 86)",
-                      "rgb(75, 192, 192)",
-                      "rgb(54, 162, 235)",
-                      "rgb(153, 102, 255)",
-                      "rgb(201, 203, 207)",
-                    ],
-                    borderWidth: 1,
-                  },
-                ],
-              }}
-            />
-          )}
+                }}
+                data={{
+                  labels: sortedBmiDateHistory,
+                  responsive: true,
+                  offset: true,
+                  datasets: [
+                    {
+                      label: "BMI History",
+                      data: sortedBmiHistory,
+                      backgroundColor: [
+                        "rgba(255, 99, 132, 1)",
+                        "rgba(255, 159, 64, 1)",
+                        "rgba(255, 205, 86, 1",
+                        "rgba(75, 192, 192, 1)",
+                        "rgba(54, 162, 235, 1)",
+                        "rgba(153, 102, 255, 1)",
+                        "rgba(201, 203, 207, 1)",
+                      ],
+                      borderColor: [
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 159, 64)",
+                        "rgb(255, 205, 86)",
+                        "rgb(75, 192, 192)",
+                        "rgb(54, 162, 235)",
+                        "rgb(153, 102, 255)",
+                        "rgb(201, 203, 207)",
+                      ],
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+              />
+            )}
+          </div>
         </div>
-        <div className="w-1/2">
+
+        <div className="max-h-fit w-full">
+          <h1 className="text-lg mx-auto w-full text-center">
+            Nutrition Intake
+          </h1>
           <Bar
+            className="max-h-[90vh]"
             pointStyle="star"
             data={{
               labels: data.labels,
@@ -267,87 +356,6 @@ export default function Analytics() {
             }}
           />
         </div>
-      </div>
-      <div className="w-1/2">
-        <div className="flex w-full flex-row items-center mb-4">
-          <select className="w-fit px-2">
-            {BmiChartType.map((type) => (
-              <option
-                onClick={() => setBmiChart(type.label)}
-                key={type.label}
-                value={type.label}
-              >
-                {type.label}
-              </option>
-            ))}
-          </select>
-          <h1 className="text-lg mx-auto pr-14">BMI History</h1>
-        </div>
-        {bmiChart === "Line" ? (
-          <Line
-            options={{
-              plugins: {
-                legend: {
-                  display: false,
-                },
-              },
-            }}
-            data={{
-              labels: sortedBmiDateHistory,
-              datasets: [
-                {
-                  label: "BMI History",
-                  data: sortedBmiHistory,
-                  fill: true,
-                  pointBackgroundColor: "#ab47bc",
-                  borderColor: "#ab47bc",
-                  backgroundColor: "#ab47bc",
-                  tension: 0.1,
-                },
-              ],
-            }}
-          />
-        ) : (
-          <Bar
-            options={{
-              plugins: {
-                legend: {
-                  display: false,
-                },
-              },
-            }}
-            data={{
-              labels: sortedBmiDateHistory,
-              responsive: true,
-              offset: true,
-              datasets: [
-                {
-                  label: "BMI History",
-                  data: sortedBmiHistory,
-                  backgroundColor: [
-                    "rgba(255, 99, 132, 1)",
-                    "rgba(255, 159, 64, 1)",
-                    "rgba(255, 205, 86, 1",
-                    "rgba(75, 192, 192, 1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(153, 102, 255, 1)",
-                    "rgba(201, 203, 207, 1)",
-                  ],
-                  borderColor: [
-                    "rgb(255, 99, 132)",
-                    "rgb(255, 159, 64)",
-                    "rgb(255, 205, 86)",
-                    "rgb(75, 192, 192)",
-                    "rgb(54, 162, 235)",
-                    "rgb(153, 102, 255)",
-                    "rgb(201, 203, 207)",
-                  ],
-                  borderWidth: 1,
-                },
-              ],
-            }}
-          />
-        )}
       </div>
     </div>
   );

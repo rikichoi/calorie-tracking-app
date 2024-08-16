@@ -152,9 +152,12 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
         gender: userData.userGender,
         age: userData.userAge,
         activity: userData.userActivity,
-        bmiValue: (userData.userBmiHistory[(userData.userBmiHistory.length)-1]).userBmi,
+        bmiValue:
+          userData.userBmiHistory[userData.userBmiHistory.length - 1].userBmi,
         height: userData.userHeight,
-        weight: (userData.userWeightHistory[(userData.userWeightHistory.length)-1]).userWeight,
+        weight:
+          userData.userWeightHistory[userData.userWeightHistory.length - 1]
+            .userWeight,
         maintenanceCalories: userData.userMaintenanceCalories,
       });
     }
@@ -195,8 +198,8 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
   };
 
   return (
-    <div className="grid h-[71vh] font-poppins grid-rows-9">
-      <div className="w-full row-span-1 flex flex-row justify-end p-4">
+    <div className="flex flex-col max-h-[71vh] font-poppins ">
+      <div className="flex flex-row justify-end p-4">
         {userData ? (
           <button
             onClick={() => onClose(!show)}
@@ -208,8 +211,8 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
           ""
         )}
       </div>
-      <div className="w-full row-span-1 flex justify-center font-bold text-3xl">
-        <h1 className="row-span-1">
+      <div className="flex justify-center font-bold md:text-lg text-3xl mb-10">
+        <h1 className="">
           {" "}
           {userData ? (
             <span>Profile Settings</span>
@@ -218,29 +221,15 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
           )}
         </h1>
       </div>
-      <div className="row-span-7 text-lg mx-20">
-        <form onSubmit={handleSubmit} className="row-span-1 flex flex-col">
-          <div className="grid row-span-5 grid-cols-3">
-            <div className="flex flex-col gap-10">
-              <h2 className="row-span-1">
-                Gender <span className="text-red-600">*</span>
-              </h2>
-              <h2 className="row-span-1">
-                Age <span className="text-red-600">*</span>
-              </h2>
-              <h2 className="row-span-1">
-                Activity Level <span className="text-red-600">*</span>
-              </h2>
-              <h2 className="row-span-1">
-                Height (cm) <span className="text-red-600">*</span>
-              </h2>
-              <h2 className="row-span-1">
-                Weight (kg) <span className="text-red-600">*</span>
-              </h2>
-              <h2 className="row-span-1">BMI</h2>
-            </div>
-            <div className="col-span-2 flex w-full flex-row justify-between ">
-              <div className="flex flex-col w-full gap-10">
+
+      <div className="md:text-sm text-lg mx-auto md:px-2">
+        <form onSubmit={handleSubmit} className=" flex flex-col">
+          <div className="  flex flex-row">
+            <div className="flex flex-col gap-10 ">
+              <div className="flex flex-row items-center ">
+                <h2 className="max-w-52 w-full ">
+                  Gender <span className="text-red-600">*</span>
+                </h2>
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
@@ -261,20 +250,33 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
                   ></input>
                   <label>Female</label>
                 </div>
-                <input
-                  onChange={handleChange}
-                  name="age"
-                  value={data.age}
-                  type="number"
-                  required
-                  className="[appearance:textfield] h-8 w-full"
-                ></input>
+              </div>
 
+              <div className="flex flex-row items-center ">
+                <h2 className=" max-w-52 w-full">
+                  Age <span className="text-red-600">*</span>
+                </h2>
+                <div>
+                  <input
+                    onChange={handleChange}
+                    name="age"
+                    value={data.age}
+                    type="number"
+                    required
+                    className="[appearance:textfield]  max-w-20"
+                  ></input>
+                </div>
+              </div>
+
+              <div className="flex flex-row items-center ">
+                <h2 className="max-w-52 w-full">
+                  Activity Level <span className="text-red-600">*</span>
+                </h2>
                 <select
                   onChange={handleChange}
                   name="activity"
                   value={data.activity}
-                  className="h-8 w-full"
+                  className=""
                   defaultValue={1.2}
                   type="number"
                 >
@@ -294,42 +296,59 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
                     Super active
                   </option>
                 </select>
+              </div>
 
+              <div className="flex flex-row items-center ">
+                <h2 className="max-w-52 w-full ">
+                  Height (cm) <span className="text-red-600">*</span>
+                </h2>
                 <input
                   onChange={handleChange}
                   name="height"
                   type="number"
                   value={data.height}
                   required
-                  className="[appearance:textfield] h-8 w-full"
+                  className="[appearance:textfield] max-w-20"
                 ></input>
+              </div>
 
+              <div className="flex flex-row items-center ">
+                <h2 className="max-w-52 w-full ">
+                  Weight (kg) <span className="text-red-600">*</span>
+                </h2>
                 <input
                   onChange={handleChange}
                   name="weight"
                   value={data.weight}
                   type="number"
                   required
-                  className="[appearance:textfield] h-8 w-full"
+                  className="[appearance:textfield] max-w-20"
                 ></input>
+              </div>
+
+              <div className="flex flex-row items-center ">
+                <h2 className="max-w-52 w-full ">BMI</h2>
 
                 <input
                   value={bmiValue}
                   disabled
                   type="number"
                   name="bmiValue"
-                  className="[appearance:textfield] cursor-not-allowed h-8 w-full"
+                  className="[appearance:textfield] cursor-not-allowed  max-w-20"
                 ></input>
               </div>
+
+              {bmiRange ? (
+                <div className="flex justify-center text-center">
+                  <h2 className="">
+                    Your BMI falls within the {bmiRange} category.
+                  </h2>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
-          {bmiRange ? (
-            <h2 className="row-span-1 w-full text-center justify-center items-center flex">
-              Your BMI falls within the {bmiRange} category.
-            </h2>
-          ) : (
-            ""
-          )}
           <button
             // onClick={() => console.log(data)}
 

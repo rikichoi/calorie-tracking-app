@@ -209,7 +209,7 @@ export default function Dashboard() {
     try {
       await deleteDoc(docRef);
       toast.success("Meal removed successfully!", {
-        position: "top-left"
+        position: "top-left",
       });
       setMealLog((prevState) => {
         return prevState.filter((i) => i.id !== mealLogId);
@@ -224,7 +224,7 @@ export default function Dashboard() {
     try {
       await deleteDoc(docRef);
       toast.success("Exercise removed successfully!", {
-        position: "top-left"
+        position: "top-left",
       });
       setExerciseLog((prevState) => {
         return prevState.filter((i) => i.id !== exerciseLogId);
@@ -405,7 +405,7 @@ export default function Dashboard() {
               className="bg-orange-600 md:w-full md:mb-4 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  px-2 h-14 flex justify-center pt-0.5"
             >
               <IoSettings className="text-3xl mr-2 text-center" />
-              <span className="text-center">Profile Settings</span>
+              <span className="text-center">Settings</span>
             </button>
             <h2 className="flex text-xl md:w-full h-3/4 font-bold items-center">
               Date Selector{" "}
@@ -444,7 +444,7 @@ export default function Dashboard() {
                 >
                   <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
                 </svg>
-                Dashboard
+                <span className="md:hidden">Dashboard</span>
               </button>
             </li>
             <li className="me-2">
@@ -469,7 +469,7 @@ export default function Dashboard() {
                 >
                   <path d="M5 11.424V1a1 1 0 1 0-2 0v10.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.228 3.228 0 0 0 0-6.152ZM19.25 14.5A3.243 3.243 0 0 0 17 11.424V1a1 1 0 0 0-2 0v10.424a3.227 3.227 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.243 3.243 0 0 0 2.25-3.076Zm-6-9A3.243 3.243 0 0 0 11 2.424V1a1 1 0 0 0-2 0v1.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0V8.576A3.243 3.243 0 0 0 13.25 5.5Z" />
                 </svg>
-                Analytics
+                <span className="md:hidden">Analytics</span>
               </button>
             </li>
             <li className="me-2">
@@ -494,7 +494,7 @@ export default function Dashboard() {
                 >
                   <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
                 </svg>
-                Discover
+                <span className="md:hidden">Discover</span>
               </button>
             </li>
             <li>
@@ -573,7 +573,7 @@ export default function Dashboard() {
                     />
                   ) : (
                     <Pie
-                    className="p-2 max-h-[400px]"
+                      className="p-2 max-h-[400px]"
                       options={{
                         plugins: {
                           legend: {
@@ -655,7 +655,7 @@ export default function Dashboard() {
               </div>
             </div>
             {/* Calorie Goal Progress Bar */}
-            <div className="w-5/6 mt-10">
+            <div className="w-full mt-10 px-24 md:px-0">
               {/* this might have to turn into a list so we can allow for mapping data */}
               <p>Maintenance Calorie Goal</p>
               <LinearProgress
@@ -672,7 +672,7 @@ export default function Dashboard() {
               </p>
             </div>
             {/* Meal Logging Section */}
-            <div className="border- w-5/6">
+            <div className="w-full px-24 md:px-0">
               <div className="w-full mt-8 mb-5 flex flex-row">
                 <h1 className="md:text-lg text-2xl font-bold w-full">
                   Recent Meals
@@ -680,13 +680,13 @@ export default function Dashboard() {
                 <div className="flex w-full justify-end justify-items-end">
                   <button
                     onClick={() => deleteAllMealHandler(mealLog)}
-                    className="bg-yellow-500 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                    className="bg-yellow-500 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white md:text-sm text-base border-2 rounded-full mr-3 flex justify-center p-2"
                   >
                     Reset
                   </button>
                   <button
                     onClick={() => deleteAllSelectedDateMealHandler(mealLog)}
-                    className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                    className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white md:text-sm text-base border-2 rounded-full mr-3 flex justify-center p-2"
                   >
                     Remove
                   </button>
@@ -694,9 +694,9 @@ export default function Dashboard() {
                     onClick={() => (
                       setModeModal("addMeal"), setOpenModal(!openModal)
                     )}
-                    className="bg-green-700 items-center border-black text-white border-2 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 rounded-full mr-3  w-36 h-12 flex justify-center pt-0.5"
+                    className="bg-green-700 items-center border-black text-white border-2 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner text-base md:text-sm active:scale-110 rounded-full mr-3 flex justify-center p-2"
                   >
-                    + Add
+                    Add
                   </button>
                 </div>
               </div>
@@ -739,17 +739,17 @@ export default function Dashboard() {
               </div>
             </div>
             {/* Exercise Logging Section */}
-            <div className="w-5/6">
+            <div className="w-full">
               <div className="w-full mt-8 mb-5 flex flex-row">
                 <h1 className="md:text-lg text-2xl font-bold w-full">
                   Recent Exercise
                 </h1>
                 <div className="flex w-full justify-end justify-items-end">
-                <button
+                  <button
                     onClick={() =>
                       deleteAllSelectedDateExerciseHandler(exerciseLog)
                     }
-                    className="bg-yellow-500 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
+                    className="bg-yellow-500 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white md:text-sm text-base border-2 rounded-full mr-3 flex justify-center p-2"
                   >
                     Reset
                   </button>
@@ -757,7 +757,7 @@ export default function Dashboard() {
                     onClick={() =>
                       deleteAllSelectedDateExerciseHandler(exerciseLog)
                     }
-                    className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white border-2 rounded-full w-36 h-12 mr-3  flex justify-center pt-0.5"
+                    className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white md:text-sm text-base border-2 rounded-full mr-3 flex justify-center p-2"
                   >
                     Remove
                   </button>
@@ -765,9 +765,9 @@ export default function Dashboard() {
                     onClick={() => (
                       setModeModal("addExercise"), setOpenModal(!openModal)
                     )}
-                    className="bg-green-700 items-center border-black text-white border-2 rounded-full mr-3 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110  w-36 h-12 flex justify-center pt-0.5"
+                    className="bg-green-700 items-center border-black text-white border-2 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner text-base md:text-sm active:scale-110 rounded-full mr-3 flex justify-center p-2"
                   >
-                    + Add
+                    Add
                   </button>
                 </div>
               </div>

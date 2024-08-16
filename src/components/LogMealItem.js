@@ -21,8 +21,8 @@ export default function LogMealItem({
   mealWeight,
 }) {
   return (
-    <div className="grid grid-cols-12">
-      <button onClick={()=>(selectMeal(selectedMeal), onClose(!show), editMealMode("editMeal"))} className="hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]">
+    <div className="flex flex-row">
+      <button onClick={()=>(selectMeal(selectedMeal), onClose(!show), editMealMode("editMeal"))} className="hover:shadow-gray-900 transition-all grow duration-100 hover:shadow-inner active:scale-110 grid grid-cols-9 col-span-11 py-3 rounded-xl hover:bg-[#C8CFA0]">
         <div className="grid col-span-8  grid-cols-9">
           <Image
             alt={""}
