@@ -51,6 +51,8 @@ export default function UserContextProvider({ children }) {
   }, [user]);
 
   const postUserData = async (
+    userGender,
+    userAge,
     userActivity,
     userBmi,
     userHeight,
@@ -60,6 +62,8 @@ export default function UserContextProvider({ children }) {
   ) => {
     const newUserData = {
       userID: userID,
+      userGender: userGender,
+      userAge: userAge,
       userActivity: userActivity,
       userBmiHistory: [{userBmi: userBmi, createdAt: new Date()}],
       userHeight: userHeight,
@@ -79,6 +83,8 @@ export default function UserContextProvider({ children }) {
   };
 
   const editUserData = async (
+    userGender,
+    userAge,
     userActivity,
     userBmi,
     userHeight,
@@ -95,6 +101,8 @@ export default function UserContextProvider({ children }) {
     newWeightHistory[0].push({userWeight, createdAt:selectedDate});
     const newUserData = {
       userID: userID,
+      userGender: userGender,
+      userAge: userAge,
       userActivity: userActivity,
       userBmiHistory: newBmiHistory[0],
       userHeight: userHeight,
