@@ -146,6 +146,20 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
     data.bmiValue,
   ]);
 
+  useEffect(() => {
+    if (userData) {
+      setData({
+        gender: userData.userGender,
+        age: userData.userAge,
+        activity: userData.userActivity,
+        bmiValue: (userData.userBmiHistory[(userData.userBmiHistory.length)-1]).userBmi,
+        height: userData.userHeight,
+        weight: (userData.userWeightHistory[(userData.userWeightHistory.length)-1]).userWeight,
+        maintenanceCalories: userData.userMaintenanceCalories,
+      });
+    }
+  }, [userData, show]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = validate();
@@ -154,6 +168,8 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
     }
     if (userData) {
       await editUserData(
+        data.gender,
+        data.age,
         data.activity,
         bmiValue,
         data.height,
@@ -165,6 +181,8 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
       // setData(initialState);
     } else {
       await postUserData(
+        data.gender,
+        data.age,
         data.activity,
         bmiValue,
         data.height,
@@ -227,6 +245,7 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
                   <input
                     type="radio"
                     name="gender"
+                    checked={data.gender == "Male"}
                     className="h-5 w-5"
                     value={"Male"}
                     onChange={handleChange}
@@ -235,6 +254,7 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
                   <input
                     type="radio"
                     name="gender"
+                    checked={data.gender == "Female"}
                     className="h-5 w-5"
                     value={"Female"}
                     onChange={handleChange}
@@ -244,14 +264,16 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
                 <input
                   onChange={handleChange}
                   name="age"
+                  value={data.age}
                   type="number"
                   required
-                  className="h-8 w-full"
+                  className="[appearance:textfield] h-8 w-full"
                 ></input>
 
                 <select
                   onChange={handleChange}
                   name="activity"
+                  value={data.activity}
                   className="h-8 w-full"
                   defaultValue={1.2}
                   type="number"
@@ -277,16 +299,18 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
                   onChange={handleChange}
                   name="height"
                   type="number"
+                  value={data.height}
                   required
-                  className="h-8 w-full"
+                  className="[appearance:textfield] h-8 w-full"
                 ></input>
 
                 <input
                   onChange={handleChange}
                   name="weight"
+                  value={data.weight}
                   type="number"
                   required
-                  className="h-8 w-full"
+                  className="[appearance:textfield] h-8 w-full"
                 ></input>
 
                 <input
@@ -294,7 +318,7 @@ export default function UserSettingsModal({ show, onClose, selectedDate }) {
                   disabled
                   type="number"
                   name="bmiValue"
-                  className="h-8 w-full"
+                  className="[appearance:textfield] cursor-not-allowed h-8 w-full"
                 ></input>
               </div>
             </div>

@@ -36,10 +36,33 @@ export default function Analytics() {
   const weightDateHistory = userData.userWeightHistory.map((weight) =>
     weight.createdAt.toDate().toLocaleDateString()
   );
+  const combinedWeightData = weightDateHistory.map((date, index) => ({
+    date,
+    weight: weightHistory[index],
+  }));
+  combinedWeightData.sort(
+    (a, b) =>
+      new Date(a.date.split("/").reverse().join("-")) -
+      new Date(b.date.split("/").reverse().join("-"))
+  );
+  const sortedWeightDateHistory = combinedWeightData.map((item) => item.date);
+  const sortedWeightHistory = combinedWeightData.map((item) => item.weight);
   const bmiHistory = userData.userBmiHistory.map((bmi) => bmi.userBmi);
   const bmiDateHistory = userData.userBmiHistory.map((bmi) =>
     bmi.createdAt.toDate().toLocaleDateString()
   );
+  const combinedBmiData = bmiDateHistory.map((date, index) => ({
+    date,
+    bmi: bmiHistory[index],
+  }));
+  combinedBmiData.sort(
+    (a, b) =>
+      new Date(a.date.split("/").reverse().join("-")) -
+      new Date(b.date.split("/").reverse().join("-"))
+  );
+  const sortedBmiDateHistory = combinedBmiData.map((item) => item.date);
+  const sortedBmiHistory = combinedBmiData.map((item) => item.bmi);
+
 
   useEffect(() => {
     getUserMealsData();
@@ -103,19 +126,19 @@ export default function Analytics() {
     <div className="w-full space-y-10 font-poppins">
       <div className="w-full gap-10 flex flex-row">
         <div className="w-1/2">
-        <div className="flex w-full flex-row items-center mb-4">
-          <select className="w-fit px-2">
-            {WeightChartType.map((type) => (
-              <option
-                onClick={() => setWeightChart(type.label)}
-                key={type.label}
-                value={type.label}
-              >
-                {type.label}
-              </option>
-            ))}
-          </select>
-          <h1 className="text-lg mx-auto pr-14">Weight History</h1>
+          <div className="flex w-full flex-row items-center mb-4">
+            <select className="w-fit px-2">
+              {WeightChartType.map((type) => (
+                <option
+                  onClick={() => setWeightChart(type.label)}
+                  key={type.label}
+                  value={type.label}
+                >
+                  {type.label}
+                </option>
+              ))}
+            </select>
+            <h1 className="text-lg mx-auto pr-14">Weight History</h1>
           </div>
           {weightChart === "Line" ? (
             <Line
@@ -127,11 +150,11 @@ export default function Analytics() {
                 },
               }}
               data={{
-                labels: weightDateHistory,
+                labels: sortedWeightDateHistory,
                 datasets: [
                   {
                     label: "Weight History",
-                    data: weightHistory,
+                    data: sortedWeightHistory,
                     fill: true,
                     pointBackgroundColor: "orange",
                     borderColor: "orange",
@@ -151,13 +174,13 @@ export default function Analytics() {
                 },
               }}
               data={{
-                labels: weightDateHistory,
+                labels: sortedWeightDateHistory,
                 responsive: true,
                 offset: true,
                 datasets: [
                   {
                     label: "Weight History",
-                    data: weightHistory,
+                    data: sortedWeightHistory,
                     backgroundColor: [
                       "rgba(255, 99, 132, 1)",
                       "rgba(255, 159, 64, 1)",
@@ -270,11 +293,11 @@ export default function Analytics() {
               },
             }}
             data={{
-              labels: bmiDateHistory,
+              labels: sortedBmiDateHistory,
               datasets: [
                 {
                   label: "BMI History",
-                  data: bmiHistory,
+                  data: sortedBmiHistory,
                   fill: true,
                   pointBackgroundColor: "#ab47bc",
                   borderColor: "#ab47bc",
@@ -294,13 +317,13 @@ export default function Analytics() {
               },
             }}
             data={{
-              labels: bmiDateHistory,
+              labels: sortedBmiDateHistory,
               responsive: true,
               offset: true,
               datasets: [
                 {
                   label: "BMI History",
-                  data: bmiHistory,
+                  data: sortedBmiHistory,
                   backgroundColor: [
                     "rgba(255, 99, 132, 1)",
                     "rgba(255, 159, 64, 1)",
