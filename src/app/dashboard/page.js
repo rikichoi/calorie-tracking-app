@@ -739,7 +739,7 @@ export default function Dashboard() {
               </div>
             </div>
             {/* Exercise Logging Section */}
-            <div className="w-full">
+            <div className="w-full px-24 md:px-0">
               <div className="w-full mt-8 mb-5 flex flex-row">
                 <h1 className="md:text-lg text-2xl font-bold w-full">
                   Recent Exercise
