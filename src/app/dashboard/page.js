@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
-import LogMealItem from "@/components/LogMealItem";
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut, Pie } from "react-chartjs-2";
 import { useState, useEffect } from "react";
-import Modal from "@/components/Modal";
-import { db } from "@/lib/firebase";
+import Modal from "../../components/Modal";
+import { db } from "../../lib/firebase";
 import {
   collection,
   addDoc,
@@ -18,6 +17,7 @@ import {
 import LogExerciseItem from "@/components/LogExerciseItem";
 import AddMealModal from "@/components/modals/AddMealModal";
 import AddExerciseModal from "@/components/modals/AddExerciseModal";
+import LogMealItem from "../../components/LogMealItem";
 import EditMealModal from "@/components/modals/EditMealModal";
 import EditExerciseModal from "@/components/modals/EditExerciseModal";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -33,7 +33,6 @@ import Analytics from "@/components/HealthMetrics";
 import Discover from "@/components/Discover";
 import { MealContext } from "@/lib/store/meals-context";
 import { redirect } from "next/navigation";
-import { Bot } from "lucide-react";
 import Assistant from "@/components/Assistant";
 
 ChartJS.register(ArcElement, Tooltip);
