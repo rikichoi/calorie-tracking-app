@@ -22,6 +22,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 
 import ViewContextProvider, { viewContext } from "@/lib/store/view-context";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const homeRef = useRef(null);
@@ -428,5 +429,6 @@ export default function Home() {
       </main>
     );
   }
-  return <Dashboard />;
+
+  return redirect("/dashboard");
 }

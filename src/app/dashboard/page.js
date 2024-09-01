@@ -41,6 +41,7 @@ import { IoSettings } from "react-icons/io5";
 import Analytics from "@/components/HealthMetrics";
 import Discover from "@/components/Discover";
 import { MealContext } from "@/lib/store/meals-context";
+import { redirect } from "next/navigation";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -336,6 +337,10 @@ export default function Dashboard() {
     getExerciseLogData();
   }, [user, openModal]);
 
+  if (!user) {
+    redirect("/");
+  }
+
   return (
     <main
       className={`${
@@ -454,7 +459,8 @@ export default function Dashboard() {
                   tabMode == "Analytics"
                     ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
                     : " border-black "
-                }inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`}
+                }inline-flex hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 items-center justify-center p-4 rounded-t-lg active group`}
+                aria-current="page"
               >
                 <svg
                   className={`${
@@ -479,7 +485,8 @@ export default function Dashboard() {
                   tabMode == "Discover"
                     ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
                     : " border-black "
-                }inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`}
+                }inline-flex hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 items-center justify-center p-4 rounded-t-lg active group`}
+                aria-current="page"
               >
                 <svg
                   className={`${
@@ -688,7 +695,7 @@ export default function Dashboard() {
                     onClick={() => deleteAllSelectedDateMealHandler(mealLog)}
                     className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white md:text-sm text-base border-2 rounded-full mr-3 flex justify-center p-2"
                   >
-                    Remove
+                    Clear
                   </button>
                   <button
                     onClick={() => (
@@ -759,7 +766,7 @@ export default function Dashboard() {
                     }
                     className="bg-red-700 items-center hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110 border-black text-white md:text-sm text-base border-2 rounded-full mr-3 flex justify-center p-2"
                   >
-                    Remove
+                    Clear
                   </button>
                   <button
                     onClick={() => (
