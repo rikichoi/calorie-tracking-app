@@ -845,11 +845,13 @@ export default function Dashboard() {
           </div>
         )}
 
-        {tabMode == "Assistant" && (
-          <div className="w-full flex flex-col items-center">
-            <Assistant />
-          </div>
-        )}
+        <div
+          className={`${
+            tabMode == "Assistant" ? " flex " : " hidden "
+          } w-full flex-col items-center`}
+        >
+          <Assistant />
+        </div>
       </div>
     </main>
   );

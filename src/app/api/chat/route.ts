@@ -1,7 +1,6 @@
 import { ChatCompletionMessage } from "openai/resources";
-import { streamToResponse, StreamingTextResponse, OpenAIStream } from "ai";
 import { createOpenAI } from '@ai-sdk/openai';
-import { generateText, streamText } from 'ai';
+import { streamText } from 'ai';
 
 const openai = createOpenAI({
   // custom settings, e.g.
@@ -13,10 +12,12 @@ export async function POST(req: Request, res: Response) {
   const { messages } = await req.json();
   console.log('messages:', messages);
 
+  // This system message is optional, but it is a good practice to include it in the messages array.
+  // We can also just type this system message out within the messages array.
   const systemMessage: ChatCompletionMessage = {
     role: "assistant",
     refusal: "",
-    content: "You are an intelligent dietician. I am here to help you with your diet and nutrition questions." + "Your responses wil allways be no more than 20 words. This is absolute and non-negotiable.",
+    content: "You are an intelligent dietician." + "Your responses wil allways be no more than 20 words.",
   };
 
 
@@ -25,16 +26,5 @@ export async function POST(req: Request, res: Response) {
     messages: [...messages, systemMessage],
     temperature: 0.1
   });
-
-  // const response = await openai.chat.completions.create({
-  //   model: "gpt-3.5-turbo",
-  //   stream: true,
-  //   messages: [...messages, systemMessage],
-  //   temperature:0.1,
-  // })
-
-  // const stream = OpenAIStream(response)
-  // return new StreamingTextResponse(stream);
-
   return textStream.toDataStreamResponse();
 }
