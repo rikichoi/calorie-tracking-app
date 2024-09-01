@@ -42,6 +42,8 @@ import Analytics from "@/components/HealthMetrics";
 import Discover from "@/components/Discover";
 import { MealContext } from "@/lib/store/meals-context";
 import { redirect } from "next/navigation";
+import { Bot } from "lucide-react";
+import Assistant from "@/components/Assistant";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -403,6 +405,14 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex md:grid md:grid-cols-1 justify-end gap-2">
+            <h2 className="flex lg:text-lg md:w-full h-3/4 font-bold items-center">
+              Select date:
+            </h2>
+            <DatePicker
+              className="w-28 md:w-full md:mb-5 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+            ></DatePicker>
             <button
               onClick={() => (
                 setModeModal("bmiCalculator"), setOpenModal(!openModal)
@@ -412,15 +422,6 @@ export default function Dashboard() {
               <IoSettings className="text-3xl mr-2 text-center" />
               <span className="text-center">Settings</span>
             </button>
-            <h2 className="flex text-xl md:w-full h-3/4 font-bold items-center">
-              Date Selector{" "}
-              <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center" />
-            </h2>
-            <DatePicker
-              className="w-28 md:w-full md:mb-5 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            ></DatePicker>
           </div>
         </div>
 
@@ -504,10 +505,39 @@ export default function Dashboard() {
                 <span className="md:hidden">Discover</span>
               </button>
             </li>
-            <li>
-              <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">
-                Assistant
-              </a>
+            <li className="me-2">
+              <button
+                onClick={() => setTabMode("Assistant")}
+                className={`${
+                  tabMode == "Assistant"
+                    ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
+                    : " border-black "
+                }inline-flex hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 items-center justify-center p-4 rounded-t-lg active group`}
+                aria-current="page"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`${
+                    tabMode == "Assistant"
+                      ? "text-blue-600 dark:text-blue-500 "
+                      : " "
+                  }w-4 h-4 me-2 group-hover:text-gray-500  dark:group-hover:text-gray-300`}
+                  viewBox="0 0 21 21"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 6V2H8" />
+                  <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z" />
+                  <path d="M2 12h2" />
+                  <path d="M9 11v2" />
+                  <path d="M15 11v2" />
+                  <path d="M20 12h2" />
+                </svg>
+                <span className="md:hidden">Assistant</span>
+              </button>
             </li>
           </ul>
         </div>
@@ -813,20 +843,22 @@ export default function Dashboard() {
           ""
         )}
 
-        {tabMode == "Analytics" ? (
+        {tabMode == "Analytics" && (
           <div className="w-full flex flex-col items-center">
             <Analytics />
           </div>
-        ) : (
-          ""
         )}
 
-        {tabMode == "Discover" ? (
+        {tabMode == "Discover" && (
           <div className="w-full flex flex-col items-center">
             <Discover />
           </div>
-        ) : (
-          ""
+        )}
+
+        {tabMode == "Assistant" && (
+          <div className="w-full flex flex-col items-center">
+            <Assistant />
+          </div>
         )}
       </div>
     </main>

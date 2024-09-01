@@ -143,7 +143,7 @@ export default function Navbar() {
           <div className="md:col-span-9 md:justify-end col-span-3 flex w-full items-center justify-center ">
             <a
               href="/login"
-              className="md:w-auto md:px-3 flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+              className="md:w-auto md:px-3 flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:border-[#f54748] hover:text-black hover:border-2 hover:bg-white hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
             >
               <span className="text-lg font-poppins">Log in</span>
             </a>
