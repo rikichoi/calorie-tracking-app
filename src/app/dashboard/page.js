@@ -1,11 +1,9 @@
 "use client";
-import Link from "next/link";
 import React from "react";
-import { numberFormatter } from "@/lib/utils";
 import LogMealItem from "@/components/LogMealItem";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut, Pie } from "react-chartjs-2";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Modal from "@/components/Modal";
 import { db } from "@/lib/firebase";
 import {
@@ -17,23 +15,16 @@ import {
   where,
   query,
 } from "firebase/firestore";
-import { storage } from "@/lib/utils";
 import LogExerciseItem from "@/components/LogExerciseItem";
 import AddMealModal from "@/components/modals/AddMealModal";
 import AddExerciseModal from "@/components/modals/AddExerciseModal";
 import EditMealModal from "@/components/modals/EditMealModal";
 import EditExerciseModal from "@/components/modals/EditExerciseModal";
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress";
+import LinearProgress from "@mui/material/LinearProgress";
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
-import Home from "../page";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import BmiCalculatorModal from "@/components/modals/BmiCalculatorModal";
-import { MdOutlineCalculate } from "react-icons/md";
-import { FaCircleArrowRight } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { UserContext } from "@/lib/store/user-context";
 import UserSettingsModal from "@/components/modals/UserSettingsModal";
@@ -566,7 +557,7 @@ export default function Dashboard() {
                 </ul>
 
                 <div className="items-center flex-col md:col-span-2 justify-center flex min-h-full">
-                  <ul className="mt-5 gap-3 mb-2 bg-black p-2 text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
+                  <ul className="mt-5 gap-3 mb-2 bg-black p-2 text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex ">
                     {chartType.map((type) => (
                       <li key={type.label} className="w-full focus-within:z-10">
                         <button
@@ -574,8 +565,8 @@ export default function Dashboard() {
                           value={type.label}
                           className={
                             nutritionChart == type.label
-                              ? "inline-block w-full p-2 text-gray-900 bg-gray-100 border-r border-gray-200 dark:border-gray-700 rounded-lg  dark:bg-gray-700 dark:text-white"
-                              : "inline-block w-full p-2 bg-white border-s-0 border-gray-200 dark:border-gray-700 rounded-lg hover:text-gray-700 hover:bg-gray-50 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                              ? "inline-block w-full p-2  text-white bg-gray-700 border-gray-200 dark:border-gray-700 rounded-lg  "
+                              : "inline-block w-full p-2 bg-white border-gray-200 text-gray-900 rounded-lg hover:text-gray-700 hover:bg-gray-50"
                           }
                         >
                           {type.label}
