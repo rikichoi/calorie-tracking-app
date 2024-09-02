@@ -1,46 +1,42 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut, Pie } from "react-chartjs-2";
-import { useState, useEffect } from "react";
 import Modal from "../../components/Modal";
 import { db } from "../../lib/firebase";
 import {
   collection,
-  addDoc,
   getDocs,
   deleteDoc,
   doc,
   where,
   query,
 } from "firebase/firestore";
-import LogExerciseItem from "@/components/LogExerciseItem";
-import AddMealModal from "@/components/modals/AddMealModal";
-import AddExerciseModal from "@/components/modals/AddExerciseModal";
+import LogExerciseItem from "../../components/LogExerciseItem";
+import AddMealModal from "../../components/modals/AddMealModal";
+import AddExerciseModal from "../../components/modals/AddExerciseModal";
 import LogMealItem from "../../components/LogMealItem";
-import EditMealModal from "@/components/modals/EditMealModal";
-import EditExerciseModal from "@/components/modals/EditExerciseModal";
+import EditMealModal from "../../components/modals/EditMealModal";
+import EditExerciseModal from "../../components/modals/EditExerciseModal";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
 import { UserContext } from "@/lib/store/user-context";
-import UserSettingsModal from "@/components/modals/UserSettingsModal";
+import UserSettingsModal from "../../components/modals/UserSettingsModal";
 import { IoSettings } from "react-icons/io5";
-import Analytics from "@/components/HealthMetrics";
-import Discover from "@/components/Discover";
-import { MealContext } from "@/lib/store/meals-context";
+import Analytics from "../../components/HealthMetrics";
+import Discover from "../../components/Discover";
 import { redirect } from "next/navigation";
-import Assistant from "@/components/Assistant";
+import Assistant from "../../components/Assistant";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
-  const { mealsData } = useContext(MealContext);
   const { userData } = useContext(UserContext);
-  const { user, loading, logout } = useContext(authContext);
+  const { user } = useContext(authContext);
   const [displayName, setDisplayName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [mealLog, setMealLog] = useState([]);
@@ -333,12 +329,11 @@ export default function Dashboard() {
     redirect("/");
   }
 
+
   return (
     <main
       className={`${
-        openModal
-          ? "fixed overflow-hidden pt-[6.1rem] top-0 left-0 right-0 "
-          : ""
+        openModal && "fixed overflow-hidden pt-[6.1rem] top-0 left-0 right-0 "
       }`}
     >
       <Modal show={openModal} onClose={setOpenModal}>
@@ -402,7 +397,8 @@ export default function Dashboard() {
               className="w-28 md:w-full md:mb-5 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
               selected={startDate}
               onChange={(date) => setStartDate(date)}
-            ></DatePicker>
+            />
+
             <button
               onClick={() => (
                 setModeModal("bmiCalculator"), setOpenModal(!openModal)
@@ -531,7 +527,7 @@ export default function Dashboard() {
             </li>
           </ul>
         </div>
-        {tabMode == "Dashboard" ? (
+        {tabMode == "Dashboard" && (
           <div className="w-full flex flex-col items-center">
             <div className="w-5/6 md:w-full md:grid-cols-1 grid grid-cols-2 gap-4">
               <div className="bg-gray-200 items-center min-h-[250px] rounded-xl md:text-sm md:pl-10 pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
@@ -829,10 +825,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        ) : (
-          ""
         )}
-
         {tabMode == "Analytics" && (
           <div className="w-full flex flex-col items-center">
             <Analytics />

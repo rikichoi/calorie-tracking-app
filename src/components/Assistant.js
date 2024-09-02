@@ -2,16 +2,23 @@
 
 import { Button } from "@mui/material";
 import { useChat } from "ai/react";
-import { Send, Trash } from "lucide-react";
+import { Bot, Send, Trash } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-export default function Assistant() {
-  const { messages, input, setMessages, handleInputChange, handleSubmit } =
-    useChat({
-      api: "/api/chat",
-    });
+import { useCompletion } from "ai/react";
 
-  const inputRef = useRef();
+export default function Assistant() {
+  const {
+    metadata,
+    messages,
+    input,
+    setMessages,
+    handleInputChange,
+    handleSubmit,
+  } = useChat({
+    api: "/api/chat",
+  });
+
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -22,21 +29,30 @@ export default function Assistant() {
 
   return (
     <div className="border-2 border-[#f54748] rounded-lg shadow-xl flex h-[50vh] flex-col w-full max-w-md pt-5 mx-auto">
-      <div
-        className="h-full mt-3 px-3 overflow-y-auto flex gap-3 flex-col"
-        ref={scrollRef}
-      >
+      <div ref={scrollRef} className="h-full mt-3 px-3 overflow-y-auto flex gap-3 flex-col">
+        {/* {completion} */}
         {messages.map((m) => (
           <div
-            key={m.id}
-            className={`${
-              m.role === "user" ? " justify-start " : " justify-end "
-            } flex whitespace-pre-wrap`}
+            className={` "mb-3 flex items-center "
+              ${
+                m.role === "assistant"
+                  ? " me-5 justify-start "
+                  : " ms-5 justify-end "
+              } `}
           >
-            {m.role === "user" ? "User: " : "AI: "}
-            {m.content}
+            {m.role === "assistant" && <Bot className="mr-2 flex-none" />}
+            <div
+              className={`" rounded-md border px-3 py-2 "
+                ${
+                  m.role === "assistant"
+                    ? " bg-background "
+                    : "bg-foreground text-background "
+                }`}
+            >
+              <p className="text-sm">{m.content}</p>
+            </div>
           </div>
-        ))}{" "}
+        ))}
       </div>
       <form
         onSubmit={handleSubmit}
@@ -55,7 +71,6 @@ export default function Assistant() {
           value={input}
           placeholder="Say something..."
           onChange={handleInputChange}
-          ref={inputRef}
         />
         <button
           title="Clear chat history"
