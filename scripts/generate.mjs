@@ -3,7 +3,8 @@ import "dotenv/config";
 import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import { getEmbeddingsCollection, getVectorStore } from "../src/lib/astradb.js";
+import {getEmbeddingsCollection} from "../src/lib/astradb.mjs";
+import {getVectorStore} from "../src/lib/astradb.mjs";
 
 async function generateEmbeddings() {
   const vectorStore = await getVectorStore();

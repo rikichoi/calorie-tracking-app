@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "generate": "node scripts/generate.mjs",
+    "generate": "node --es-module-specifier-resolution=node scripts/generate.mjs",
     "start": "next start",
     "lint": "next lint"
   },

@@ -29,7 +29,7 @@ export default function Assistant() {
 
   return (
     <div className="border-2 border-[#f54748] rounded-lg shadow-xl flex h-[50vh] flex-col w-full max-w-md pt-5 mx-auto">
-      <div ref={scrollRef} className="h-full mt-3 px-3 overflow-y-auto flex gap-3 flex-col">
+      <div ref={scrollRef} className="h-full mt-3 mb-3 px-3 overflow-y-auto flex gap-3 flex-col">
         {/* {completion} */}
         {messages.map((m) => (
           <div

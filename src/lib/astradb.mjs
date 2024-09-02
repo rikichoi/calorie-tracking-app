@@ -13,7 +13,7 @@ if (!token || !endpoint || !collection) {
   );
 }
 
-export async function getVectorStore() {
+export  async function getVectorStore() {
   return AstraDBVectorStore.fromExistingIndex(
     new OpenAIEmbeddings({ modelName: "text-embedding-3-small" }),
     {
@@ -30,7 +30,7 @@ export async function getVectorStore() {
   );
 }
 
-export async function getEmbeddingsCollection() {
+export  async function getEmbeddingsCollection() {
   const client = new DataAPIClient(token);
   const db = client.db(endpoint);
 
