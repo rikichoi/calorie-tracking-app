@@ -383,7 +383,7 @@ export default function Dashboard() {
           />
         )}
       </Modal>
-      <div className="flex font-poppins min-h-screen h-[1000px] flex-col items-center md:px-2 px-24 pt-8 ">
+      <div className="flex font-poppins flex-col items-center md:px-2 px-24 pt-8 ">
         <div className="w-5/6 grid md:grid-cols-1 grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold ">Good morning, {displayName}</h1>
@@ -766,7 +766,7 @@ export default function Dashboard() {
               </div>
             </div>
             {/* Exercise Logging Section */}
-            <div className="w-full px-24 md:px-0">
+            <div className="w-full px-24 md:px-0 mb-20">
               <div className="w-full mt-8 mb-5 flex flex-row">
                 <h1 className="md:text-lg text-2xl font-bold w-full">
                   Recent Exercise

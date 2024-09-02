@@ -21,7 +21,7 @@ export default function Assistant() {
   }, [messages]);
 
   return (
-    <div className="border-2 border-[#f54748] rounded-lg shadow-xl flex h-[75vh] flex-col w-full max-w-md py-5 mx-auto stretch">
+    <div className="border-2 border-[#f54748] rounded-lg shadow-xl flex h-[50vh] flex-col w-full max-w-md pt-5 mx-auto">
       <div
         className="h-full mt-3 px-3 overflow-y-auto flex gap-3 flex-col"
         ref={scrollRef}
@@ -40,7 +40,7 @@ export default function Assistant() {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex gap-1  fixed bottom-0 w-full max-w-md mb-8 border-gray-300 rounded shadow-xl"
+        className="flex gap-1 justify-end bottom-0 w-full max-w-md border-gray-300 rounded shadow-xl"
       >
         <button
           title="Clear chat history"

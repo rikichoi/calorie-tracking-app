@@ -11,26 +11,11 @@ import { MdOutlineMenu } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import HamburgerModal from "./HamburberMenu/HamburgerModal";
 
-import ViewContextProvider, { viewContext } from "@/lib/store/view-context";
-
 export default function Navbar() {
   const { user, loading, logout } = useContext(authContext);
   const { googleLoginHandler } = useContext(authContext);
   const [openMenu, setOpenMenu] = useState(false);
   const [selectedPage, setSelectedPage] = useState("");
-  const {
-    sectionInView,
-    homeValue,
-    featuresValue,
-    pricingValue,
-    supportValue,
-    contactValue,
-    getContactValue,
-    getFeaturesValue,
-    getHomeValue,
-    getPricingValue,
-    getSupportValue,
-  } = useContext(viewContext);
 
   return (
     <div className="sticky bg-white z-20 top-0">

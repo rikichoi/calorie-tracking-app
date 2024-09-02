@@ -19,57 +19,19 @@ import { FaQuestionCircle } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
-
-import ViewContextProvider, { viewContext } from "@/lib/store/view-context";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  const homeRef = useRef(null);
-  const homeIsInView = useInView(homeRef, { amount: 0.85 });
-  const featuresRef = useRef(null);
-  const featuresIsInView = useInView(featuresRef, { amount: 0.15 });
-  const pricingRef = useRef(null);
-  const pricingIsInView = useInView(pricingRef, { amount: 0.6 });
-  const supportRef = useRef(null);
-  const supportIsInView = useInView(supportRef, { amount: 0.32 });
-  const contactRef = useRef(null);
-  const contactIsInView = useInView(contactRef, { amount: 0.6 });
-  const {
-    sectionInView,
-    homeValue,
-    featuresValue,
-    pricingValue,
-    supportValue,
-    contactValue,
-    getContactValue,
-    getFeaturesValue,
-    getHomeValue,
-    getPricingValue,
-    getSupportValue,
-  } = useContext(viewContext);
   const { user, loading, logout } = useContext(authContext);
   const { googleLoginHandler } = useContext(authContext);
 
-  useEffect(() => {
-    getContactValue(contactIsInView);
-    getFeaturesValue(featuresIsInView);
-    getHomeValue(homeIsInView);
-    getPricingValue(pricingIsInView);
-    getSupportValue(supportIsInView);
-  }, [
-    homeIsInView,
-    featuresIsInView,
-    pricingIsInView,
-    supportIsInView,
-    contactIsInView,
-  ]);
 
   if (!user) {
     return (
       <main className="flex min-h-screen flex-col items-center gap-10">
         <div
-          ref={homeRef}
+
           id="home"
           className="md:py-0 py-16 md:max-h-[500px] w-full md:min-h-[450px] max-h-[570px] grid justify-items-center "
         >
@@ -97,7 +59,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="md:scroll-mt-12 scroll-mt-24" ref={featuresRef} id="features">
+        <div className="md:scroll-mt-12 scroll-mt-24" id="features">
           <div className="border-y-2 flex flex-col py-20 gap-16 items-center w-full bg-[#edeef2] h-full">
             <div className="grid md:grid-rows-3 grid-rows-2 w-5/6">
               <h2 className="md:row-span-1 md:text-2xl text-4xl font-semibold">
@@ -213,7 +175,7 @@ export default function Home() {
         </div>
 
         <div
-          ref={pricingRef}
+          
           id="pricing"
           className="bg-[#edeef2] scroll-mt-24 py-20 border-y-2 w-full justify-center grid grid-rows-7"
         >
@@ -304,7 +266,7 @@ export default function Home() {
         </div>
 
         <div
-          ref={supportRef}
+   
           id="support"
           className="scroll-mt-24 w-full py-10 justify-center"
         >
@@ -352,7 +314,7 @@ export default function Home() {
         </div>
 
         <div
-          ref={contactRef}
+
           id="contact"
           className="bg-[#edeef2] scroll-mt-24 border-y-2 w-full py-10 justify-center"
         >
