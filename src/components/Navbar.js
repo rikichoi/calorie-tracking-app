@@ -11,26 +11,11 @@ import { MdOutlineMenu } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import HamburgerModal from "./HamburberMenu/HamburgerModal";
 
-import ViewContextProvider, { viewContext } from "@/lib/store/view-context";
-
 export default function Navbar() {
   const { user, loading, logout } = useContext(authContext);
   const { googleLoginHandler } = useContext(authContext);
   const [openMenu, setOpenMenu] = useState(false);
   const [selectedPage, setSelectedPage] = useState("");
-  const {
-    sectionInView,
-    homeValue,
-    featuresValue,
-    pricingValue,
-    supportValue,
-    contactValue,
-    getContactValue,
-    getFeaturesValue,
-    getHomeValue,
-    getPricingValue,
-    getSupportValue,
-  } = useContext(viewContext);
 
   return (
     <div className="sticky bg-white z-20 top-0">
@@ -143,7 +128,7 @@ export default function Navbar() {
           <div className="md:col-span-9 md:justify-end col-span-3 flex w-full items-center justify-center ">
             <a
               href="/login"
-              className="md:w-auto md:px-3 flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
+              className="md:w-auto md:px-3 flex justify-center items-center rounded-xl w-40 h-14 mr-2 text-white font-semibold bg-[#f54748] hover:border-[#f54748] hover:text-black hover:bg-white hover:border-4 hover:shadow-gray-900 transition-all duration-100 hover:shadow-inner active:scale-110"
             >
               <span className="text-lg font-poppins">Log in</span>
             </a>

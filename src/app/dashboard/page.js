@@ -1,54 +1,42 @@
 "use client";
-import Link from "next/link";
-import React from "react";
-import { numberFormatter } from "@/lib/utils";
-import LogMealItem from "@/components/LogMealItem";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import React, { useState, useEffect } from "react";
+import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut, Pie } from "react-chartjs-2";
-import { useState, useRef, useEffect } from "react";
-import Modal from "@/components/Modal";
-import { db } from "@/lib/firebase";
+import Modal from "../../components/Modal";
+import { db } from "../../lib/firebase";
 import {
   collection,
-  addDoc,
   getDocs,
   deleteDoc,
   doc,
   where,
   query,
 } from "firebase/firestore";
-import { storage } from "@/lib/utils";
-import LogExerciseItem from "@/components/LogExerciseItem";
-import AddMealModal from "@/components/modals/AddMealModal";
-import AddExerciseModal from "@/components/modals/AddExerciseModal";
-import EditMealModal from "@/components/modals/EditMealModal";
-import EditExerciseModal from "@/components/modals/EditExerciseModal";
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress";
+import LogExerciseItem from "../../components/LogExerciseItem";
+import AddMealModal from "../../components/modals/AddMealModal";
+import AddExerciseModal from "../../components/modals/AddExerciseModal";
+import LogMealItem from "../../components/LogMealItem";
+import EditMealModal from "../../components/modals/EditMealModal";
+import EditExerciseModal from "../../components/modals/EditExerciseModal";
+import LinearProgress from "@mui/material/LinearProgress";
 import { useContext } from "react";
 import { authContext } from "@/lib/store/auth-context";
-import Home from "../page";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import BmiCalculatorModal from "@/components/modals/BmiCalculatorModal";
-import { MdOutlineCalculate } from "react-icons/md";
-import { FaCircleArrowRight } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { UserContext } from "@/lib/store/user-context";
-import UserSettingsModal from "@/components/modals/UserSettingsModal";
+import UserSettingsModal from "../../components/modals/UserSettingsModal";
 import { IoSettings } from "react-icons/io5";
-import Analytics from "@/components/HealthMetrics";
-import Discover from "@/components/Discover";
-import { MealContext } from "@/lib/store/meals-context";
+import Analytics from "../../components/HealthMetrics";
+import Discover from "../../components/Discover";
 import { redirect } from "next/navigation";
+import Assistant from "../../components/Assistant";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 ChartJS.register(ArcElement, Tooltip);
 
 export default function Dashboard() {
-  const { mealsData } = useContext(MealContext);
   const { userData } = useContext(UserContext);
-  const { user, loading, logout } = useContext(authContext);
+  const { user } = useContext(authContext);
   const [displayName, setDisplayName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [mealLog, setMealLog] = useState([]);
@@ -341,12 +329,11 @@ export default function Dashboard() {
     redirect("/");
   }
 
+
   return (
     <main
       className={`${
-        openModal
-          ? "fixed overflow-hidden pt-[6.1rem] top-0 left-0 right-0 "
-          : ""
+        openModal && "fixed overflow-hidden pt-[6.1rem] top-0 left-0 right-0 "
       }`}
     >
       <Modal show={openModal} onClose={setOpenModal}>
@@ -391,7 +378,7 @@ export default function Dashboard() {
           />
         )}
       </Modal>
-      <div className="flex font-poppins min-h-screen h-[1000px] flex-col items-center md:px-2 px-24 pt-8 ">
+      <div className="flex font-poppins flex-col items-center md:px-2 px-24 pt-8 ">
         <div className="w-5/6 grid md:grid-cols-1 grid-cols-2">
           <div>
             <h1 className="text-2xl font-bold ">Good morning, {displayName}</h1>
@@ -403,6 +390,15 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex md:grid md:grid-cols-1 justify-end gap-2">
+            <h2 className="flex lg:text-lg md:w-full h-3/4 font-bold items-center">
+              Select date:
+            </h2>
+            <DatePicker
+              className="w-28 md:w-full md:mb-5 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+            />
+
             <button
               onClick={() => (
                 setModeModal("bmiCalculator"), setOpenModal(!openModal)
@@ -412,15 +408,6 @@ export default function Dashboard() {
               <IoSettings className="text-3xl mr-2 text-center" />
               <span className="text-center">Settings</span>
             </button>
-            <h2 className="flex text-xl md:w-full h-3/4 font-bold items-center">
-              Date Selector{" "}
-              <FaCircleArrowRight className="text-4xl ml-2 flex text-green-600 justify-center" />
-            </h2>
-            <DatePicker
-              className="w-28 md:w-full md:mb-5 text-center h-14 hover:shadow-none shadow-gray-900 border-black hover:scale-105 transition-all duration-100  shadow-inner hover:cursor-pointer"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            ></DatePicker>
           </div>
         </div>
 
@@ -504,14 +491,43 @@ export default function Dashboard() {
                 <span className="md:hidden">Discover</span>
               </button>
             </li>
-            <li>
-              <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">
-                Assistant
-              </a>
+            <li className="me-2">
+              <button
+                onClick={() => setTabMode("Assistant")}
+                className={`${
+                  tabMode == "Assistant"
+                    ? "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500 border-b-2 "
+                    : " border-black "
+                }inline-flex hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 items-center justify-center p-4 rounded-t-lg active group`}
+                aria-current="page"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`${
+                    tabMode == "Assistant"
+                      ? "text-blue-600 dark:text-blue-500 "
+                      : " "
+                  }w-4 h-4 me-2 group-hover:text-gray-500  dark:group-hover:text-gray-300`}
+                  viewBox="0 0 21 21"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 6V2H8" />
+                  <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z" />
+                  <path d="M2 12h2" />
+                  <path d="M9 11v2" />
+                  <path d="M15 11v2" />
+                  <path d="M20 12h2" />
+                </svg>
+                <span className="md:hidden">Assistant</span>
+              </button>
             </li>
           </ul>
         </div>
-        {tabMode == "Dashboard" ? (
+        {tabMode == "Dashboard" && (
           <div className="w-full flex flex-col items-center">
             <div className="w-5/6 md:w-full md:grid-cols-1 grid grid-cols-2 gap-4">
               <div className="bg-gray-200 items-center min-h-[250px] rounded-xl md:text-sm md:pl-10 pl-3 pr-3 grid grid-cols-3 shadow-xl border-2 border-gray-600">
@@ -536,7 +552,7 @@ export default function Dashboard() {
                 </ul>
 
                 <div className="items-center flex-col md:col-span-2 justify-center flex min-h-full">
-                  <ul className="mt-5 gap-3 mb-2 bg-black p-2 text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
+                  <ul className="mt-5 gap-3 mb-2 bg-black p-2 text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex ">
                     {chartType.map((type) => (
                       <li key={type.label} className="w-full focus-within:z-10">
                         <button
@@ -544,8 +560,8 @@ export default function Dashboard() {
                           value={type.label}
                           className={
                             nutritionChart == type.label
-                              ? "inline-block w-full p-2 text-gray-900 bg-gray-100 border-r border-gray-200 dark:border-gray-700 rounded-lg  dark:bg-gray-700 dark:text-white"
-                              : "inline-block w-full p-2 bg-white border-s-0 border-gray-200 dark:border-gray-700 rounded-lg hover:text-gray-700 hover:bg-gray-50 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                              ? "inline-block w-full p-2  text-white bg-gray-700 border-gray-200 dark:border-gray-700 rounded-lg  "
+                              : "inline-block w-full p-2 bg-white border-gray-200 text-gray-900 rounded-lg hover:text-gray-700 hover:bg-gray-50"
                           }
                         >
                           {type.label}
@@ -746,7 +762,7 @@ export default function Dashboard() {
               </div>
             </div>
             {/* Exercise Logging Section */}
-            <div className="w-full px-24 md:px-0">
+            <div className="w-full px-24 md:px-0 mb-20">
               <div className="w-full mt-8 mb-5 flex flex-row">
                 <h1 className="md:text-lg text-2xl font-bold w-full">
                   Recent Exercise
@@ -809,25 +825,26 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        ) : (
-          ""
         )}
-
-        {tabMode == "Analytics" ? (
+        {tabMode == "Analytics" && (
           <div className="w-full flex flex-col items-center">
             <Analytics />
           </div>
-        ) : (
-          ""
         )}
 
-        {tabMode == "Discover" ? (
+        {tabMode == "Discover" && (
           <div className="w-full flex flex-col items-center">
             <Discover />
           </div>
-        ) : (
-          ""
         )}
+
+        <div
+          className={`${
+            tabMode == "Assistant" ? " flex " : " hidden "
+          } w-full flex-col items-center`}
+        >
+          <Assistant />
+        </div>
       </div>
     </main>
   );

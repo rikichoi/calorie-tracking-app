@@ -3,7 +3,6 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ViewContextProvider from "@/lib/store/view-context";
 import UserContextProvider from "@/lib/store/user-context";
 import AuthContextProvider from "@/lib/store/auth-context";
 import MealContextProvider from "@/lib/store/meals-context";
@@ -30,11 +29,9 @@ export default function RootLayout({ children }) {
         <AuthContextProvider>
           <UserContextProvider>
             <MealContextProvider>
-              <ViewContextProvider>
                 <ToastContainer />
                 <Navbar />
                 {children}
-              </ViewContextProvider>
             </MealContextProvider>
           </UserContextProvider>
         </AuthContextProvider>

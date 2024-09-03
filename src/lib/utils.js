@@ -1,8 +1,6 @@
-export const numberFormatter = (amount) => {
-    const formatter = Intl.NumberFormat("en-US", {
-        currency: "USD",
-        style: "decimal"
-    })
-    return formatter.format(amount);
-};
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge"
 
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
