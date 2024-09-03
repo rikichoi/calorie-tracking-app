@@ -1,25 +1,39 @@
 "use client";
-
-import { Button } from "@mui/material";
+import { UserContext } from "@/lib/store/user-context";
 import { useChat } from "ai/react";
 import { Bot, Send, Trash } from "lucide-react";
-import { useEffect, useRef } from "react";
-
-import { useCompletion } from "ai/react";
+import { useContext, useEffect, useRef } from "react";
 
 export default function Assistant() {
   const {
-    metadata,
     messages,
     input,
     setMessages,
     handleInputChange,
     handleSubmit,
     isLoading,
+    data,
   } = useChat({
     api: "/api/chat",
   });
+  const { userData } = useContext(UserContext);
 
+  const userWeight = userData.userWeightHistory;
+  // useEffect(() => {
+  //   setMessages([
+  //     ...messages,
+  //     {
+  //       id: messages.length,
+  //       role: "assistant",
+  //       content: `Your weight is ${
+  //         userWeight[userWeight.length - 1].userWeight
+  //       } kg`,
+  //     },
+  //   ]);
+  //   console.log(messages);
+  // }, []);
+  // console.log(userWeight[userWeight.length - 1].userWeight);
+ 
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -45,8 +59,7 @@ export default function Assistant() {
               You can ask the assistant any question about diet and exercise.
             </p>
             <p className="text-gray-500 tracking-tight">
-              Note: The assistant will provide answers that are tailored to your
-              own data!
+              Note: The assistant is a dietician and health coach with a plethra of knowledge about health and exercise!
             </p>
           </div>
         )}

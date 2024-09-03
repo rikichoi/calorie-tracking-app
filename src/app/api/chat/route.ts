@@ -15,7 +15,7 @@ const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   const body = await req.json();
   const messages = body.messages ?? [];
   const currentMessageContent = messages[messages.length - 1].content;
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const prompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      "You are an intelligent dietician that has a plethra of knowledge about building supplies." + "Your responses wil allways be no more than 20 words.\n\n"
+      "You are an intelligent dietician and health coach." + "Your responses wil allways be no more than 20 words.\n\n"
       +
       "Context:\n{context}",
     ],

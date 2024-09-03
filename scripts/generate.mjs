@@ -13,9 +13,9 @@ async function generateEmbeddings() {
 
   // const gripsetPDFPath = "src/data/Gripset_38FC_Technical_Data_Sheet.pdf";
 
-  const gripsetPDFPath = "src/data/";
+  const pdfDataPath = "src/data/";
 
-  const directoryLoader = new DirectoryLoader(gripsetPDFPath, {
+  const directoryLoader = new DirectoryLoader(pdfDataPath, {
     ".pdf": (path) => new PDFLoader(path),
   });
 
