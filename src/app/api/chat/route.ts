@@ -24,7 +24,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     model: 'gpt-3.5-turbo-0125',
     temperature: 0,
     streaming: true,
-    callbacks: []
+    callbacks: [],
+    verbose: true
   });
 
   const prompt = ChatPromptTemplate.fromMessages([
