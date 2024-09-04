@@ -33,7 +33,7 @@ export default function Assistant() {
   //   console.log(messages);
   // }, []);
   // console.log(userWeight[userWeight.length - 1].userWeight);
- 
+
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Assistant() {
   }, [messages]);
 
   return (
-    <div className="border px-2 pb-2 bg-white rounded-lg shadow-xl flex h-[55vh] flex-col w-full max-w-md pt-5 mx-auto">
+    <div className="border px-2 pb-2 bg-white rounded-lg shadow-xl flex h-[55vh] flex-col w-full max-w-xl pt-5 mx-auto">
       <div
         ref={scrollRef}
         className="h-full mt-3 mb-3 px-3 overflow-y-auto flex gap-3 flex-col"
@@ -59,7 +59,8 @@ export default function Assistant() {
               You can ask the assistant any question about diet and exercise.
             </p>
             <p className="text-gray-500 tracking-tight">
-              Note: The assistant is a dietician and health coach with a plethra of knowledge about health and exercise!
+              Note: The assistant is a dietician and health coach with a plethra
+              of knowledge about health and exercise!
             </p>
           </div>
         )}
@@ -97,7 +98,7 @@ export default function Assistant() {
 
       <form
         onSubmit={handleSubmit}
-        className="flex gap-1 justify-end bottom-0 w-full max-w-md border-gray-300 rounded "
+        className="flex gap-1 justify-end bottom-0 w-full border-gray-300 rounded "
       >
         <button
           title="Clear chat history"
@@ -108,7 +109,7 @@ export default function Assistant() {
           <Trash size={20} className=""></Trash>
         </button>
         <input
-          className="bottom-0 w-full max-w-md p-2 border border-gray-300 rounded "
+          className="bottom-0 w-full p-2 border border-gray-300 rounded "
           value={input}
           placeholder="Say something..."
           onChange={handleInputChange}

@@ -31,8 +31,9 @@ export async function POST(req: NextRequest) {
   const prompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      "You are an intelligent dietician and health coach." + "Your responses wil allways be no more than 20 words.\n\n"
-      +
+      "You are an intelligent tradesman, experiences, and professional.m\n" +
+      "You have access to an extensive database, containing information from PDFs regarding tools that the user may query you on.\n" +
+      "Your responses wil allways be no more than 100 words. This is non-negotiable. No exceptions.\n\n" +
       "Context:\n{context}",
     ],
     ["user", "{input}"],
