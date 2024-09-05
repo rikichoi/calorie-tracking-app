@@ -1,13 +1,15 @@
 import { ChatCompletionMessage } from "openai/resources";
 import { createOpenAI } from '@ai-sdk/openai';
-import { LangChainAdapter, LangChainStream, streamText } from 'ai';
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { LangChainAdapter, LangChainStream, StreamingTextResponse, streamText, Message as VercelChatMessage } from 'ai';
+import { ChatPromptTemplate, PromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { getVectorStore } from "@/lib/astradb.mjs";
 import { NextRequest, NextResponse } from "next/server";
 import type { AIMessageChunk } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 
 const openai = createOpenAI({
   // custom settings, e.g.
@@ -18,15 +20,43 @@ const openai = createOpenAI({
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const messages = body.messages ?? [];
+
+  const chatHistory = messages.slice(0, -1).map((message: VercelChatMessage) => message.role === "user" ? new HumanMessage(message.content) : new AIMessage(message.content));
   const currentMessageContent = messages[messages.length - 1].content;
+
 
   const model = new ChatOpenAI({
     model: 'gpt-3.5-turbo-0125',
-    temperature: 0,
     streaming: true,
-    callbacks: [],
-    verbose: true
+    verbose: true,
+    temperature: 0.1
   });
+
+  const rephrasingModel = new ChatOpenAI({
+    model: 'gpt-3.5-turbo-0125',
+    streaming: false,
+    verbose: true,
+    temperature: 0.1
+  });
+
+  const retriever = (await getVectorStore()).asRetriever();
+
+  const rephrasePrompt = ChatPromptTemplate.fromMessages([
+    new MessagesPlaceholder("chat_history"),
+    ["user", "{input}"],
+    [
+      "user",
+      "Given the above conversation, generate a search query to look up in order to get information relevant to the current question. " +
+      "Don't leave out any relevant keywords. Only return the query and no other text.",
+    ],
+  ]);
+
+  const historyAwareRetrieverChain = await createHistoryAwareRetriever({
+    llm: rephrasingModel,
+    retriever,
+    rephrasePrompt,
+  });
+
 
   const prompt = ChatPromptTemplate.fromMessages([
     [
@@ -36,19 +66,20 @@ export async function POST(req: NextRequest) {
       "Your responses wil allways be no more than 100 words. This is non-negotiable. No exceptions.\n\n" +
       "Context:\n{context}",
     ],
+    new MessagesPlaceholder("chat_history"),
     ["user", "{input}"],
   ]);
 
   const combineDocsChain = await createStuffDocumentsChain({
     llm: model,
     prompt,
+    documentPrompt: PromptTemplate.fromTemplate("Page URL: {url}\n{page_content}"),
+    documentSeparator: "\n--------\n",
   });
 
-  const retriever = (await getVectorStore()).asRetriever();
-
   const retrievalChain = await createRetrievalChain({
-    retriever,
     combineDocsChain,
+    retriever: historyAwareRetrieverChain,
   });
 
   // chain.invoke({ input: currentMessage })
@@ -62,11 +93,23 @@ export async function POST(req: NextRequest) {
   // };
 
 
-  const stream = await retrievalChain.stream({ input: currentMessageContent })
+  // const stream = await retrievalChain.stream({ input: currentMessageContent })
+  // const rephrasedQuery = await historyAwareRetrieverChain.invoke({
+  //   input: currentMessageContent,
+  //   chat_history: chatHistory,
+  // });
 
-  const eventStream = await retrievalChain.streamEvents(
-    { input: currentMessageContent },
-    { version: "v2" }
+  // const finalResponse = await retrievalChain.invoke({
+  //   input: currentMessageContent,
+  //   chat_history: chatHistory,
+  // });
+
+  const eventStream = retrievalChain.streamEvents(
+    {
+      input: currentMessageContent,
+
+    },
+    { version: "v2" },
   );
 
   return LangChainAdapter.toDataStreamResponse(eventStream);
