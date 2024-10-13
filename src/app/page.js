@@ -22,12 +22,10 @@ export default function Home() {
   const { user, loading, logout } = useContext(authContext);
   const { googleLoginHandler } = useContext(authContext);
 
-
   if (!user) {
     return (
       <main className="flex min-h-screen flex-col items-center gap-10">
         <div
-
           id="home"
           className="md:py-0 py-16 md:max-h-[500px] w-full md:min-h-[450px] max-h-[570px] grid justify-items-center "
         >
@@ -69,12 +67,12 @@ export default function Home() {
                 every step of the way.
               </h3>
             </div>
-            <div className="w-5/6 md:w-3/6 grid md:grid-cols-1 grid-cols-4 gap-5">
+            <div className="w-5/6 md:w-full md:px-5 grid md:grid-cols-1 grid-cols-4 gap-5">
               <div className="md:bg-zinc-50 md:py-10 md:px-3 md:drop-shadow-2xl shadow- md:rounded-xl md:w-full">
                 <Image
                   alt="Various Fruits"
                   src={NutritionImage}
-                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] w-full object-cover "
                 />
                 <h3 className="pt-4 pb-2 font-semibold">Log your meals</h3>
                 <h4 className="text-gray-500 text-sm">
@@ -85,7 +83,7 @@ export default function Home() {
                 <Image
                   alt="People Jogging"
                   src={FitnessImage}
-                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] w-full object-cover "
                 />
                 <h3 className="pt-4 pb-2 font-semibold">Log your exercises</h3>
                 <h4 className="text-gray-500 text-sm">
@@ -96,7 +94,7 @@ export default function Home() {
                 <Image
                   alt="Scale"
                   src={BMIImage}
-                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] w-full object-cover "
                 />
                 <h3 className="pt-4 pb-2 font-semibold">Calculate your BMI</h3>
                 <h4 className="text-gray-500 text-sm">
@@ -108,7 +106,7 @@ export default function Home() {
                 <Image
                   alt="Goal Setting"
                   src={TargetImage}
-                  className="rounded-xl max-h-[137px] md:max-h-[200px] object-cover "
+                  className="rounded-xl max-h-[137px] md:max-h-[200px] w-full object-cover "
                 />
                 <h3 className="pt-4 pb-2 font-semibold">Set a target weight</h3>
                 <h4 className="text-gray-500 text-sm">
@@ -171,7 +169,6 @@ export default function Home() {
         </div>
 
         <div
-          
           id="pricing"
           className="bg-[#edeef2] scroll-mt-24 py-20 border-y-2 w-full justify-center grid grid-rows-7"
         >
@@ -186,8 +183,8 @@ export default function Home() {
               We offer competitive prices for all users
             </h3>
           </div>
-          <div className="row-span-4 md:grid-cols-1 md:pt-0 md:px-32 px-56 pt-10 grid grid-cols-2 gap-24 w-full">
-            <div className="bg-[#f54748] md:h-full h-5/6 text-white border-2 p-6 rounded-3xl border-black grid grid-rows-5">
+          <div className="row-span-4 md:grid-cols-1 md:pt-0 md:px-3  mx-auto px-56 pt-10 grid grid-cols-2 gap-24 w-full">
+            <div className="bg-[#f54748] md:mt-5 md:h-full h-5/6 text-white border-2 p-6 rounded-3xl border-black grid grid-rows-5">
               <div className="font-poppins row-span-2 space-y-5 text-center">
                 <h3 className="text-3xl">Standard</h3>
                 <h2 className="text-5xl">$30/mth</h2>
@@ -261,17 +258,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div
-   
-          id="support"
-          className="scroll-mt-24 w-full py-10 justify-center"
-        >
+        <div id="support" className="scroll-mt-24 w-full py-10 justify-center">
           <div className="bg-[#ffaa5f] md:px-0 w-4/5 p-12 rounded-3xl mx-auto grid grid-rows-6">
             <div className="row-span-1 text-center">
               <h4 className="text-gray-500">F.A.Q.</h4>
             </div>
             <div className="row-span-1 text-center">
-              <h2 className="font-ubuntu text-4xl">
+              <h2 className="font-ubuntu text-4xl md:text-3xl">
                 Frequently Asked Questions
               </h2>
             </div>
@@ -310,20 +303,19 @@ export default function Home() {
         </div>
 
         <div
-
           id="contact"
           className="bg-[#edeef2] scroll-mt-24 border-y-2 w-full py-10 justify-center"
         >
-          <div className="md:py-0 p-12 md:grid-rows-1 mx-auto grid grid-rows-3">
-            <div className="md:py-10 text-center font-poppins space-y-4">
+          <div className="md:grid-rows-1 mx-auto grid grid-rows-3">
+            <div className="md:py-10 text-center font-poppins space-y-4 md:px-2">
               <h1 className="text-4xl">Get in Touch</h1>
               <h2 className="text-lg">
                 Want to get in touch? We&apos;d love to hear from you.
                 Here&apos;s how you can reach us...
               </h2>
             </div>
-            <div className="row-span-2 md:grid-cols-1 md:px-5 grid grid-cols-3 gap-10 px-36 font-poppins">
-              <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">
+            <div className="row-span-2  md:grid-cols-1 md:px-5 grid grid-cols-3 gap-10 px-36 font-poppins">
+              <div className="col-span-1 p-7 bg-white shadow-2xl gap-3 grid grid-rows-2">
                 <div>
                   <FaLocationDot className=" bg-gray-300 row-span-1 text-blue-700 h-16 w-16 rounded-full p-5" />
                 </div>
@@ -334,7 +326,7 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-              <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">
+              <div className="col-span-1  p-7  bg-white shadow-2xl gap-3 grid grid-rows-2">
                 <div>
                   <FaPhoneAlt className=" bg-gray-300 row-span-1 text-blue-700 h-16 w-16 rounded-full p-5" />
                 </div>
@@ -346,7 +338,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="col-span-1  p-14 bg-white shadow-2xl gap-3 grid grid-rows-2">
+              <div className="col-span-1 p-7 bg-white shadow-2xl gap-3 grid grid-rows-2">
                 <div>
                   <MdMail className=" bg-gray-300 row-span-1 text-blue-700 h-16 w-16 rounded-full p-5" />
                 </div>
